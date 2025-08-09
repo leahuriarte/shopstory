@@ -60,7 +60,7 @@ Shop Story Core transforms user shopping behavior and taste preferences into eng
 
 #### Acceptance Criteria
 
-1. WHEN analyzing user behavior THEN the system SHALL process purchase history, browsing patterns, and product interactions
+1. WHEN analyzing REAL user behavior THEN the system SHALL process purchase history, browsing patterns, and product interactions
 2. WHEN identifying style preferences THEN the system SHALL extract color preferences, brand affinities, price ranges, and category preferences
 3. WHEN generating insights THEN the system SHALL use machine learning or rule-based algorithms to identify patterns and trends
 4. WHEN updating user profiles THEN the system SHALL continuously refine Style DNA based on new shopping behavior

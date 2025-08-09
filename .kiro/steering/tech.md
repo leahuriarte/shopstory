@@ -20,8 +20,7 @@
 ## Development Commands
 ```bash
 # Start development server
-npm run start
-# or
+
 npx shop-minis dev
 ```
 

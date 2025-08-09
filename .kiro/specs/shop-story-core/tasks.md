@@ -37,7 +37,7 @@
   - Write integration tests for story generation workflow
   - _Requirements: 1.1, 1.2, 3.1, 3.2_
 
-- [ ] 6. Build commerce intelligence and shoppable sets
+- [x] 6. Build commerce intelligence and shoppable sets
   - Create product curation algorithms based on Style DNA and insights
   - Implement ShoppableSetCard component with product grid and pricing
   - Build "complete the set" recommendation logic
@@ -64,7 +64,7 @@
   - Write tests for sharing and export functionality
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
 
-- [ ] 9. Create main navigation and app shell
+- [x] 9. Create main navigation and app shell
   - Build main App component with navigation between story views and shoppable sets
   - Implement bottom navigation or tab system for different app sections
   - Add header with user profile and settings access
