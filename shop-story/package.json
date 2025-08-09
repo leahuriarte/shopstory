@@ -5,16 +5,24 @@
   "description": "A Shop Mini with WebView and Vite",
   "main": "index.tsx",
   "scripts": {
-    "start": "shop-minis dev"
+    "start": "shop-minis dev",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
+    "@shopify/shop-minis-cli": "0.0.175",
     "@tailwindcss/vite": "^4.1.8",
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/react": "^16.3.0",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.2.1",
+    "@vitest/coverage-v8": "^1.0.0",
+    "jsdom": "^23.0.0",
     "tailwindcss": "^4.1.8",
     "typescript": "^5.8.3",
-    "@shopify/shop-minis-cli": "0.0.175"
+    "vitest": "^1.0.0"
   },
   "dependencies": {
     "@shopify/shop-minis-react": "0.0.30",
