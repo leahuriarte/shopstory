@@ -9,6 +9,7 @@ type AestheticsScreenProps = {
 /**
  * A screen component that analyzes saved products to generate a Spotify Daylist-style
  * headline and identifies the user's top 3 style aesthetics with percentages.
+ * Now styled with scrapbook theme to match TitleScreen.
  */
 export function AestheticsScreen({onNext}: AestheticsScreenProps) {
   const {products, loading: productsLoading, error: productsError} = useSavedProducts({first: 15})
@@ -80,17 +81,45 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
     }
   }
 
+  // Base scrapbook background style
+  const scrapbookStyle = {
+    background: `
+      radial-gradient(circle at 20% 30%, rgba(139, 69, 19, 0.03) 1px, transparent 1px),
+      radial-gradient(circle at 80% 70%, rgba(139, 69, 19, 0.02) 1px, transparent 1px),
+      radial-gradient(circle at 40% 80%, rgba(139, 69, 19, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139, 69, 19, 0.01) 50%, transparent 50%),
+      linear-gradient(180deg, rgba(139, 69, 19, 0.01) 50%, transparent 50%),
+      linear-gradient(135deg, 
+        #faf5f0 0%, 
+        #f7f1ea 25%,
+        #f5ede4 50%,
+        #f3e9de 75%,
+        #f1e5d8 100%
+      )
+    `,
+    backgroundSize: '40px 40px, 60px 60px, 30px 30px, 8px 8px, 12px 12px, 100% 100%',
+    boxShadow: 'inset 0 0 120px rgba(139, 69, 19, 0.1), inset 0 0 40px rgba(139, 69, 19, 0.05)',
+  }
+
   // Loading state for products
   if (productsLoading) {
     return (
-      <div className="w-full h-full bg-gradient-to-br from-pink-900 via-purple-900 to-indigo-900 rounded-2xl flex items-center justify-center text-white cursor-pointer" onClick={onNext}>
+      <div 
+        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer relative overflow-hidden" 
+        onClick={onNext}
+        style={scrapbookStyle}
+      >
+        {/* Decorative tape pieces */}
+        <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute top-5 right-5 w-9 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        
         <div className="text-center z-10 p-8">
           <div className="w-16 h-16 mx-auto mb-6 relative">
-            <div className="absolute inset-0 rounded-full border-4 border-white/20"></div>
-            <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-white animate-spin"></div>
+            <div className="absolute inset-0 rounded-full border-4 border-amber-800/20"></div>
+            <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-800 animate-spin"></div>
           </div>
-          <h3 className="text-2xl font-bold mb-2">Loading Your Products</h3>
-          <p className="text-purple-200 text-lg">Gathering your saved items...</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Loading Your Products</h3>
+          <p className="text-amber-800 text-lg">Gathering your saved items...</p>
         </div>
       </div>
     )
@@ -100,18 +129,22 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
   if (productsError || !products) {
     return (
       <div
-        className="w-full h-full bg-gradient-to-br from-red-600 via-rose-600 to-pink-600 rounded-2xl flex items-center justify-center text-white cursor-pointer overflow-hidden relative"
+        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
         onClick={onNext}
+        style={scrapbookStyle}
       >
-        <div className="absolute inset-0 bg-black/10"></div>
+        {/* Decorative tape pieces */}
+        <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute bottom-5 right-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
+        
         <div className="text-center z-10 p-8">
-          <div className="w-20 h-20 mx-auto mb-6 bg-white/20 rounded-full flex items-center justify-center">
-            <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-20 h-20 mx-auto mb-6 bg-amber-100 rounded-full flex items-center justify-center border-2 border-amber-200 shadow-sm">
+            <svg className="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-2">Unable to Load Products</h3>
-          <p className="text-rose-100 text-lg">Click anywhere to continue</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Unable to Load Products</h3>
+          <p className="text-amber-800 text-lg">Click anywhere to continue</p>
         </div>
       </div>
     )
@@ -121,20 +154,28 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
   if (products.length === 0) {
     return (
       <div
-        className="w-full h-full bg-gradient-to-br from-slate-50 to-purple-50 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative"
+        className="w-full h-full rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative"
         onClick={onNext}
+        style={scrapbookStyle}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5"></div>
+        {/* Decorative tape pieces */}
+        <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute top-5 right-5 w-9 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute bottom-5 left-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
+        
         <div className="text-center z-10 max-w-md">
-          <div className="w-24 h-24 mx-auto mb-8 bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl flex items-center justify-center">
-            <svg className="w-12 h-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-24 h-24 mx-auto mb-8 bg-white border-2 border-amber-200 rounded-lg shadow-md relative p-4">
+            <svg className="w-full h-full text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
             </svg>
+            {/* Tape corners */}
+            <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
+            <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
           </div>
-          <h2 className="text-3xl font-bold mb-4 text-gray-900 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold mb-4 text-amber-900">
             Your Style DNA
           </h2>
-          <p className="text-gray-600 mb-8 text-lg leading-relaxed">
+          <p className="text-amber-800 mb-8 text-lg leading-relaxed">
             Start saving products to discover your unique aesthetic DNA and style personality!
           </p>
           <button
@@ -142,7 +183,7 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
               e.stopPropagation()
               onNext()
             }}
-            className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-purple-600 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            className="bg-amber-800 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-amber-900 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-amber-700"
           >
             Continue Journey
           </button>
@@ -154,26 +195,33 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
   // Analyzing state
   if (isAnalyzing) {
     return (
-      <div className="w-full h-full bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 rounded-2xl flex items-center justify-center text-white cursor-pointer overflow-hidden relative" onClick={onNext}>
-        <div className="absolute inset-0 bg-black/20"></div>
+      <div 
+        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative" 
+        onClick={onNext}
+        style={scrapbookStyle}
+      >
+        {/* Decorative tape pieces */}
+        <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute bottom-5 right-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
+        
         <div className="text-center z-10 p-8">
-          {/* Animated aesthetic analyzer */}
+          {/* Animated aesthetic analyzer with scrapbook styling */}
           <div className="w-20 h-20 mx-auto mb-6 relative">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 animate-spin"></div>
-            <div className="absolute inset-2 rounded-full bg-indigo-900 flex items-center justify-center">
+            <div className="absolute inset-0 rounded-full bg-white border-4 border-amber-300 shadow-md animate-spin"></div>
+            <div className="absolute inset-2 rounded-full bg-amber-100 flex items-center justify-center">
               <span className="text-2xl">✨</span>
             </div>
           </div>
-          <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">
             Analyzing Your Aesthetic DNA
           </h3>
-          <p className="text-purple-200 mb-8 text-lg">Discovering your unique style personality...</p>
+          <p className="text-amber-800 mb-8 text-lg">Discovering your unique style personality...</p>
           <button 
             onClick={(e) => {
               e.stopPropagation()
               onNext()
             }}
-            className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 py-3 rounded-full hover:bg-white/20 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+            className="bg-white/90 backdrop-blur-md border-2 border-amber-300 text-amber-800 px-8 py-3 rounded-lg hover:bg-white transition-all duration-300 font-semibold shadow-md hover:shadow-lg transform hover:scale-105"
           >
             Skip Analysis
           </button>
@@ -186,24 +234,28 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
   if (analysisError) {
     return (
       <div
-        className="w-full h-full bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 rounded-2xl flex items-center justify-center text-white cursor-pointer overflow-hidden relative"
+        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
         onClick={onNext}
+        style={scrapbookStyle}
       >
-        <div className="absolute inset-0 bg-black/10"></div>
+        {/* Decorative tape pieces */}
+        <div className="absolute top-5 right-5 w-9 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute bottom-5 left-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
+        
         <div className="text-center z-10 p-8">
-          <div className="w-20 h-20 mx-auto mb-6 bg-white/20 rounded-full flex items-center justify-center">
-            <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-20 h-20 mx-auto mb-6 bg-amber-100 rounded-full flex items-center justify-center border-2 border-amber-300 shadow-md">
+            <svg className="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-2">Analysis Unavailable</h3>
-          <p className="text-rose-100 text-lg mb-4">{analysisError}</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Analysis Unavailable</h3>
+          <p className="text-amber-800 text-lg mb-4">{analysisError}</p>
           <button
             onClick={(e) => {
               e.stopPropagation()
               onNext()
             }}
-            className="bg-white/20 backdrop-blur-md text-white px-6 py-3 rounded-full hover:bg-white/30 transition-all duration-300 font-semibold"
+            className="bg-white/90 backdrop-blur-md border-2 border-amber-300 text-amber-800 px-6 py-3 rounded-lg hover:bg-white transition-all duration-300 font-semibold shadow-md"
           >
             Continue
           </button>
@@ -212,72 +264,77 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
     )
   }
 
-  // Results state
+  // Results state with scrapbook styling
   if (analysis && showResults) {
     return (
       <div
-        className="w-full h-full bg-gradient-to-br from-slate-50 via-white to-purple-50 rounded-2xl p-4 overflow-y-auto cursor-pointer"
+        className="w-full h-full rounded-lg p-4 overflow-y-auto cursor-pointer relative"
         onClick={onNext}
+        style={scrapbookStyle}
       >
-        {/* Header with Spotify-style headline */}
-        <div className="text-center mb-8">
+        {/* Decorative tape pieces */}
+        <div className="absolute top-2 left-3 w-8 h-3 bg-white bg-opacity-90 border border-amber-300 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute top-2 right-3 w-7 h-3 bg-white bg-opacity-90 border border-amber-300 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        
+        {/* Header with scrapbook styling */}
+        <div className="text-center mb-6 relative z-10">
           <div className="inline-flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-amber-800 rounded-lg flex items-center justify-center shadow-md">
               <span className="text-white text-lg">✨</span>
             </div>
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+            <h2 className="text-2xl font-bold text-amber-900">
               Your Style DNA
             </h2>
           </div>
           
-          {/* Spotify Daylist-style headline */}
-          <div className="bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl p-6 mb-6 text-white shadow-lg">
-            <p className="text-sm font-medium mb-2 opacity-90">Your aesthetic right now</p>
-            <h1 className="text-2xl font-bold leading-tight">
+          {/* Spotify Daylist-style headline as a scrapbook note */}
+          <div className="bg-white rounded-lg p-6 mb-6 text-amber-900 shadow-lg border-2 border-amber-200 relative transform -rotate-1">
+            {/* Tape corners for the note */}
+            <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
+            <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
+            
+            <p className="text-sm font-medium mb-2 text-amber-700">Your aesthetic right now</p>
+            <h1 className="text-2xl font-bold leading-tight text-amber-900">
               {analysis.headline}
             </h1>
           </div>
           
-          <p className="text-gray-600 text-sm">Based on {products.length} saved products</p>
+          <p className="text-amber-800 text-sm">Based on {products.length} saved products</p>
         </div>
 
-        {/* Top 3 Aesthetics */}
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-4 text-center text-gray-800">Your Top Aesthetics</h3>
+        {/* Top 3 Aesthetics as polaroid-style cards */}
+        <div className="mb-6 relative z-10">
+          <h3 className="text-lg font-semibold mb-4 text-center text-amber-900">Your Top Aesthetics</h3>
           <div className="space-y-4">
             {analysis.topAesthetics.map((aesthetic, index) => {
-              const gradients = [
-                'from-purple-500 to-pink-600',
-                'from-blue-500 to-purple-600', 
-                'from-pink-500 to-rose-600'
-              ]
-              const bgColors = [
-                'bg-purple-50 border-purple-200',
-                'bg-blue-50 border-blue-200',
-                'bg-pink-50 border-pink-200'
-              ]
+              const rotations = ['rotate-2', '-rotate-1', 'rotate-1']
+              const rotation = rotations[index] || 'rotate-0'
               
               return (
-                <div key={index} className={`bg-white rounded-xl p-4 border-2 ${bgColors[index]} shadow-sm hover:shadow-md transition-all duration-300`}>
+                <div key={index} className={`bg-white rounded-lg p-4 border-2 border-amber-200 shadow-md hover:shadow-lg transition-all duration-300 relative ${rotation}`}>
+                  {/* Tape corners */}
+                  <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
+                  <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
+                  
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{aesthetic.emoji}</span>
                       <div>
-                        <h4 className="font-bold text-gray-900 text-lg">{aesthetic.name}</h4>
-                        <p className="text-sm text-gray-600">{aesthetic.description}</p>
+                        <h4 className="font-bold text-amber-900 text-lg">{aesthetic.name}</h4>
+                        <p className="text-sm text-amber-800">{aesthetic.description}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className={`text-2xl font-bold bg-gradient-to-r ${gradients[index]} bg-clip-text text-transparent`}>
+                      <div className="text-2xl font-bold text-amber-800">
                         {aesthetic.percentage}%
                       </div>
                     </div>
                   </div>
                   
-                  {/* Progress bar */}
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  {/* Progress bar with scrapbook styling */}
+                  <div className="w-full bg-amber-100 rounded-full h-2 border border-amber-200">
                     <div 
-                      className={`h-2 rounded-full bg-gradient-to-r ${gradients[index]} transition-all duration-1000 ease-out`}
+                      className="h-2 rounded-full bg-amber-600 transition-all duration-1000 ease-out"
                       style={{ width: `${aesthetic.percentage}%` }}
                     ></div>
                   </div>
@@ -287,25 +344,31 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
           </div>
         </div>
 
-        {/* Summary */}
-        <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-200 mb-6">
-          <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
-            <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {/* Summary as a handwritten note */}
+        <div className="bg-white rounded-lg p-4 border-2 border-amber-200 mb-6 relative transform rotate-1 shadow-md">
+          {/* Tape corners */}
+          <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
+          <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
+          
+          <h3 className="font-semibold text-amber-900 mb-3 flex items-center gap-2">
+            <svg className="w-5 h-5 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             Your Style Summary
           </h3>
-          <p className="text-gray-700 text-sm leading-relaxed">{analysis.summary}</p>
+          <p className="text-amber-800 text-sm leading-relaxed">{analysis.summary}</p>
         </div>
 
-        {/* Continue Button */}
-        <div className="sticky bottom-0 pt-4 bg-gradient-to-t from-white via-white to-transparent">
+        {/* Continue Button with scrapbook styling */}
+        <div className="sticky bottom-0 pt-4 relative z-10" style={{
+          background: 'linear-gradient(to top, #faf5f0 0%, #faf5f0 70%, transparent 100%)'
+        }}>
           <button
             onClick={(e) => {
               e.stopPropagation()
               onNext()
             }}
-            className="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 rounded-xl font-semibold text-base hover:from-purple-600 hover:to-pink-700 transition-all duration-300 transform hover:scale-[1.01] shadow-md hover:shadow-lg flex items-center justify-center gap-2 group"
+            className="w-full bg-amber-800 text-white py-3 rounded-lg font-semibold text-base hover:bg-amber-900 transition-all duration-300 transform hover:scale-[1.01] shadow-md hover:shadow-lg flex items-center justify-center gap-2 group border border-amber-700"
           >
             Continue Your Journey
             <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -319,14 +382,22 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
 
   // Default loading state while waiting for analysis to start
   return (
-    <div className="w-full h-full bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 rounded-2xl flex items-center justify-center text-white cursor-pointer" onClick={onNext}>
+    <div 
+      className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer relative" 
+      onClick={onNext}
+      style={scrapbookStyle}
+    >
+      {/* Decorative tape pieces */}
+      <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+      <div className="absolute bottom-5 right-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
+      
       <div className="text-center z-10 p-8">
         <div className="w-16 h-16 mx-auto mb-6 relative">
-          <div className="absolute inset-0 rounded-full border-4 border-white/20"></div>
-          <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-white animate-spin"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-amber-800/20"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-800 animate-spin"></div>
         </div>
-        <h3 className="text-2xl font-bold mb-2">Preparing Analysis</h3>
-        <p className="text-purple-200 text-lg">Getting ready to analyze your aesthetics...</p>
+        <h3 className="text-2xl font-bold mb-2 text-amber-900">Preparing Analysis</h3>
+        <p className="text-amber-800 text-lg">Getting ready to analyze your aesthetics...</p>
       </div>
     </div>
   )
