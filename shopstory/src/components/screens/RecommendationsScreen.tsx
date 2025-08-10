@@ -137,8 +137,8 @@ export function RecommendationsScreen({ onNext, onPrevious }: RecommendationsScr
             <div className="absolute inset-0 rounded-full border-4 border-amber-800/20"></div>
             <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-800 animate-spin"></div>
           </div>
-          <h3 className="text-2xl font-bold mb-2 text-amber-900">Loading Recommendations</h3>
-          <p className="text-amber-800 text-lg">Finding your future style...</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Loading Your Main Character Era</h3>
+          <p className="text-amber-800 text-lg">Manifesting your future aesthetic...</p>
         </div>
       </div>
     )
@@ -162,8 +162,8 @@ export function RecommendationsScreen({ onNext, onPrevious }: RecommendationsScr
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-2 text-amber-900">Unable to Load Recommendations</h3>
-          <p className="text-amber-800 text-lg">Click anywhere to continue</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Oops, That's Not Very Slay</h3>
+          <p className="text-amber-800 text-lg">Tap anywhere to keep the vibe going</p>
         </div>
       </div>
     )
@@ -192,10 +192,10 @@ export function RecommendationsScreen({ onNext, onPrevious }: RecommendationsScr
             <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
           </div>
           <h2 className="text-3xl font-bold mb-4 text-amber-900">
-            Your Future Style
+            Your Glow-Up Era
           </h2>
           <p className="text-amber-800 mb-8 text-lg leading-relaxed">
-            No recommendations available right now. Keep exploring to discover your future style evolution!
+            No recs available rn, but your style evolution is still loading! Keep shopping to unlock your main character moment ✨
           </p>
         </div>
       </div>
@@ -223,9 +223,9 @@ export function RecommendationsScreen({ onNext, onPrevious }: RecommendationsScr
             </div>
           </div>
           <h3 className="text-2xl font-bold mb-2 text-amber-900">
-            Predicting Your Future Style
+            Manifesting Your Style Era
           </h3>
-          <p className="text-amber-800 mb-8 text-lg">Reading the style crystal ball...</p>
+          <p className="text-amber-800 mb-8 text-lg">The algorithm is doing its thing...</p>
           <button
             onClick={(e) => {
               e.stopPropagation()
@@ -233,7 +233,7 @@ export function RecommendationsScreen({ onNext, onPrevious }: RecommendationsScr
             }}
             className="bg-white/90 backdrop-blur-md border-2 border-amber-300 text-amber-800 px-8 py-3 rounded-lg hover:bg-white transition-all duration-300 font-semibold shadow-md hover:shadow-lg transform hover:scale-105"
           >
-            Skip Prediction
+            Skip the Wait
           </button>
         </div>
       </div>
@@ -258,8 +258,8 @@ export function RecommendationsScreen({ onNext, onPrevious }: RecommendationsScr
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-2 text-amber-900">Prediction Unavailable</h3>
-          <p className="text-amber-800 text-lg mb-4">{analysisError}</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">That's Not It, Chief</h3>
+          <p className="text-amber-800 text-lg mb-4">The vibe check failed: {analysisError}</p>
           <button
             onClick={(e) => {
               e.stopPropagation()
@@ -267,7 +267,7 @@ export function RecommendationsScreen({ onNext, onPrevious }: RecommendationsScr
             }}
             className="bg-white/90 backdrop-blur-md border-2 border-amber-300 text-amber-800 px-6 py-3 rounded-lg hover:bg-white transition-all duration-300 font-semibold shadow-md"
           >
-            Continue
+            Keep It Moving
           </button>
         </div>
       </div>
@@ -293,7 +293,7 @@ export function RecommendationsScreen({ onNext, onPrevious }: RecommendationsScr
               <span className="text-white text-lg">🔮</span>
             </div>
             <h2 className="text-2xl font-bold text-amber-900">
-              Your Future Style
+              Your Main Character Era
             </h2>
           </div>
 
@@ -303,7 +303,7 @@ export function RecommendationsScreen({ onNext, onPrevious }: RecommendationsScr
             <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
             <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
 
-            <p className="text-sm font-medium mb-2 text-emerald-700">Your style evolution</p>
+            <p className="text-sm font-medium mb-2 text-emerald-700">Your glow-up prediction</p>
             <h1 className="text-2xl font-bold leading-tight text-amber-900">
               {analysis.headline}
             </h1>
@@ -319,7 +319,7 @@ export function RecommendationsScreen({ onNext, onPrevious }: RecommendationsScr
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              To match your future self
+              To serve your future looks
             </h3>
             <p className="text-amber-800 text-sm leading-relaxed">{analysis.futureSelfdescription}</p>
           </div>
@@ -329,7 +329,7 @@ export function RecommendationsScreen({ onNext, onPrevious }: RecommendationsScr
 
         {/* Product Recommendations as polaroid grid */}
         <div className="mb-6 relative z-10">
-          <h3 className="text-lg font-semibold mb-4 text-center text-amber-900">Recommended for You</h3>
+          <h3 className="text-lg font-semibold mb-4 text-center text-amber-900">Your Next Obsessions</h3>
           <div
             className="grid grid-cols-2 gap-4"
             onClick={e => e.stopPropagation()}
@@ -362,7 +362,7 @@ export function RecommendationsScreen({ onNext, onPrevious }: RecommendationsScr
               <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
 
               <p className="text-sm text-amber-800 text-center">
-                +{products.length - 8} more recommendations waiting for you
+                +{products.length - 8} more items that would absolutely slay on you
               </p>
             </div>
           )}
@@ -388,8 +388,8 @@ export function RecommendationsScreen({ onNext, onPrevious }: RecommendationsScr
           <div className="absolute inset-0 rounded-full border-4 border-amber-800/20"></div>
           <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-800 animate-spin"></div>
         </div>
-        <h3 className="text-2xl font-bold mb-2 text-amber-900">Preparing Predictions</h3>
-        <p className="text-amber-800 text-lg">Getting ready to see your future style...</p>
+        <h3 className="text-2xl font-bold mb-2 text-amber-900">Loading Your Moment</h3>
+        <p className="text-amber-800 text-lg">Curating your next era...</p>
       </div>
     </div>
   )

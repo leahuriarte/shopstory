@@ -32,7 +32,7 @@ export function TitleScreen({onNext, onPrevious}: TitleScreenProps) {
       {/* Title and Subtitle - brown text for scrapbook aesthetic */}
       <div className="relative z-10 text-center">
         <h1 className="text-5xl font-extrabold tracking-tight text-amber-900 drop-shadow-sm">ShopStory</h1>
-        <p className="text-xl font-light mt-2 text-amber-800">Your Life Unboxed</p>
+        <p className="text-xl font-light mt-2 text-amber-800">Your Style, Unboxed</p>
       </div>
     </>
   )
@@ -96,11 +96,11 @@ export function TitleScreen({onNext, onPrevious}: TitleScreenProps) {
       {loading ? (
         <div className="relative z-10 text-center">
           <div className="text-5xl font-extrabold tracking-tight text-amber-900 drop-shadow-sm mb-2">ShopStory</div>
-          <p className="text-xl font-light text-amber-800">Loading your story...</p>
+          <p className="text-xl font-light text-amber-800">Curating your vibe...</p>
         </div>
       ) : error ? (
         <p className="relative z-10 text-center text-red-600">
-          Could not load saved items.
+          Oops, your items are being shy rn.
         </p>
       ) : (
         renderContent()

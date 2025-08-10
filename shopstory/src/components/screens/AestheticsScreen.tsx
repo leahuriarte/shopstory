@@ -132,8 +132,8 @@ export function AestheticsScreen({onNext, onPrevious}: AestheticsScreenProps) {
             <div className="absolute inset-0 rounded-full border-4 border-amber-800/20"></div>
             <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-800 animate-spin"></div>
           </div>
-          <h3 className="text-2xl font-bold mb-2 text-amber-900">Loading Your Products</h3>
-          <p className="text-amber-800 text-lg">Gathering your saved items...</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Loading Your Vibe Check</h3>
+          <p className="text-amber-800 text-lg">Gathering your aesthetic evidence...</p>
         </div>
       </div>
     )
@@ -157,8 +157,8 @@ export function AestheticsScreen({onNext, onPrevious}: AestheticsScreenProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-2 text-amber-900">Unable to Load Products</h3>
-          <p className="text-amber-800 text-lg">Click anywhere to continue</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Vibe Check Failed</h3>
+          <p className="text-amber-800 text-lg">Tap anywhere to keep it moving</p>
         </div>
       </div>
     )
@@ -227,9 +227,9 @@ export function AestheticsScreen({onNext, onPrevious}: AestheticsScreenProps) {
             </div>
           </div>
           <h3 className="text-2xl font-bold mb-2 text-amber-900">
-            Analyzing Your Aesthetic DNA
+            Reading Your Style DNA
           </h3>
-          <p className="text-amber-800 mb-8 text-lg">Discovering your unique style personality...</p>
+          <p className="text-amber-800 mb-8 text-lg">Decoding your main character energy...</p>
           <button 
             onClick={(e) => {
               e.stopPropagation()
@@ -262,8 +262,8 @@ export function AestheticsScreen({onNext, onPrevious}: AestheticsScreenProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-2 text-amber-900">Analysis Unavailable</h3>
-          <p className="text-amber-800 text-lg mb-4">{analysisError}</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">That's Not Very Aesthetic</h3>
+          <p className="text-amber-800 text-lg mb-4">The vibe reader broke: {analysisError}</p>
           <button
             onClick={(e) => {
               e.stopPropagation()
@@ -307,7 +307,7 @@ export function AestheticsScreen({onNext, onPrevious}: AestheticsScreenProps) {
             <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
             <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
             
-            <p className="text-sm font-medium mb-2 text-amber-700">Your aesthetic right now</p>
+            <p className="text-sm font-medium mb-2 text-amber-700">Your current main character era</p>
             <h1 className="text-2xl font-bold leading-tight text-amber-900">
               {analysis.headline}
             </h1>
@@ -317,7 +317,7 @@ export function AestheticsScreen({onNext, onPrevious}: AestheticsScreenProps) {
 
         {/* Top 3 Aesthetics as polaroid-style cards */}
         <div className="mb-6 relative z-10">
-          <h3 className="text-lg font-semibold mb-4 text-center text-amber-900">Your Top Aesthetics</h3>
+          <h3 className="text-lg font-semibold mb-4 text-center text-amber-900">Your Aesthetic Breakdown</h3>
           <div className="space-y-4">
             {analysis.topAesthetics.map((aesthetic, index) => {
               const rotations = ['rotate-2', '-rotate-1', 'rotate-1']
@@ -377,8 +377,8 @@ export function AestheticsScreen({onNext, onPrevious}: AestheticsScreenProps) {
           <div className="absolute inset-0 rounded-full border-4 border-amber-800/20"></div>
           <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-800 animate-spin"></div>
         </div>
-        <h3 className="text-2xl font-bold mb-2 text-amber-900">Preparing Analysis</h3>
-        <p className="text-amber-800 text-lg">Getting ready to analyze your aesthetics...</p>
+        <h3 className="text-2xl font-bold mb-2 text-amber-900">Preparing Your Vibe Check</h3>
+        <p className="text-amber-800 text-lg">Getting ready to serve you some insights...</p>
       </div>
     </div>
   )

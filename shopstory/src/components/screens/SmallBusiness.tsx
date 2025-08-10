@@ -125,10 +125,10 @@ export function SmallBusinessScreen({onNext, onPrevious}: SmallBusinessScreenPro
             <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-800 animate-spin"></div>
           </div>
           <h3 className="text-2xl font-bold mb-2 text-amber-900">
-            {loading ? 'Loading Your Purchases' : 'Analyzing Small Businesses'}
+            {loading ? 'Loading Your Shopping Receipts' : 'Finding Your Small Biz Supports'}
           </h3>
           <p className="text-amber-800 mb-8 text-lg">
-            {loading ? 'Getting your saved products...' : 'Using AI to identify small businesses...'}
+            {loading ? 'Gathering your shopping evidence...' : 'AI is checking which brands are small biz...'}
           </p>
           <button 
             onClick={(e) => {
@@ -162,11 +162,11 @@ export function SmallBusinessScreen({onNext, onPrevious}: SmallBusinessScreenPro
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-2 text-amber-600">Analysis Error</h3>
+          <h3 className="text-2xl font-bold mb-2 text-amber-600">That's Not Very Small Biz of Us</h3>
           <p className="text-amber-700 text-lg mb-6">
-            {error ? 'Unable to load products' : analysisError}
+            {error ? 'Your items are being shy rn' : `The small biz detector broke: ${analysisError}`}
           </p>
-          <p className="text-amber-600">Click anywhere to continue</p>
+          <p className="text-amber-600">Tap anywhere to keep it moving</p>
         </div>
       </div>
     )
@@ -257,7 +257,7 @@ export function SmallBusinessScreen({onNext, onPrevious}: SmallBusinessScreenPro
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-amber-900">
-            Small Businesses You Support
+            Your Small Biz Support Era
           </h2>
         </div>
         {analysis && (
@@ -277,9 +277,9 @@ export function SmallBusinessScreen({onNext, onPrevious}: SmallBusinessScreenPro
             <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
             <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
           </div>
-          <h3 className="text-xl font-semibold text-amber-700 mb-2">No Small Businesses Found</h3>
+          <h3 className="text-xl font-semibold text-amber-700 mb-2">No Small Biz Vibes Detected</h3>
           <p className="text-amber-500">
-            Start exploring local businesses to make an impact!
+            Time to support some local legends and small business queens!
           </p>
         </div>
       ) : (
@@ -361,7 +361,7 @@ export function SmallBusinessScreen({onNext, onPrevious}: SmallBusinessScreenPro
               <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
               
               <p className="text-sm text-amber-800 text-center">
-                +{smallBusinessShops.length - 4} more small businesses you support
+                +{smallBusinessShops.length - 4} more small biz queens you're supporting
               </p>
             </div>
           )}

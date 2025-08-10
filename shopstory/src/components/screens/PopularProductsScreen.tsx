@@ -27,7 +27,7 @@ export function PopularProductsScreen({onNext, onPrevious}: PopularProductsScree
   if (loading) {
     return (
       <div className="w-full h-full bg-gray-800 rounded-lg flex items-center justify-center text-white">
-        <p>Loading popular products...</p>
+        <p>Loading what's trending rn...</p>
       </div>
     )
   }
@@ -38,7 +38,7 @@ export function PopularProductsScreen({onNext, onPrevious}: PopularProductsScree
         className="w-full h-full bg-red-900 rounded-lg flex items-center justify-center text-white cursor-pointer"
         onClick={handleClick}
       >
-        <p>Error loading products. Click to continue.</p>
+        <p>That's not very popular of us. Tap to continue.</p>
       </div>
     )
   }
@@ -48,7 +48,7 @@ export function PopularProductsScreen({onNext, onPrevious}: PopularProductsScree
       className="w-full h-full bg-white rounded-lg p-4 overflow-y-auto cursor-pointer"
       onClick={handleClick}
     >
-      <h2 className="text-xl font-bold mb-4 text-center">Popular Products</h2>
+      <h2 className="text-xl font-bold mb-4 text-center">What's Trending</h2>
       <div 
         className="grid grid-cols-2 gap-4"
         onClick={e => e.stopPropagation()}

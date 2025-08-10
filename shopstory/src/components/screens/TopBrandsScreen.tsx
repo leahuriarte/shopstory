@@ -65,9 +65,9 @@ export function TopBrandsScreen({onNext, onPrevious}: TopBrandsScreenProps) {
             <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-800 animate-spin"></div>
           </div>
           <h3 className="text-2xl font-bold mb-2 text-amber-900">
-            Discovering Your Top Brands
+            Discovering Your Brand Obsessions
           </h3>
-          <p className="text-amber-800 mb-8 text-lg">Analyzing your saved products...</p>
+          <p className="text-amber-800 mb-8 text-lg">Analyzing your shopping receipts...</p>
           <button 
             onClick={(e) => {
               e.stopPropagation()
@@ -99,8 +99,8 @@ export function TopBrandsScreen({onNext, onPrevious}: TopBrandsScreenProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-2 text-amber-900">Unable to Load Brands</h3>
-          <p className="text-amber-800 text-lg">Click anywhere to continue</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Brands Are Being Shy</h3>
+          <p className="text-amber-800 text-lg">Tap anywhere to keep it moving</p>
         </div>
       </div>
     )
@@ -180,10 +180,10 @@ export function TopBrandsScreen({onNext, onPrevious}: TopBrandsScreenProps) {
             <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
           </div>
           <h2 className="text-3xl font-bold mb-4 text-amber-900">
-            Your Top Brands
+            Your Brand Loyalty Era
           </h2>
           <p className="text-amber-800 mb-8 text-lg leading-relaxed">
-            Start saving products to discover your favorite brands and build your personalized shopping insights!
+            Start saving items to see which brands have your heart! We'll spill the tea on your shopping patterns ✨
           </p>
         </div>
       </div>
@@ -235,7 +235,7 @@ export function TopBrandsScreen({onNext, onPrevious}: TopBrandsScreenProps) {
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-amber-900">
-            Your Top Brands
+            Your Brand Hall of Fame
           </h2>
         </div>
         <p className="text-amber-800 text-sm">Based on your {products.length} saved products</p>

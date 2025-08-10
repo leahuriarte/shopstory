@@ -136,7 +136,7 @@ export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScree
         
         <div className="text-center z-10">
           <p className="text-lg mb-4">🌱</p>
-          <p className="text-amber-900 font-semibold">Loading your saved products...</p>
+          <p className="text-amber-900 font-semibold">Loading your shopping receipts...</p>
         </div>
       </div>
     )
@@ -156,8 +156,8 @@ export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScree
         
         <div className="text-center z-10">
           <p className="text-lg mb-2">⚠️</p>
-          <p className="text-amber-900 font-semibold">Error loading saved products.</p>
-          <p className="text-sm mt-2 text-amber-800">Click to continue.</p>
+          <p className="text-amber-900 font-semibold">That's not very sustainable of us.</p>
+          <p className="text-sm mt-2 text-amber-800">Tap to keep it moving.</p>
         </div>
       </div>
     )
@@ -182,9 +182,9 @@ export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScree
             <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
             <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
           </div>
-          <p className="text-amber-900 font-semibold">No saved products found.</p>
-          <p className="text-sm mt-2 text-amber-800">Save some products first, then check your carbon footprint!</p>
-          <p className="text-xs mt-4 text-amber-700">Click to continue.</p>
+          <p className="text-amber-900 font-semibold">Your cart is giving minimalist vibes.</p>
+          <p className="text-sm mt-2 text-amber-800">Save some items first, then we'll spill the tea on your carbon footprint!</p>
+          <p className="text-xs mt-4 text-amber-700">Tap to continue.</p>
         </div>
       </div>
     )
@@ -202,8 +202,8 @@ export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScree
         
         <div className="text-center z-10">
           <div className="animate-spin text-3xl mb-4">🌍</div>
-          <p className="text-lg font-semibold text-amber-900">Starting Carbon Footprint Analysis...</p>
-          <p className="text-sm text-amber-800 mt-2">Analyzing {products.length} saved products</p>
+          <p className="text-lg font-semibold text-amber-900">Calculating Your Environmental Impact...</p>
+          <p className="text-sm text-amber-800 mt-2">Crunching the numbers on {products.length} items</p>
         </div>
       </div>
     )
@@ -222,9 +222,9 @@ export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScree
         
         <div className="text-center z-10">
           <div className="animate-spin text-3xl mb-4">🌍</div>
-          <p className="text-lg font-semibold text-amber-900">Analyzing Carbon Footprint...</p>
+          <p className="text-lg font-semibold text-amber-900">Reading Your Environmental Tea...</p>
           <p className="text-sm text-amber-800 mt-2">
-            {isAnalyzing ? 'Processing your saved products...' : 'Finalizing analysis...'}
+            {isAnalyzing ? 'Checking your shopping receipts...' : 'Almost done with the vibe check...'}
           </p>
         </div>
       </div>
@@ -249,7 +249,7 @@ export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScree
         
         <div className="text-center mb-6 relative z-10">
           <p className="text-3xl mb-2">🌱</p>
-          <h2 className="text-xl font-bold text-amber-900">Carbon Footprint Analysis</h2>
+          <h2 className="text-xl font-bold text-amber-900">Your Environmental Impact</h2>
         </div>
 
         {/* Total Emissions as a scrapbook card with green accents */}
@@ -258,7 +258,7 @@ export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScree
           <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
           <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
           
-          <h3 className="font-semibold text-green-800 mb-2">Total Emissions</h3>
+          <h3 className="font-semibold text-green-800 mb-2">Your Carbon Reality Check</h3>
           <p className="text-2xl font-bold text-green-900">
             {analysis.totalEmissionsKgCO2.toFixed(2)} kg CO₂
           </p>
@@ -273,7 +273,7 @@ export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScree
           <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
           <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
           
-          <h3 className="font-semibold text-green-800 mb-2">Analysis</h3>
+          <h3 className="font-semibold text-green-800 mb-2">The Tea</h3>
           <ul className="space-y-1">
             {analysis.analysis.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0).map((sentence, index) => (
               <li key={index} className="text-sm text-amber-800 flex items-start gap-2">
@@ -286,7 +286,7 @@ export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScree
 
         {/* Top Eco-Friendly Products as polaroid-style cards */}
         <div className="mb-4 relative z-10">
-          <h3 className="font-semibold text-amber-900 mb-3">🏆 Most Eco-Friendly Purchases</h3>
+          <h3 className="font-semibold text-amber-900 mb-3">🏆 Your Sustainable Slay Moments</h3>
           <div className="space-y-3">
             {analysis.lowestEmissionProducts.map((product, index) => {
               const originalProduct = products.find(p => p.id === product.productId)
@@ -333,7 +333,7 @@ export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScree
           <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
           <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
           
-          <h3 className="font-semibold text-green-800 mb-2">💡 Recommendations</h3>
+          <h3 className="font-semibold text-green-800 mb-2">💡 How to Serve Sustainability</h3>
           <ul className="space-y-1">
             {analysis.recommendations.map((recommendation, index) => (
               <li key={index} className="text-sm text-amber-800 flex items-start gap-2">
@@ -360,8 +360,8 @@ export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScree
         <div className="absolute bottom-5 right-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
         
         <p className="text-2xl mb-4">⚠️</p>
-        <p className="text-lg font-semibold mb-2 text-amber-900">Analysis Failed</p>
-        <p className="text-sm text-center mb-4 text-amber-800">{analysisError}</p>
+        <p className="text-lg font-semibold mb-2 text-amber-900">That's Not Very Eco of Us</p>
+        <p className="text-sm text-center mb-4 text-amber-800">The sustainability check failed: {analysisError}</p>
         <div className="space-y-2 w-full max-w-xs">
           <button
             onClick={() => {

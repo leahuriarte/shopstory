@@ -154,8 +154,8 @@ export function PaletteScreen({onNext, onPrevious}: PaletteScreenProps) {
             <div className="absolute inset-0 rounded-full border-4 border-amber-800/20"></div>
             <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-800 animate-spin"></div>
           </div>
-          <h3 className="text-2xl font-bold mb-2 text-amber-900">Loading Your Products</h3>
-          <p className="text-amber-800 text-lg">Gathering your saved items...</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Loading Your Color Story</h3>
+          <p className="text-amber-800 text-lg">Gathering your aesthetic evidence...</p>
         </div>
       </div>
     )
@@ -179,8 +179,8 @@ export function PaletteScreen({onNext, onPrevious}: PaletteScreenProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-2 text-amber-900">Unable to Load Products</h3>
-          <p className="text-amber-800 text-lg">Click anywhere to continue</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Colors Are Being Shy</h3>
+          <p className="text-amber-800 text-lg">Tap anywhere to keep the vibe going</p>
         </div>
       </div>
     )
@@ -212,7 +212,7 @@ export function PaletteScreen({onNext, onPrevious}: PaletteScreenProps) {
             Your Color Story
           </h2>
           <p className="text-amber-800 mb-8 text-lg leading-relaxed">
-            Start saving products to discover your unique color palette and style preferences!
+            Start saving items to unlock your color DNA and discover your aesthetic signature!
           </p>
         </div>
       </div>
@@ -240,9 +240,9 @@ export function PaletteScreen({onNext, onPrevious}: PaletteScreenProps) {
             </div>
           </div>
           <h3 className="text-2xl font-bold mb-2 text-amber-900">
-            Analyzing Your Color Palette
+            Reading Your Color Aura
           </h3>
-          <p className="text-amber-800 mb-8 text-lg">Discovering your unique style preferences...</p>
+          <p className="text-amber-800 mb-8 text-lg">Decoding your aesthetic DNA...</p>
           <button 
             onClick={(e) => {
               e.stopPropagation()
@@ -275,8 +275,8 @@ export function PaletteScreen({onNext, onPrevious}: PaletteScreenProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-2 text-amber-900">Analysis Unavailable</h3>
-          <p className="text-amber-800 text-lg mb-4">{analysisError}</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Color Reader Broke</h3>
+          <p className="text-amber-800 text-lg mb-4">The palette detector failed: {analysisError}</p>
           <button
             onClick={(e) => {
               e.stopPropagation()
@@ -312,7 +312,7 @@ export function PaletteScreen({onNext, onPrevious}: PaletteScreenProps) {
               </svg>
             </div>
             <h2 className="text-2xl font-bold text-amber-900">
-              Your Color Story
+              Your Color Era
             </h2>
           </div>
           <p className="text-amber-800 text-sm">Based on {products.length} saved products</p>
@@ -330,7 +330,7 @@ export function PaletteScreen({onNext, onPrevious}: PaletteScreenProps) {
 
         {/* Color Palette as simple squares */}
         <div className="mb-12 relative z-10">
-          <h3 className="text-lg font-semibold mb-4 text-center text-amber-900">Your Color Palette</h3>
+          <h3 className="text-lg font-semibold mb-4 text-center text-amber-900">Your Color DNA</h3>
           <div className="grid grid-cols-3 gap-4 mb-12">
             {colorAnalysis.colors.slice(0, 6).map((color, index) => {
               const rotations = ['rotate-2', '-rotate-1', 'rotate-1', '-rotate-2', 'rotate-3', '-rotate-3']
@@ -355,7 +355,7 @@ export function PaletteScreen({onNext, onPrevious}: PaletteScreenProps) {
 
         {/* Palette Popsicle */}
         <div className="mb-6 relative z-10">
-          <h3 className="text-lg font-semibold mb-4 text-center text-amber-900">Palette Popsicle</h3>
+          <h3 className="text-lg font-semibold mb-4 text-center text-amber-900">Your Vibe Spectrum</h3>
           <div className="flex rounded-lg overflow-hidden shadow-md h-16 border-2 border-amber-200">
             {colorAnalysis.colors.slice(0, 6).map((color, index) => (
               <div
@@ -402,8 +402,8 @@ export function PaletteScreen({onNext, onPrevious}: PaletteScreenProps) {
           <div className="absolute inset-0 rounded-full border-4 border-amber-800/20"></div>
           <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-800 animate-spin"></div>
         </div>
-        <h3 className="text-2xl font-bold mb-2 text-amber-900">Preparing Analysis</h3>
-        <p className="text-amber-800 text-lg">Getting ready to analyze your colors...</p>
+        <h3 className="text-2xl font-bold mb-2 text-amber-900">Preparing Your Color Reading</h3>
+        <p className="text-amber-800 text-lg">Getting ready to decode your aesthetic...</p>
       </div>
     </div>
   )

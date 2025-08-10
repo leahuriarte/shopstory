@@ -114,8 +114,8 @@ export function ShippingTimeScreen({onNext, onPrevious}: ShippingTimeScreenProps
             <div className="absolute inset-0 rounded-full border-4 border-amber-800/20"></div>
             <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-800 animate-spin"></div>
           </div>
-          <h3 className="text-2xl font-bold mb-2 text-amber-900">Analyzing Shipping Times</h3>
-          <p className="text-amber-800 text-lg">Gathering your delivery data...</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Calculating Your Patience Level</h3>
+          <p className="text-amber-800 text-lg">Crunching your delivery receipts...</p>
         </div>
       </div>
     )
@@ -138,8 +138,8 @@ export function ShippingTimeScreen({onNext, onPrevious}: ShippingTimeScreenProps
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-2 text-amber-900">Error Loading Shipping Data</h3>
-          <p className="text-amber-800 text-lg">Click to continue</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">That's Not Very Cash Money</h3>
+          <p className="text-amber-800 text-lg">Tap to keep the vibe going</p>
         </div>
       </div>
     )
@@ -165,10 +165,10 @@ export function ShippingTimeScreen({onNext, onPrevious}: ShippingTimeScreenProps
               <span className="text-white text-lg">📦</span>
             </div>
             <h2 className="text-2xl font-bold text-amber-900">
-              Shipping Time Analytics
+              Your Waiting Era
             </h2>
           </div>
-          <p className="text-amber-800 text-sm">Your monthly delivery insights</p>
+          <p className="text-amber-800 text-sm">How long you've been manifesting packages</p>
         </div>
 
         {/* Section 1: Cumulative Wait Time as scrapbook note */}
@@ -181,7 +181,7 @@ export function ShippingTimeScreen({onNext, onPrevious}: ShippingTimeScreenProps
             <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4 border-2 border-blue-200">
               <span className="text-2xl">⏱️</span>
             </div>
-            <h3 className="text-xl font-semibold text-amber-900 mb-2">Total Wait Time This Month</h3>
+            <h3 className="text-xl font-semibold text-amber-900 mb-2">Your Patience This Month</h3>
             <div className="text-4xl font-bold text-blue-600 mb-2">
               {shippingData.totalCumulativeWaitTime} days
             </div>
@@ -215,7 +215,7 @@ export function ShippingTimeScreen({onNext, onPrevious}: ShippingTimeScreenProps
             <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4 border-2 border-red-200">
               <span className="text-2xl">🐌</span>
             </div>
-            <h3 className="text-xl font-semibold text-amber-900">Longest Shipping Time</h3>
+            <h3 className="text-xl font-semibold text-amber-900">Your Biggest Test of Patience</h3>
             <p className="text-red-600 font-medium text-lg">{shippingData.longestShippingProduct.days} days</p>
           </div>
           <div className="bg-amber-50 rounded-lg p-4 border-2 border-amber-200 relative">
@@ -237,7 +237,7 @@ export function ShippingTimeScreen({onNext, onPrevious}: ShippingTimeScreenProps
                 <p className="text-red-600 font-medium">{shippingData.longestShippingProduct.price}</p>
                 <div className="flex items-center mt-2">
                   <div className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs border border-red-200">
-                    {shippingData.longestShippingProduct.days} days late
+                    took {shippingData.longestShippingProduct.days} days (not it)
                   </div>
                 </div>
               </div>
@@ -255,7 +255,7 @@ export function ShippingTimeScreen({onNext, onPrevious}: ShippingTimeScreenProps
             <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4 border-2 border-green-200">
               <span className="text-2xl">⚡</span>
             </div>
-            <h3 className="text-xl font-semibold text-amber-900">Fastest Shipping Time</h3>
+            <h3 className="text-xl font-semibold text-amber-900">Your Speed Demon Delivery</h3>
             <p className="text-green-600 font-medium text-lg">{shippingData.shortestShippingProduct.days} days</p>
           </div>
           <div className="bg-amber-50 rounded-lg p-4 border-2 border-amber-200 relative">
@@ -277,7 +277,7 @@ export function ShippingTimeScreen({onNext, onPrevious}: ShippingTimeScreenProps
                 <p className="text-green-600 font-medium">{shippingData.shortestShippingProduct.price}</p>
                 <div className="flex items-center mt-2">
                   <div className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs border border-green-200">
-                    Lightning fast! ⚡
+                    Absolutely sent it! ⚡
                   </div>
                 </div>
               </div>
@@ -295,8 +295,8 @@ export function ShippingTimeScreen({onNext, onPrevious}: ShippingTimeScreenProps
             <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4 border-2 border-purple-200">
               <span className="text-2xl">📊</span>
             </div>
-            <h3 className="text-xl font-semibold text-amber-900 mb-2">How You Compare</h3>
-            <p className="text-amber-700 text-sm mb-4">Your shipping wait time vs other Shop customers</p>
+            <h3 className="text-xl font-semibold text-amber-900 mb-2">Your Patience Ranking</h3>
+            <p className="text-amber-700 text-sm mb-4">How you stack up against other shoppers</p>
             
             <div className="bg-amber-50 rounded-lg p-6 border-2 border-amber-200">
               <div className="text-4xl font-bold text-purple-600 mb-2">73rd</div>
