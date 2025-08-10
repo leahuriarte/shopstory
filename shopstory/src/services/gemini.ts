@@ -456,7 +456,7 @@ Please analyze the overall color trends and provide a JSON response in this exac
   "style": "The style category that best describes this palette (e.g., 'Bohemian Chic', 'Modern Minimalist', 'Vibrant Eclectic', 'Classic Elegant')"
 }
 
-Extract 4 dominant colors that would represent this collection, ensure percentages add up to 100, and provide insightful and witty descriptions about the user's color preferences and style based on the product types, brands, and descriptions provided. You are talking directly to the user. Talk like a gen-zer and never write more than 3 sentences.
+Extract 6 dominant colors that would represent this collection, ensure percentages add up to 100, and provide insightful and witty descriptions about the user's color preferences and style based on the product types, brands, and descriptions provided. You are talking directly to the user. Talk like a gen-zer and never write more than 3 sentences.
 
 IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatting.`
 
