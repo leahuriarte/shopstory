@@ -44,20 +44,36 @@ export function SmallBusinessScreen({onNext, onPrevious}: SmallBusinessScreenPro
     setAnalysisError(null)
 
     try {
-      // Extract unique shops and count their occurrences
+      // Extract unique shops and count their occurrences, storing shop objects and sample products
       const shopCounts = products.reduce((acc, product) => {
         const shop = product.shop
         const shopId = shop.id || shop.name || 'unknown'
         
+        // Debug: Log shop properties to understand what's available
+        if (!acc[shopId]) {
+          console.log('Shop object for small business analysis:', {
+            id: shop.id,
+            name: shop.name,
+            logo: (shop as any).logo,
+            description: (shop as any).description,
+            allProperties: Object.keys(shop)
+          })
+        }
+        
         if (!acc[shopId]) {
           acc[shopId] = {
             shop: shop,
-            count: 0
+            count: 0,
+            sampleProducts: []
           }
         }
         acc[shopId].count += 1
+        // Keep up to 3 sample products for variety
+        if (acc[shopId].sampleProducts.length < 3) {
+          acc[shopId].sampleProducts.push(product)
+        }
         return acc
-      }, {} as Record<string, {shop: any, count: number}>)
+      }, {} as Record<string, {shop: any, count: number, sampleProducts: any[]}>)
 
       // Prepare business data for analysis
       const businesses = Object.values(shopCounts).map(({shop, count}) => ({
@@ -213,12 +229,17 @@ export function SmallBusinessScreen({onNext, onPrevious}: SmallBusinessScreenPro
     if (!acc[shopId]) {
       acc[shopId] = {
         shop: shop,
-        count: 0
+        count: 0,
+        sampleProducts: []
       }
     }
     acc[shopId].count += 1
+    // Keep up to 3 sample products for variety
+    if (acc[shopId].sampleProducts.length < 3) {
+      acc[shopId].sampleProducts.push(product)
+    }
     return acc
-  }, {} as Record<string, {shop: any, count: number}>)
+  }, {} as Record<string, {shop: any, count: number, sampleProducts: any[]}>)
 
   // Get small businesses from analysis, sorted by purchase count
   const smallBusinessShops = analysis?.smallBusinesses
@@ -230,13 +251,80 @@ export function SmallBusinessScreen({onNext, onPrevious}: SmallBusinessScreenPro
       return {
         ...business,
         shop: shopData?.shop,
-        purchaseCount: shopData?.count || 0
+        purchaseCount: shopData?.count || 0,
+        sampleProducts: shopData?.sampleProducts || []
       }
     })
     ?.filter(business => business.shop) // Only include businesses where we found shop data
     ?.sort((a, b) => b.purchaseCount - a.purchaseCount) || []
 
   console.log('Small business shops:', smallBusinessShops)
+
+  // Function to determine shop genre from sample products
+  const getShopGenre = (sampleProducts: any[]): string => {
+    if (!sampleProducts || sampleProducts.length === 0) return 'Small Business'
+    
+    // Collect all product types and titles
+    const productInfo = sampleProducts.map(product => ({
+      title: product.title?.toLowerCase() || '',
+      type: (product as any).productType || (product as any).category || (product as any).type || '',
+      description: (product as any).description?.toLowerCase() || ''
+    }))
+    
+    // Analyze common themes
+    const allText = productInfo.map(p => `${p.title} ${p.type} ${p.description}`).join(' ').toLowerCase()
+    
+    // Electronics & Tech
+    if (allText.includes('phone') || allText.includes('electronics') || allText.includes('tech') || 
+        allText.includes('computer') || allText.includes('headphone') || allText.includes('speaker')) {
+      return 'Electronics'
+    }
+    
+    // Fashion & Clothing
+    if (allText.includes('clothing') || allText.includes('fashion') || allText.includes('shirt') || 
+        allText.includes('dress') || allText.includes('shoes') || allText.includes('apparel')) {
+      return 'Fashion'
+    }
+    
+    // Home & Living
+    if (allText.includes('home') || allText.includes('furniture') || allText.includes('decor') || 
+        allText.includes('kitchen') || allText.includes('living') || allText.includes('house')) {
+      return 'Home & Living'
+    }
+    
+    // Beauty & Personal Care
+    if (allText.includes('beauty') || allText.includes('skincare') || allText.includes('cosmetic') || 
+        allText.includes('makeup') || allText.includes('care') || allText.includes('health')) {
+      return 'Beauty & Care'
+    }
+    
+    // Food & Beverage
+    if (allText.includes('food') || allText.includes('drink') || allText.includes('beverage') || 
+        allText.includes('coffee') || allText.includes('tea') || allText.includes('snack')) {
+      return 'Food & Drink'
+    }
+    
+    // Sports & Fitness
+    if (allText.includes('sport') || allText.includes('fitness') || allText.includes('gym') || 
+        allText.includes('exercise') || allText.includes('workout') || allText.includes('athletic')) {
+      return 'Sports & Fitness'
+    }
+    
+    // Arts & Crafts
+    if (allText.includes('art') || allText.includes('craft') || allText.includes('handmade') || 
+        allText.includes('creative') || allText.includes('design') || allText.includes('artisan')) {
+      return 'Arts & Crafts'
+    }
+    
+    // Books & Media
+    if (allText.includes('book') || allText.includes('media') || allText.includes('magazine') || 
+        allText.includes('reading') || allText.includes('literature')) {
+      return 'Books & Media'
+    }
+    
+    // Fallback to Small Business if no clear category
+    return 'Small Business'
+  }
 
   return (
     <div
@@ -284,67 +372,116 @@ export function SmallBusinessScreen({onNext, onPrevious}: SmallBusinessScreenPro
         </div>
       ) : (
         <div className="flex-1 flex flex-col relative z-10">
-          {/* Grid of Polaroid-style Small Business Cards */}
-          <div className="grid grid-cols-2 gap-4 flex-1 min-h-0 p-2 mb-6">
-            {smallBusinessShops.slice(0, 4).map((business, index) => {
-              const rotations = ['rotate-2', '-rotate-1', 'rotate-1', '-rotate-2']
-              const rotation = rotations[index % rotations.length]
+          {/* Small Business Cards in TopBrands style */}
+          <div className="space-y-3 mb-5 relative z-10">
+            {smallBusinessShops.slice(0, 5).map((business, index) => {
               const shop = business.shop
+              const sampleProducts = business.sampleProducts || []
+              const rotations = ['rotate-1', '-rotate-1', 'rotate-2', '-rotate-2', 'rotate-1']
+              const rotation = rotations[index % rotations.length]
+              const shopGenre = getShopGenre(sampleProducts)
               
               return (
                 <div
                   key={business.businessId}
-                  className={`bg-white rounded-lg p-4 border-2 border-amber-200 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 ${rotation} relative`}
+                  className={`bg-white rounded-lg p-5 border-2 border-green-200 hover:border-green-300 hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] relative overflow-hidden shadow-md ${rotation}`}
                 >
-                  {/* Tape corners for each polaroid */}
+                  {/* Tape corners for each card */}
                   <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
                   <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
                   
-                  {/* Small Business Badge */}
-                  <div className="absolute -top-2 -right-2 z-10">
-                    <div className="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md border border-green-500">
-                      Small
-                    </div>
-                  </div>
-                  
-                  {/* Shop logo with polaroid styling */}
-                  <div className="flex justify-center mb-3">
-                    <div className="relative">
-                      {(shop as any).logoUrl || (shop as any).logo ? (
-                        <img 
-                          src={(shop as any).logoUrl || (shop as any).logo} 
-                          alt={`${shop.name} logo`}
-                          className="w-16 h-16 rounded-lg object-cover border-2 border-amber-100 shadow-sm bg-white p-1"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.style.display = 'none';
-                            target.nextElementSibling?.classList.remove('hidden');
-                          }}
-                        />
-                      ) : null}
-                      <div className={`w-16 h-16 bg-white border-2 border-amber-200 rounded-lg flex items-center justify-center shadow-sm p-1 ${((shop as any).logoUrl || (shop as any).logo) ? 'hidden' : ''}`}>
-                        <span className="text-amber-700 font-bold text-xl">
-                          {shop.name?.charAt(0).toUpperCase() || '?'}
-                        </span>
+                  <div className="flex items-start relative z-10">
+                    {/* Product images from this shop as polaroid collage (only show if available) */}
+                    {sampleProducts.length > 0 && sampleProducts.some(p => p.featuredImage) && (
+                      <div className="flex-shrink-0 mr-4">
+                        <div className="relative w-16 h-16">
+                          {/* Main product image with polaroid styling */}
+                          {sampleProducts[0]?.featuredImage && (
+                            <div className="w-16 h-16 bg-white p-1 rounded-lg shadow-md border border-green-200">
+                              <img 
+                                src={sampleProducts[0].featuredImage.url} 
+                                alt={sampleProducts[0].featuredImage.altText || sampleProducts[0].title}
+                                className="w-full h-full rounded-md object-cover"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.style.display = 'none';
+                                }}
+                              />
+                            </div>
+                          )}
+                          
+                          {/* Secondary product images as small polaroids */}
+                          {sampleProducts.length > 1 && sampleProducts[1]?.featuredImage && (
+                            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-white p-0.5 rounded-md shadow-sm border border-green-200">
+                              <img 
+                                src={sampleProducts[1].featuredImage.url} 
+                                alt={sampleProducts[1].featuredImage.altText || sampleProducts[1].title}
+                                className="w-full h-full rounded-sm object-cover"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.style.display = 'none';
+                                }}
+                              />
+                            </div>
+                          )}
+                          
+                          {/* Third product image if available */}
+                          {sampleProducts.length > 2 && sampleProducts[2]?.featuredImage && (
+                            <div className="absolute -top-1 -right-1 w-5 h-5 bg-white p-0.5 rounded-md shadow-sm border border-green-200">
+                              <img 
+                                src={sampleProducts[2].featuredImage.url} 
+                                alt={sampleProducts[2].featuredImage.altText || sampleProducts[2].title}
+                                className="w-full h-full rounded-sm object-cover"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.style.display = 'none';
+                                }}
+                              />
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  
-                  {/* Shop info with handwritten note styling */}
-                  <div className="text-center">
-                    <h3 className="font-bold text-sm text-amber-900 mb-2 leading-tight">
-                      {shop.name || 'Unknown Business'}
-                    </h3>
+                    )}
                     
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-center gap-1 text-xs text-green-700 font-medium">
-                        <div className="w-1.5 h-1.5 bg-green-600 rounded-full"></div>
-                        {business.purchaseCount} purchase{business.purchaseCount !== 1 ? 's' : ''}
-                      </div>
-                      
-                      <div className="flex items-center justify-center gap-1 text-xs text-amber-700">
-                        👥
-                        {business.employeeEstimate || 1} employee{(business.employeeEstimate || 1) !== 1 ? 's' : ''}
+                    {/* Shop info with enhanced styling to fill the space */}
+                    <div className="flex-1 min-w-0">
+                      <div className="mb-3">
+                        <div className="flex items-start justify-between mb-2">
+                          <h3 className="font-bold text-xl text-amber-900 hover:text-amber-700 transition-colors leading-tight flex-1 pr-2">
+                            {shop.name || 'Unknown Business'}
+                          </h3>
+                          
+                          {/* Genre Badge - positioned to prevent cutoff */}
+                          <div className="flex-shrink-0 ml-2">
+                            <div className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium border border-green-200 whitespace-nowrap">
+                              {shopGenre}
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Shop description with more space */}
+                        {(shop as any).description && (
+                          <p className="text-amber-700 text-sm mb-3 leading-relaxed">
+                            {(shop as any).description}
+                          </p>
+                        )}
+                        
+                        {/* Enhanced stats row */}
+                        <div className="flex flex-wrap items-center gap-4 text-sm">
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 bg-green-600 rounded-full"></div>
+                            <span className="font-semibold text-amber-800">
+                              {business.purchaseCount} product{business.purchaseCount !== 1 ? 's' : ''} purchased
+                            </span>
+                          </div>
+                          
+                          <div className="flex items-center gap-2 text-amber-700">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <span>{business.employeeEstimate || 1} employee{(business.employeeEstimate || 1) !== 1 ? 's' : ''}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -353,15 +490,15 @@ export function SmallBusinessScreen({onNext, onPrevious}: SmallBusinessScreenPro
             })}
           </div>
 
-          {/* Summary Note as handwritten scrapbook note */}
-          {smallBusinessShops.length > 4 && (
-            <div className="bg-white rounded-lg p-4 border-2 border-amber-200 mb-4 relative transform rotate-1 shadow-md">
+          {/* Summary Note if more businesses exist */}
+          {smallBusinessShops.length > 5 && (
+            <div className="bg-white rounded-lg p-4 border-2 border-green-200 mb-4 relative transform rotate-1 shadow-md">
               {/* Tape corners */}
               <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
               <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
               
               <p className="text-sm text-amber-800 text-center">
-                +{smallBusinessShops.length - 4} more small biz queens you're supporting
+                +{smallBusinessShops.length - 5} more small businesses you support 💚
               </p>
             </div>
           )}
