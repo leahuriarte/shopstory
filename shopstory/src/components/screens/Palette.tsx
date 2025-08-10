@@ -80,10 +80,15 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
       }
 
       console.log('Starting color analysis for', productsData.length, 'products')
+      console.log('Sample products:', productsData.slice(0, 3).map(p => ({title: p.title, vendor: p.vendor})))
+      
       const result = await falAIService.analyzeColorPalette(productsData)
 
+      console.log('Analysis result:', result)
+      
       if (result.success && result.data) {
-        console.log('Color analysis successful:', result.data)
+        console.log('Color analysis successful - Colors:', result.data.colors?.map((c: any) => c.name))
+        console.log('Style:', result.data.style, 'Mood:', result.data.mood)
         setColorAnalysis(result.data)
       } else {
         console.error('Color analysis failed:', result.error)
