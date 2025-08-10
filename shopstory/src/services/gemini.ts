@@ -62,7 +62,7 @@ class GeminiService {
 
   constructor() {
     // Put your Gemini API key here:
-    this.apiKey = 'edit here'
+    this.apiKey = import.meta.env.VITE_GEMINI_API_KEY || null
   }
 
   /**
