@@ -195,7 +195,14 @@ export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
         {/* Analysis */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
           <h3 className="font-semibold text-blue-800 mb-2">Analysis</h3>
-          <p className="text-sm text-gray-700">{analysis.analysis}</p>
+          <ul className="space-y-1">
+            {analysis.analysis.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0).map((sentence, index) => (
+              <li key={index} className="text-sm text-gray-700 flex items-start gap-2">
+                <span className="text-blue-600">•</span>
+                <span>{sentence.trim()}.</span>
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* Top Eco-Friendly Products */}
