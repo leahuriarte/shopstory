@@ -3,6 +3,8 @@
  * Solves MAX_TOKENS issue by disabling thinking and increasing limits
  */
 
+
+
 export interface GeminiResponse<T = any> {
   data?: T
   error?: string
@@ -49,13 +51,18 @@ export interface AestheticsAnalysis {
   summary: string
 }
 
+export interface RecommendationsAnalysis {
+  headline: string
+  futureSelfdescription: string
+}
+
 class GeminiService {
   private apiKey: string | null = null
   private baseURL = 'https://generativelanguage.googleapis.com/v1beta/models'
 
   constructor() {
     // Put your Gemini API key here:
-    this.apiKey = 'AIzaSyAp6ANRRTeT-bbnmJQWtxsc6KSQ54VS7Is'
+    this.apiKey = 'edit here'
   }
 
   /**
@@ -92,7 +99,7 @@ class GeminiService {
           }]
         }],
         generationConfig: {
-          temperature: 1, 
+          temperature: 0.1, // Lower for faster, more consistent responses
           topK: 10,
           topP: 0.5,
           maxOutputTokens: 2048, // Increased token limit
@@ -167,6 +174,102 @@ class GeminiService {
   }
 
   /**
+   * Analyze recommended products using Gemini - generates Spotify Daylist-style headline for future self
+   */
+  async analyzeRecommendations(
+    products: Array<{
+      id: string
+      title: string
+      description?: string
+      vendor?: string
+      productType?: string
+      imageUrl?: string
+    }>,
+    apiKey?: string
+  ): Promise<GeminiResponse<RecommendationsAnalysis>> {
+    
+    const sampleProducts = products.slice(0, 10) // Analyze up to 10 products
+    const prompt = `You are a gen-z fashion and lifestyle expert. Analyze these ${sampleProducts.length} recommended products to create a Spotify Daylist-style headline about the user's future style evolution and describe what their future self would be like.
+
+Recommended products to analyze:
+${sampleProducts.map((product, index) => `
+${index + 1}. ${product.title}
+   Description: ${product.description || 'No description'}
+   Vendor: ${product.vendor || 'Unknown'}
+   Type: ${product.productType || 'Unknown'}
+`).join('')}
+
+Create a catchy Spotify Daylist-style headline that captures their future style evolution (like "elevated minimalist era incoming" or "maximalist fairy princess transformation" or "dark academia meets future tuesday energy"). Then describe what their future self would be like based on these recommendations.
+
+Please provide your analysis in the following JSON format:
+{
+  "headline": "catchy spotify daylist style headline describing their future style evolution",
+  "futureSelfdescription": "A description of what their future self would be like, their style evolution, and how these products would help them achieve that aesthetic. Keep it witty and inspiring in gen-z language. 2-3 sentences max."
+}
+
+Make the headline creative and forward-looking, focusing on style evolution and transformation. Be inspiring and aspirational while staying authentic. You are talking directly to the user about their style future.
+
+IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatting.`
+
+    try {
+      const response = await this.makeAPICall<string>(prompt, 'gemini-2.5-flash', apiKey)
+      
+      if (!response.success) {
+        return this.createRecommendationsFallback(products)
+      }
+
+      try {
+        const cleanResponse = (response.data as string).replace(/```json|```/g, '').trim()
+        const analysis = JSON.parse(cleanResponse)
+        
+        return {
+          success: true,
+          data: analysis,
+        }
+      } catch (parseError) {
+        return this.createRecommendationsFallback(products)
+      }
+    } catch (error) {
+      return this.createRecommendationsFallback(products)
+    }
+  }
+
+  /**
+   * Smart recommendations fallback based on product analysis
+   */
+  private createRecommendationsFallback(products: any[]): GeminiResponse<RecommendationsAnalysis> {
+    const allText = products.map(p => `${p.title} ${p.vendor || ''} ${p.productType || ''}`).join(' ').toLowerCase()
+    
+    let headline = "elevated minimalist era incoming"
+    let futureDescription = "Your future self is giving main character energy with a curated, intentional style that effortlessly blends comfort and sophistication."
+    
+    if (allText.includes('vintage') || allText.includes('retro') || allText.includes('thrift')) {
+      headline = "vintage curator transformation loading"
+      futureDescription = "You're evolving into a vintage treasure hunter with an eye for timeless pieces that tell stories. Your future wardrobe will be a carefully curated collection of unique finds."
+    } else if (allText.includes('luxury') || allText.includes('premium') || allText.includes('designer')) {
+      headline = "luxury minimalist era activated"
+      futureDescription = "Your style evolution is heading toward effortless luxury with investment pieces that elevate every look. Quality over quantity is about to become your whole personality."
+    } else if (allText.includes('colorful') || allText.includes('bright') || allText.includes('bold')) {
+      headline = "maximalist color queen transformation"
+      futureDescription = "Your future self isn't afraid of color or patterns - you're becoming someone who uses fashion as art and self-expression. Bold choices incoming."
+    } else if (allText.includes('natural') || allText.includes('organic') || allText.includes('sustainable')) {
+      headline = "conscious style maven evolution"
+      futureDescription = "You're transforming into someone who shops with intention, choosing pieces that align with your values. Sustainable style is your new superpower."
+    } else if (allText.includes('tech') || allText.includes('modern') || allText.includes('contemporary')) {
+      headline = "future minimalist aesthetic loading"
+      futureDescription = "Your style DNA is evolving toward clean lines, modern silhouettes, and tech-inspired pieces. You're becoming the person who makes simple look absolutely iconic."
+    }
+
+    return {
+      success: true,
+      data: {
+        headline: headline,
+        futureSelfdescription: futureDescription,
+      },
+    }
+  }
+
+  /**
    * Analyze aesthetics of products using Gemini - generates Spotify Daylist-style headline and top aesthetics
    */
   async analyzeAesthetics(
@@ -192,34 +295,34 @@ ${index + 1}. ${product.title}
    Type: ${product.productType || 'Unknown'}
 `).join('')}
 
-Create a catchy headline that captures their vibe right now (like "y2k revival baby who studies the archives"). Then identify their top 3 aesthetics with percentages.
+Create a catchy Spotify Daylist-style headline that captures their vibe right now (like "soft minimalist sunday vibes" or "maximalist fairycore energy" or "dark academia meets cottagecore tuesday"). Then identify their top 3 aesthetics with percentages.
 
 Popular aesthetics include: Dark Academia, Cottagecore, Y2K, Minimalist, Maximalist, Fairycore, Grunge, Soft Girl, VSCO Girl, E-Girl, Kawaii, Indie Sleaze, Coquette, Coastal Grandmother, Clean Girl, That Girl, Barbiecore, Gorpcore, Old Money, Mob Wife, Coastal Cowgirl, Vanilla Girl, Tomato Girl, Scandi Girl, French Girl, It Girl, Boho, Preppy, Streetwear, Cottagecore, Grandmacore, Normcore, Bloomcore, Forestcore, Oceancore, Spacecore, Cyberpunk, Steampunk, Goth, Emo, Punk, Romantic Academia, Light Academia, Art Hoe, Skater, Surfer, Hippie, Retro, Vintage, Modern, Contemporary, Eclectic, Bohemian, Chic, Elegant, Edgy, Quirky, Whimsical, Dreamy, Ethereal, Bold, Vibrant, Muted, Pastel, Neon, Monochrome, Colorful, Neutral, Earth Tones, Jewel Tones, Warm Tones, Cool Tones, Bubblegum Princess, Ethereal Fairy, Urban Explorer, Sunset Chaser, or create custom aesthetic names.
 
 Please provide your analysis in the following JSON format:
 {
-  "headline": "catchy headline describing their current aesthetic vibe. eg "y2k revival baby who studies the archives". max 8 words. original and quirky. "",
+  "headline": "catchy spotify daylist style headline describing their current aesthetic vibe",
   "topAesthetics": [
     {
       "name": "Aesthetic Name",
       "percentage": 79,
-      "description": "1 sentence description (max 10 words)",
+      "description": "Brief description of why this aesthetic fits them",
       "emoji": "relevant emoji"
     },
     {
       "name": "Second Aesthetic",
       "percentage": 45,
-      "description": "1 sentence description (max 10 words)",
+      "description": "Brief description",
       "emoji": "relevant emoji"
     },
     {
       "name": "Third Aesthetic", 
       "percentage": 32,
-      "description": "1 sentence description (max 10 words)",
+      "description": "Brief description",
       "emoji": "relevant emoji"
     }
   ],
-  "summary": "A witty paragraph about their overall style DNA and aesthetic personality in gen-z language. 3 sentences."
+  "summary": "A witty paragraph about their overall style DNA and aesthetic personality in gen-z language"
 }
 
 Make the headline creative and specific to their products. Percentages don't need to add to 100% since aesthetics can overlap. Be witty and authentic. You are talking directly to the user.
@@ -495,7 +598,7 @@ Please provide your analysis in the following JSON format:
       "reasoning": "<explanation of why this product has relatively low emissions>"
     }
   ],
-  "analysis": "<analysis of the overall carbon footprint, discussing key factors in a gen-z accessible way, being positive>",
+  "analysis": "<analysis of the overall carbon footprint, discussing key factors in a gen-z accessible way>",
   "recommendations": ["<specific actionable recommendation 1>", "<specific actionable recommendation 2>]
 }
 
@@ -676,8 +779,8 @@ Please provide your analysis in the following JSON format:
 
 Consider these factors when determining if a business is small:
 - Business name patterns (does it sound corporate vs. local/personal?)
-- Follower count (small businesses typically have fewer followers - under 30,000 is often small, under 1,000 is very likely small)
-- Review count (small businesses often have fewer reviews - under 1000 reviews often indicates smaller scale)
+- Follower count (small businesses typically have fewer followers - under 10,000 is often small, under 1,000 is very likely small)
+- Review count (small businesses often have fewer reviews - under 500 reviews often indicates smaller scale)
 - Business description language (mentions of family-owned, local, handmade, artisan, boutique, etc.)
 - Scale indicators in the business name or description
 - Professional vs. personal branding style
@@ -688,7 +791,6 @@ Generally consider businesses as "small" if they appear to have:
 - Personal, family-owned, or artisan-focused business indicators
 - Handmade, custom, or small-batch product offerings
 - Limited social media presence or more personal/informal online presence
-- If in doubt (you haven't heard of the brand) assume to be small!
 
 Provide  insights about the user's shopping patterns and the impact of supporting small businesses, along with actionable recommendations for finding and supporting more small businesses. Talk like a gen-zer and never write more than 3 sentences.
 
