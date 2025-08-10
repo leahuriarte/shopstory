@@ -1,5 +1,6 @@
 import {ColorScreen} from './screens/ColorScreen'
 import {PopularProductsScreen} from './screens/PopularProductsScreen'
+import {TitleScreen} from './screens/TitleScreen'
 import {Screen} from './StoryView'
 
 type StoryScreenProps = {
@@ -17,6 +18,8 @@ export function StoryScreen({onNext, screen}: StoryScreenProps) {
   }
 
   switch (screen.type) {
+    case 'title':
+      return <TitleScreen onNext={onNext} screen={screen} />
     case 'color':
       return <ColorScreen onNext={onNext} screen={screen} />
     case 'popularProducts':
@@ -32,3 +35,4 @@ export function StoryScreen({onNext, screen}: StoryScreenProps) {
       )
   }
 }
+

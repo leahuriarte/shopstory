@@ -11,6 +11,11 @@ export function App() {
       id: 'story-1',
       screens: [
         {
+          type: 'title' as const,
+          imageUrl:
+            'https://media.istockphoto.com/id/1293996796/photo/white-paper-texture-background.jpg?s=612x612&w=0&k=20&c=rm1tkR4vvYScql1xyWWywF4h5vKQgHFurlJyieJAESw=',
+        },
+        {
           type: 'color' as const,
           value: 'bg-blue-500',
           text: 'Welcome!',

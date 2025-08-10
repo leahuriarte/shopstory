@@ -12,8 +12,13 @@ export type PopularProductsScreenData = {
   type: 'popularProducts'
 }
 
+export type TitleScreenData = {
+  type: 'title'
+  imageUrl: string
+}
+
 // A screen can be one of the types we've defined.
-export type Screen = ColorScreenData | PopularProductsScreenData
+export type Screen = ColorScreenData | PopularProductsScreenData | TitleScreenData
 
 // A story is an array of these screen types.
 type Story = {
