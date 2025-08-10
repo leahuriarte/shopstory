@@ -20,7 +20,8 @@ interface ColorPalette {
 
 /**
  * A screen component that analyzes the color palette of saved products using Gemini
- * and displays a beautiful visualization of the user's color preferences.
+ * and displays a beautiful scrapbook visualization of the user's color preferences
+ * with actual color swatches and polaroid-style presentation.
  */
 export function PaletteScreen({onNext}: PaletteScreenProps) {
   const {products, loading: productsLoading, error: productsError} = useSavedProducts({first: 10})
@@ -102,17 +103,45 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
     }
   }
 
+  // Base scrapbook background style
+  const scrapbookStyle = {
+    background: `
+      radial-gradient(circle at 20% 30%, rgba(139, 69, 19, 0.03) 1px, transparent 1px),
+      radial-gradient(circle at 80% 70%, rgba(139, 69, 19, 0.02) 1px, transparent 1px),
+      radial-gradient(circle at 40% 80%, rgba(139, 69, 19, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139, 69, 19, 0.01) 50%, transparent 50%),
+      linear-gradient(180deg, rgba(139, 69, 19, 0.01) 50%, transparent 50%),
+      linear-gradient(135deg, 
+        #faf5f0 0%, 
+        #f7f1ea 25%,
+        #f5ede4 50%,
+        #f3e9de 75%,
+        #f1e5d8 100%
+      )
+    `,
+    backgroundSize: '40px 40px, 60px 60px, 30px 30px, 8px 8px, 12px 12px, 100% 100%',
+    boxShadow: 'inset 0 0 120px rgba(139, 69, 19, 0.1), inset 0 0 40px rgba(139, 69, 19, 0.05)',
+  }
+
   // Loading state for products
   if (productsLoading) {
     return (
-      <div className="w-full h-full bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 rounded-2xl flex items-center justify-center text-white cursor-pointer" onClick={onNext}>
+      <div 
+        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer relative" 
+        onClick={onNext}
+        style={scrapbookStyle}
+      >
+        {/* Decorative tape pieces */}
+        <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute top-5 right-5 w-9 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        
         <div className="text-center z-10 p-8">
           <div className="w-16 h-16 mx-auto mb-6 relative">
-            <div className="absolute inset-0 rounded-full border-4 border-white/20"></div>
-            <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-white animate-spin"></div>
+            <div className="absolute inset-0 rounded-full border-4 border-amber-800/20"></div>
+            <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-800 animate-spin"></div>
           </div>
-          <h3 className="text-2xl font-bold mb-2">Loading Your Products</h3>
-          <p className="text-purple-200 text-lg">Gathering your saved items...</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Loading Your Products</h3>
+          <p className="text-amber-800 text-lg">Gathering your saved items...</p>
         </div>
       </div>
     )
@@ -122,18 +151,22 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
   if (productsError || !products) {
     return (
       <div
-        className="w-full h-full bg-gradient-to-br from-red-600 via-rose-600 to-pink-600 rounded-2xl flex items-center justify-center text-white cursor-pointer overflow-hidden relative"
+        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
         onClick={onNext}
+        style={scrapbookStyle}
       >
-        <div className="absolute inset-0 bg-black/10"></div>
+        {/* Decorative tape pieces */}
+        <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute bottom-5 right-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
+        
         <div className="text-center z-10 p-8">
-          <div className="w-20 h-20 mx-auto mb-6 bg-white/20 rounded-full flex items-center justify-center">
-            <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-20 h-20 mx-auto mb-6 bg-amber-100 rounded-full flex items-center justify-center border-2 border-amber-200 shadow-sm">
+            <svg className="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-2">Unable to Load Products</h3>
-          <p className="text-rose-100 text-lg">Click anywhere to continue</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Unable to Load Products</h3>
+          <p className="text-amber-800 text-lg">Click anywhere to continue</p>
         </div>
       </div>
     )
@@ -143,20 +176,28 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
   if (products.length === 0) {
     return (
       <div
-        className="w-full h-full bg-gradient-to-br from-slate-50 to-purple-50 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative"
+        className="w-full h-full rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative"
         onClick={onNext}
+        style={scrapbookStyle}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5"></div>
+        {/* Decorative tape pieces */}
+        <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute top-5 right-5 w-9 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute bottom-5 left-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
+        
         <div className="text-center z-10 max-w-md">
-          <div className="w-24 h-24 mx-auto mb-8 bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl flex items-center justify-center">
-            <svg className="w-12 h-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-24 h-24 mx-auto mb-8 bg-white border-2 border-amber-200 rounded-lg shadow-md relative p-4">
+            <svg className="w-full h-full text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5H9a2 2 0 00-2 2v10a4 4 0 004 4h6a2 2 0 002-2V5z" />
             </svg>
+            {/* Tape corners */}
+            <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
+            <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
           </div>
-          <h2 className="text-3xl font-bold mb-4 text-gray-900 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold mb-4 text-amber-900">
             Your Color Story
           </h2>
-          <p className="text-gray-600 mb-8 text-lg leading-relaxed">
+          <p className="text-amber-800 mb-8 text-lg leading-relaxed">
             Start saving products to discover your unique color palette and style preferences!
           </p>
           <button
@@ -164,7 +205,7 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
               e.stopPropagation()
               onNext()
             }}
-            className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-purple-600 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            className="bg-amber-800 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-amber-900 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-amber-700"
           >
             Continue Journey
           </button>
@@ -176,24 +217,33 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
   // Analyzing state
   if (isAnalyzing) {
     return (
-      <div className="w-full h-full bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 rounded-2xl flex items-center justify-center text-white cursor-pointer overflow-hidden relative" onClick={onNext}>
-        <div className="absolute inset-0 bg-black/20"></div>
+      <div 
+        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative" 
+        onClick={onNext}
+        style={scrapbookStyle}
+      >
+        {/* Decorative tape pieces */}
+        <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute bottom-5 right-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
+        
         <div className="text-center z-10 p-8">
-          {/* Animated color palette */}
+          {/* Animated color palette with scrapbook styling */}
           <div className="w-20 h-20 mx-auto mb-6 relative">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-red-400 via-yellow-400 via-green-400 via-blue-400 to-purple-400 animate-spin"></div>
-            <div className="absolute inset-2 rounded-full bg-indigo-900"></div>
+            <div className="absolute inset-0 rounded-full bg-white border-4 border-amber-300 shadow-md animate-spin"></div>
+            <div className="absolute inset-2 rounded-full bg-amber-100 flex items-center justify-center">
+              🎨
+            </div>
           </div>
-          <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">
             Analyzing Your Color Palette
           </h3>
-          <p className="text-purple-200 mb-8 text-lg">Discovering your unique style preferences...</p>
+          <p className="text-amber-800 mb-8 text-lg">Discovering your unique style preferences...</p>
           <button 
             onClick={(e) => {
               e.stopPropagation()
               onNext()
             }}
-            className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 py-3 rounded-full hover:bg-white/20 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+            className="bg-white/90 backdrop-blur-md border-2 border-amber-300 text-amber-800 px-8 py-3 rounded-lg hover:bg-white transition-all duration-300 font-semibold shadow-md hover:shadow-lg transform hover:scale-105"
           >
             Skip Analysis
           </button>
@@ -206,24 +256,28 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
   if (analysisError) {
     return (
       <div
-        className="w-full h-full bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 rounded-2xl flex items-center justify-center text-white cursor-pointer overflow-hidden relative"
+        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
         onClick={onNext}
+        style={scrapbookStyle}
       >
-        <div className="absolute inset-0 bg-black/10"></div>
+        {/* Decorative tape pieces */}
+        <div className="absolute top-5 right-5 w-9 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute bottom-5 left-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
+        
         <div className="text-center z-10 p-8">
-          <div className="w-20 h-20 mx-auto mb-6 bg-white/20 rounded-full flex items-center justify-center">
-            <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-20 h-20 mx-auto mb-6 bg-amber-100 rounded-full flex items-center justify-center border-2 border-amber-300 shadow-md">
+            <svg className="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-2">Analysis Unavailable</h3>
-          <p className="text-rose-100 text-lg mb-4">{analysisError}</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Analysis Unavailable</h3>
+          <p className="text-amber-800 text-lg mb-4">{analysisError}</p>
           <button
             onClick={(e) => {
               e.stopPropagation()
               onNext()
             }}
-            className="bg-white/20 backdrop-blur-md text-white px-6 py-3 rounded-full hover:bg-white/30 transition-all duration-300 font-semibold"
+            className="bg-white/90 backdrop-blur-md border-2 border-amber-300 text-amber-800 px-6 py-3 rounded-lg hover:bg-white transition-all duration-300 font-semibold shadow-md"
           >
             Continue
           </button>
@@ -232,104 +286,122 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
     )
   }
 
-  // Results state
+  // Results state with scrapbook styling and real colors
   if (colorAnalysis && showResults) {
     return (
       <div
-        className="w-full h-full bg-gradient-to-br from-slate-50 via-white to-purple-50 rounded-2xl p-4 overflow-y-auto cursor-pointer"
+        className="w-full h-full rounded-lg p-4 overflow-y-auto cursor-pointer relative"
         onClick={onNext}
+        style={scrapbookStyle}
       >
-        {/* Header */}
-        <div className="text-center mb-6">
+        {/* Decorative tape pieces */}
+        <div className="absolute top-2 left-3 w-8 h-3 bg-white bg-opacity-90 border border-amber-300 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute top-2 right-3 w-7 h-3 bg-white bg-opacity-90 border border-amber-300 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        
+        {/* Header with scrapbook styling */}
+        <div className="text-center mb-6 relative z-10">
           <div className="inline-flex items-center gap-2 mb-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-amber-800 rounded-lg flex items-center justify-center shadow-md">
               <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5H9a2 2 0 00-2 2v10a4 4 0 004 4h6a2 2 0 002-2V5z" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+            <h2 className="text-2xl font-bold text-amber-900">
               Your Color Story
             </h2>
           </div>
-          <p className="text-gray-600 text-sm">Based on {products.length} saved products</p>
+          <p className="text-amber-800 text-sm">Based on {products.length} saved products</p>
         </div>
 
-        {/* Style and Mood Tags */}
-        <div className="flex justify-center gap-3 mb-6">
-          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-purple-100 text-purple-800 border border-purple-200">
+        {/* Style and Mood Tags as vintage stickers */}
+        <div className="flex justify-center gap-3 mb-6 relative z-10">
+          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-white text-amber-800 border-2 border-amber-300 shadow-md transform -rotate-1">
             {colorAnalysis.style}
           </span>
-          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-800 border border-pink-200">
+          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-white text-amber-800 border-2 border-amber-300 shadow-md transform rotate-1">
             {colorAnalysis.mood}
           </span>
         </div>
 
-        {/* Color Palette */}
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-4 text-center text-gray-800">Your Dominant Colors</h3>
+        {/* Color Palette as paint swatches */}
+        <div className="mb-6 relative z-10">
+          <h3 className="text-lg font-semibold mb-4 text-center text-amber-900">The Rainbow of You</h3>
           <div className="grid grid-cols-2 gap-3 mb-4">
-            {colorAnalysis.colors.map((color, index) => (
-              <div key={index} className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
-                <div className="flex items-center gap-3 mb-3">
-                  <div 
-                    className="w-12 h-12 rounded-lg shadow-md border border-gray-200"
-                    style={{ backgroundColor: color.hex }}
-                  ></div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-gray-900 text-sm">{color.name}</h4>
-                    <p className="text-xs text-gray-500">{color.percentage}%</p>
+            {colorAnalysis.colors.map((color, index) => {
+              const rotations = ['rotate-2', '-rotate-1', 'rotate-1', '-rotate-2']
+              const rotation = rotations[index % rotations.length]
+              
+              return (
+                <div key={index} className={`bg-white rounded-lg p-4 border-2 border-amber-200 shadow-md hover:shadow-lg transition-all duration-300 relative ${rotation}`}>
+                  {/* Tape corners */}
+                  <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
+                  <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
+                  
+                  <div className="flex items-center gap-3 mb-3">
+                    {/* Real color swatch with paint blob effect */}
+                    <div className="relative">
+                      <div 
+                        className="w-12 h-12 rounded-lg shadow-md border-2 border-amber-200 relative"
+                        style={{ backgroundColor: color.hex }}
+                      >
+                        {/* Paint texture overlay */}
+                        <div 
+                          className="absolute inset-0 rounded-lg opacity-20"
+                          style={{
+                            background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%)`
+                          }}
+                        ></div>
+                      </div>
+                      {/* Paint drip effect */}
+                      <div 
+                        className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 rounded-full"
+                        style={{ backgroundColor: color.hex, opacity: 0.7 }}
+                      ></div>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-amber-900 text-sm">{color.name}</h4>
+                      <p className="text-xs text-amber-700">{color.percentage}%</p>
+                    </div>
                   </div>
+                  <p className="text-xs text-amber-800 leading-relaxed">{color.description}</p>
                 </div>
-                <p className="text-xs text-gray-600 leading-relaxed">{color.description}</p>
-              </div>
-            ))}
+              )
+            })}
           </div>
 
-          {/* Color Palette Visualization */}
-          <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm mb-6">
-            <h4 className="font-semibold text-gray-800 text-sm mb-3 text-center">Palette Overview</h4>
-            <div className="flex rounded-lg overflow-hidden shadow-md h-16">
+          {/* Color Palette Visualization as paint stripe */}
+          <div className="bg-white rounded-lg p-4 border-2 border-amber-200 shadow-md mb-6 relative transform rotate-1">
+            {/* Tape corners */}
+            <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
+            <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
+            
+            <h4 className="font-semibold text-amber-900 text-sm mb-3 text-center">Palette Overview</h4>
+            <div className="flex rounded-lg overflow-hidden shadow-md h-16 border-2 border-amber-200">
               {colorAnalysis.colors.map((color, index) => (
                 <div
                   key={index}
-                  className="flex-grow flex items-end justify-center pb-2 text-white text-xs font-medium"
+                  className="flex-grow flex items-end justify-center pb-2 text-white text-xs font-medium relative overflow-hidden"
                   style={{ 
                     backgroundColor: color.hex,
                     width: `${color.percentage}%`
                   }}
                 >
-                  {color.percentage >= 15 && `${color.percentage}%`}
+                  {/* Paint texture overlay */}
+                  <div 
+                    className="absolute inset-0 opacity-20"
+                    style={{
+                      background: `linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.2) 75%)`
+                    }}
+                  ></div>
+                  {color.percentage >= 15 && (
+                    <span className="relative z-10 drop-shadow-sm">
+                      {color.percentage}%
+                    </span>
+                  )}
                 </div>
               ))}
             </div>
           </div>
-        </div>
-
-        {/* Overall Description */}
-        <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-200 mb-6">
-          <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
-            <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Your Style Analysis
-          </h3>
-          <p className="text-gray-700 text-sm leading-relaxed">{colorAnalysis.overallDescription}</p>
-        </div>
-
-        {/* Continue Button */}
-        <div className="sticky bottom-0 pt-4 bg-gradient-to-t from-white via-white to-transparent">
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onNext()
-            }}
-            className="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 rounded-xl font-semibold text-base hover:from-purple-600 hover:to-pink-700 transition-all duration-300 transform hover:scale-[1.01] shadow-md hover:shadow-lg flex items-center justify-center gap-2 group"
-          >
-            Continue Your Journey
-            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </button>
         </div>
       </div>
     )
@@ -337,14 +409,22 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
 
   // Default loading state while waiting for analysis to start
   return (
-    <div className="w-full h-full bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 rounded-2xl flex items-center justify-center text-white cursor-pointer" onClick={onNext}>
+    <div 
+      className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer relative" 
+      onClick={onNext}
+      style={scrapbookStyle}
+    >
+      {/* Decorative tape pieces */}
+      <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+      <div className="absolute bottom-5 right-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
+      
       <div className="text-center z-10 p-8">
         <div className="w-16 h-16 mx-auto mb-6 relative">
-          <div className="absolute inset-0 rounded-full border-4 border-white/20"></div>
-          <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-white animate-spin"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-amber-800/20"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-800 animate-spin"></div>
         </div>
-        <h3 className="text-2xl font-bold mb-2">Preparing Analysis</h3>
-        <p className="text-purple-200 text-lg">Getting ready to analyze your colors...</p>
+        <h3 className="text-2xl font-bold mb-2 text-amber-900">Preparing Analysis</h3>
+        <p className="text-amber-800 text-lg">Getting ready to analyze your colors...</p>
       </div>
     </div>
   )
