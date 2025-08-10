@@ -34,6 +34,7 @@ export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
 
       return () => clearTimeout(timer)
     }
+    return undefined
   }, [analysis, showResults])
 
   const startAnalysis = async () => {
@@ -53,7 +54,7 @@ export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
         
         // Extract data more carefully from the Shopify product
         const title = product.title || 'Unknown Product'
-        const description = product.description || 
+        const description = (product as any).description || 
                            (product as any).excerpt || 
                            (product as any).summary || 
                            ''
