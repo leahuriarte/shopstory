@@ -1,6 +1,7 @@
 import {ColorScreen} from './screens/ColorScreen'
 import {PopularProductsScreen} from './screens/PopularProductsScreen'
 import {TitleScreen} from './screens/TitleScreen'
+import {CarbonFootprintScreen} from './screens/CarbonFootprint'
 import {Screen} from './StoryView'
 
 type StoryScreenProps = {
@@ -24,6 +25,8 @@ export function StoryScreen({onNext, screen}: StoryScreenProps) {
       return <ColorScreen onNext={onNext} screen={screen} />
     case 'popularProducts':
       return <PopularProductsScreen onNext={onNext} />
+    case 'carbonFootprint':
+      return <CarbonFootprintScreen onNext={onNext} />
     default:
       return (
         <div

@@ -30,6 +30,10 @@ export function App() {
         {
           type: 'popularProducts' as const,
         },
+        // Carbon footprint analysis screen - analyzes saved products with AI
+        {
+          type: 'carbonFootprint' as const,
+        },
       ],
     },
   ]
