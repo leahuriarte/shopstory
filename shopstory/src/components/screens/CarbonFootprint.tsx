@@ -11,7 +11,7 @@ type CarbonFootprintScreenProps = {
  * using Gemini LLM integration. Shows total emissions and eco-friendly rankings.
  */
 export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
-  const {products, loading: productsLoading, error: productsError} = useSavedProducts()
+  const {products, loading: productsLoading, error: productsError} = useSavedProducts({first: 20})
   const [analysis, setAnalysis] = useState<CarbonFootprintAnalysis | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)

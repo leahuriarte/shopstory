@@ -6,7 +6,9 @@ import {TopBrandsScreen} from './screens/TopBrandsScreen'
 import {PaletteScreen} from './screens/Palette'
 import {SmallBusinessScreen} from './screens/SmallBusiness'
 import {ShippingTimeScreen} from './screens/ShippingTime'
+import {AestheticsScreen} from './screens/AestheticsScreen'
 import {Screen} from './StoryView'
+
 
 type StoryScreenProps = {
   onNext: () => void
@@ -39,6 +41,8 @@ export function StoryScreen({onNext, screen}: StoryScreenProps) {
       return <SmallBusinessScreen onNext={onNext} />
     case 'shippingTime':
       return <ShippingTimeScreen onNext={onNext} />
+    case 'aesthetics':
+      return <AestheticsScreen onNext={onNext} />
     default:
       return (
         <div

@@ -38,8 +38,12 @@ export type ShippingTimeScreenData = {
   type: 'shippingTime'
 }
 
+export type AestheticsScreenData = {
+  type: 'aesthetics'
+}
+
 // A screen can be one of the types we've defined.
-export type Screen = TitleScreenData | ColorScreenData | PopularProductsScreenData | CarbonFootprintScreenData | TopBrandsScreenData | PaletteScreenData | SmallBusinessScreenData | ShippingTimeScreenData
+export type Screen = TitleScreenData | ColorScreenData | PopularProductsScreenData | CarbonFootprintScreenData | TopBrandsScreenData | PaletteScreenData | SmallBusinessScreenData | ShippingTimeScreenData | AestheticsScreenData
 
 // A story is an array of these screen types.
 type Story = {
