@@ -1,21 +1,31 @@
 import {StoryView} from './components/StoryView'
 
+/**
+ * The main App component.
+ * Its purpose is to define the sequence of stories and screens.
+ * The actual rendering and data fetching is handled by the components.
+ */
 export function App() {
-  // The list of stories to be displayed.
-  // Each object in the array represents a story, and its 'screens' property is an array of screen components.
-  // For now, we are just passing empty screen objects to render the placeholders.
   const stories = [
     {
       id: 'story-1',
-      screens: [{}, {}, {}], // This story will have 3 screens.
-    },
-    {
-      id: 'story-2',
-      screens: [{}, {}], // This story will have 2 screens.
-    },
-    {
-      id: 'story-3',
-      screens: [{}, {}, {}, {}], // This story will have 4 screens.
+      screens: [
+        {
+          type: 'color' as const,
+          value: 'bg-blue-500',
+          text: 'Welcome!',
+        },
+        {
+          type: 'color' as const,
+          value: 'bg-green-500',
+          text: 'Check out our popular products next!',
+        },
+        // This screen will render the PopularProductsScreen component.
+        // It doesn't need any extra data because the component fetches its own.
+        {
+          type: 'popularProducts' as const,
+        },
+      ],
     },
   ]
 
