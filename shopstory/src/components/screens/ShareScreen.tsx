@@ -13,12 +13,25 @@ import { RecommendationsScreen } from './RecommendationsScreen'
 
 type ShareScreenProps = {
   onNext: () => void
+  onPrevious: () => void
   allScreens?: Screen[]
 }
 
 type SocialPlatform = 'instagram' | 'twitter' | 'facebook' | 'tiktok' | 'linkedin'
 
-export function ShareScreen({ onNext, allScreens = [] }: ShareScreenProps) {
+export function ShareScreen({ onNext, onPrevious, allScreens = [] }: ShareScreenProps) {
+  const handleClick = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const clickX = e.clientX - rect.left
+    const screenWidth = rect.width
+    
+    // If clicked on left half, go back; if clicked on right half, go forward
+    if (clickX < screenWidth / 2) {
+      onPrevious()
+    } else {
+      onNext()
+    }
+  }
   const [selectedScreenIndex, setSelectedScreenIndex] = useState(0)
   const [showSocialOptions, setShowSocialOptions] = useState(false)
   const [touchStart, setTouchStart] = useState<number | null>(null)
@@ -117,25 +130,25 @@ export function ShareScreen({ onNext, allScreens = [] }: ShareScreenProps) {
     const dummyOnNext = () => {}
     switch (screen.type) {
       case 'title':
-        return <TitleScreen onNext={dummyOnNext} screen={screen} />
+        return <TitleScreen onNext={dummyOnNext} onPrevious={dummyOnNext} screen={screen} />
       case 'color':
-        return <ColorScreen onNext={dummyOnNext} screen={screen} />
+        return <ColorScreen onNext={dummyOnNext} onPrevious={dummyOnNext} screen={screen} />
       case 'popularProducts':
-        return <PopularProductsScreen onNext={dummyOnNext} />
+        return <PopularProductsScreen onNext={dummyOnNext} onPrevious={dummyOnNext} />
       case 'carbonFootprint':
-        return <CarbonFootprintScreen onNext={dummyOnNext} />
+        return <CarbonFootprintScreen onNext={dummyOnNext} onPrevious={dummyOnNext} />
       case 'topBrands':
-        return <TopBrandsScreen onNext={dummyOnNext} />
+        return <TopBrandsScreen onNext={dummyOnNext} onPrevious={dummyOnNext} />
       case 'palette':
-        return <PaletteScreen onNext={dummyOnNext} />
+        return <PaletteScreen onNext={dummyOnNext} onPrevious={dummyOnNext} />
       case 'smallBusiness':
-        return <SmallBusinessScreen onNext={dummyOnNext} />
+        return <SmallBusinessScreen onNext={dummyOnNext} onPrevious={dummyOnNext} />
       case 'shippingTime':
-        return <ShippingTimeScreen onNext={dummyOnNext} />
+        return <ShippingTimeScreen onNext={dummyOnNext} onPrevious={dummyOnNext} />
       case 'aesthetics':
-        return <AestheticsScreen onNext={dummyOnNext} />
+        return <AestheticsScreen onNext={dummyOnNext} onPrevious={dummyOnNext} />
       case 'recommendations':
-        return <RecommendationsScreen onNext={dummyOnNext} />
+        return <RecommendationsScreen onNext={dummyOnNext} onPrevious={dummyOnNext} />
       default:
         return (
           <div className="w-full h-full bg-gray-700 flex items-center justify-center text-white rounded-lg">
@@ -177,10 +190,11 @@ export function ShareScreen({ onNext, allScreens = [] }: ShareScreenProps) {
 
       {/* Current screen */}
       <div 
-        className="flex-1 relative overflow-hidden"
+        className="flex-1 relative overflow-hidden cursor-pointer"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
+        onClick={handleClick}
       >
         {renderActualScreen(shareableScreens[selectedScreenIndex])}
 

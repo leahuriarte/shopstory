@@ -2,6 +2,7 @@ import {usePreloadedSavedProducts} from '../../contexts/DataContext'
 
 type TopBrandsScreenProps = {
   onNext: () => void
+  onPrevious: () => void
 }
 
 /**
@@ -9,7 +10,19 @@ type TopBrandsScreenProps = {
  * Features authentic scrapbook aesthetics with polaroid-style brand cards, handwritten notes,
  * and decorative tape elements. Shows actual saved product images for a personal touch.
  */
-export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
+export function TopBrandsScreen({onNext, onPrevious}: TopBrandsScreenProps) {
+  const handleClick = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const clickX = e.clientX - rect.left
+    const screenWidth = rect.width
+    
+    // If clicked on left half, go back; if clicked on right half, go forward
+    if (clickX < screenWidth / 2) {
+      onPrevious()
+    } else {
+      onNext()
+    }
+  }
   const {products, loading, error} = usePreloadedSavedProducts({first: 20})
   
   console.log('TopBrandsScreen render:', { products, loading, error })
@@ -38,7 +51,7 @@ export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
     return (
       <div 
         className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative" 
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -73,7 +86,7 @@ export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -149,7 +162,7 @@ export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -206,7 +219,7 @@ export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
   return (
     <div
       className="w-full h-full rounded-lg p-4 overflow-y-auto cursor-pointer relative"
-      onClick={onNext}
+      onClick={handleClick}
       style={scrapbookStyle}
     >
       {/* Decorative tape pieces */}

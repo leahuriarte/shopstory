@@ -1,10 +1,11 @@
-import {useState, useEffect} from 'react'
-import {ProductCard} from '@shopify/shop-minis-react'
-import {geminiService, RecommendationsAnalysis} from '../../services/gemini'
-import {usePreloadedRecommendedProducts} from '../../contexts/DataContext'
+import { useState, useEffect } from 'react'
+import { ProductCard } from '@shopify/shop-minis-react'
+import { geminiService, RecommendationsAnalysis } from '../../services/gemini'
+import { usePreloadedRecommendedProducts } from '../../contexts/DataContext'
 
 type RecommendationsScreenProps = {
   onNext: () => void
+  onPrevious: () => void
 }
 
 /**
@@ -12,8 +13,20 @@ type RecommendationsScreenProps = {
  * headline and displays product recommendations to match the user's future self.
  * Now styled with scrapbook theme to match TitleScreen.
  */
-export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
-  const {products, loading: productsLoading, error: productsError} = usePreloadedRecommendedProducts({first: 12})
+export function RecommendationsScreen({ onNext, onPrevious }: RecommendationsScreenProps) {
+  const handleClick = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const clickX = e.clientX - rect.left
+    const screenWidth = rect.width
+
+    // If clicked on left half, go back; if clicked on right half, go forward
+    if (clickX < screenWidth / 2) {
+      onPrevious()
+    } else {
+      onNext()
+    }
+  }
+  const { products, loading: productsLoading, error: productsError } = usePreloadedRecommendedProducts({ first: 12 })
 
   const [analysis, setAnalysis] = useState<RecommendationsAnalysis | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
@@ -62,11 +75,11 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
       }))
 
       console.log('Starting recommendations analysis for', productsData.length, 'products')
-      
+
       const result = await geminiService.analyzeRecommendations(productsData)
 
       console.log('Recommendations analysis result:', result)
-      
+
       if (result.success && result.data) {
         console.log('Analysis successful - Headline:', result.data.headline)
         console.log('Future self description:', result.data.futureSelfdescription)
@@ -110,15 +123,15 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
   // Loading state for products
   if (productsLoading) {
     return (
-      <div 
-        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative" 
-        onClick={onNext}
+      <div
+        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
         <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
         <div className="absolute top-5 right-5 w-9 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
-        
+
         <div className="text-center z-10 p-8">
           <div className="w-16 h-16 mx-auto mb-6 relative">
             <div className="absolute inset-0 rounded-full border-4 border-amber-800/20"></div>
@@ -136,13 +149,13 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
         <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
         <div className="absolute bottom-5 right-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
-        
+
         <div className="text-center z-10 p-8">
           <div className="w-20 h-20 mx-auto mb-6 bg-amber-100 rounded-full flex items-center justify-center border-2 border-amber-200 shadow-sm">
             <svg className="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -161,14 +174,14 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
         <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
         <div className="absolute top-5 right-5 w-9 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
         <div className="absolute bottom-5 left-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
-        
+
         <div className="text-center z-10 max-w-md">
           <div className="w-24 h-24 mx-auto mb-8 bg-white border-2 border-amber-200 rounded-lg shadow-md relative p-4">
             <svg className="w-full h-full text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -192,15 +205,15 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
   // Analyzing state
   if (isAnalyzing) {
     return (
-      <div 
-        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative" 
-        onClick={onNext}
+      <div
+        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
         <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
         <div className="absolute bottom-5 right-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
-        
+
         <div className="text-center z-10 p-8">
           {/* Animated crystal ball with scrapbook styling */}
           <div className="w-20 h-20 mx-auto mb-6 relative">
@@ -213,7 +226,7 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
             Predicting Your Future Style
           </h3>
           <p className="text-amber-800 mb-8 text-lg">Reading the style crystal ball...</p>
-          <button 
+          <button
             onClick={(e) => {
               e.stopPropagation()
               onNext()
@@ -232,13 +245,13 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
         <div className="absolute top-5 right-5 w-9 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
         <div className="absolute bottom-5 left-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
-        
+
         <div className="text-center z-10 p-8">
           <div className="w-20 h-20 mx-auto mb-6 bg-amber-100 rounded-full flex items-center justify-center border-2 border-amber-300 shadow-md">
             <svg className="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -266,7 +279,7 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg p-4 overflow-y-auto cursor-pointer relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -283,25 +296,25 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
               Your Future Style
             </h2>
           </div>
-          
+
           {/* Spotify Daylist-style headline as a scrapbook note */}
           <div className="bg-white rounded-lg p-6 mb-4 text-amber-900 shadow-lg border-2 border-emerald-200 relative transform -rotate-1">
             {/* Tape corners for the note */}
             <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
             <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
-            
+
             <p className="text-sm font-medium mb-2 text-emerald-700">Your style evolution</p>
             <h1 className="text-2xl font-bold leading-tight text-amber-900">
               {analysis.headline}
             </h1>
           </div>
-          
+
           {/* Future self description as handwritten note */}
           <div className="bg-white rounded-lg p-4 border-2 border-emerald-200 mb-6 relative transform rotate-1 shadow-md">
             {/* Tape corners */}
             <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
             <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
-            
+
             <h3 className="font-semibold text-emerald-800 mb-2 flex items-center gap-2">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -310,30 +323,30 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
             </h3>
             <p className="text-amber-800 text-sm leading-relaxed">{analysis.futureSelfdescription}</p>
           </div>
-          
+
           <p className="text-amber-700 text-sm">Based on {products.length} curated recommendations</p>
         </div>
 
         {/* Product Recommendations as polaroid grid */}
         <div className="mb-6 relative z-10">
           <h3 className="text-lg font-semibold mb-4 text-center text-amber-900">Recommended for You</h3>
-          <div 
+          <div
             className="grid grid-cols-2 gap-4"
             onClick={e => e.stopPropagation()}
           >
             {products.slice(0, 8).map((product, index) => {
               const rotations = ['rotate-1', '-rotate-1', 'rotate-2', '-rotate-2']
               const rotation = rotations[index % rotations.length]
-              
+
               return (
                 <div key={product.id} className={`bg-white p-2 rounded-lg border-2 border-amber-200 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 ${rotation} relative`}>
                   {/* Tape corners for each product card */}
                   <div className="absolute -top-1 -right-1 w-3 h-1.5 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
                   <div className="absolute -bottom-1 -left-1 w-2 h-1.5 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
-                  
+
                   <div className="transform scale-90 origin-center">
-                    <ProductCard 
-                      product={product} 
+                    <ProductCard
+                      product={product}
                       onFavoriteToggled={handleFavoriteToggled}
                     />
                   </div>
@@ -341,13 +354,13 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
               )
             })}
           </div>
-          
+
           {products.length > 8 && (
             <div className="bg-white rounded-lg p-3 border-2 border-amber-200 mt-4 relative transform -rotate-1 shadow-md">
               {/* Tape corners */}
               <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
               <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
-              
+
               <p className="text-sm text-amber-800 text-center">
                 +{products.length - 8} more recommendations waiting for you
               </p>
@@ -361,15 +374,15 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
 
   // Default loading state while waiting for analysis to start
   return (
-    <div 
-      className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer relative" 
-      onClick={onNext}
+    <div
+      className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer relative"
+      onClick={handleClick}
       style={scrapbookStyle}
     >
       {/* Decorative tape pieces */}
       <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
       <div className="absolute bottom-5 right-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
-      
+
       <div className="text-center z-10 p-8">
         <div className="w-16 h-16 mx-auto mb-6 relative">
           <div className="absolute inset-0 rounded-full border-4 border-amber-800/20"></div>

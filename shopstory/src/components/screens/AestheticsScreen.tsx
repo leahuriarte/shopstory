@@ -4,6 +4,7 @@ import {usePreloadedSavedProducts} from '../../contexts/DataContext'
 
 type AestheticsScreenProps = {
   onNext: () => void
+  onPrevious: () => void
 }
 
 /**
@@ -11,7 +12,19 @@ type AestheticsScreenProps = {
  * headline and identifies the user's top 3 style aesthetics with percentages.
  * Now styled with scrapbook theme to match TitleScreen.
  */
-export function AestheticsScreen({onNext}: AestheticsScreenProps) {
+export function AestheticsScreen({onNext, onPrevious}: AestheticsScreenProps) {
+  const handleClick = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const clickX = e.clientX - rect.left
+    const screenWidth = rect.width
+    
+    // If clicked on left half, go back; if clicked on right half, go forward
+    if (clickX < screenWidth / 2) {
+      onPrevious()
+    } else {
+      onNext()
+    }
+  }
   const {products, loading: productsLoading, error: productsError} = usePreloadedSavedProducts({first: 15})
 
   const [analysis, setAnalysis] = useState<AestheticsAnalysis | null>(null)
@@ -107,7 +120,7 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
     return (
       <div 
         className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer relative overflow-hidden" 
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -131,7 +144,7 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -156,7 +169,7 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -198,7 +211,7 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
     return (
       <div 
         className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative" 
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -236,7 +249,7 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -270,7 +283,7 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg p-4 overflow-y-auto cursor-pointer relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -352,7 +365,7 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
   return (
     <div 
       className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer relative" 
-      onClick={onNext}
+      onClick={handleClick}
       style={scrapbookStyle}
     >
       {/* Decorative tape pieces */}

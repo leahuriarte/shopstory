@@ -2,13 +2,26 @@ import {usePopularProducts, ProductCard} from '@shopify/shop-minis-react'
 
 type PopularProductsScreenProps = {
   onNext: () => void
+  onPrevious: () => void
 }
 
 /**
  * A screen component that fetches and displays popular products in a grid.
  * It handles its own loading and error states.
  */
-export function PopularProductsScreen({onNext}: PopularProductsScreenProps) {
+export function PopularProductsScreen({onNext, onPrevious}: PopularProductsScreenProps) {
+  const handleClick = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const clickX = e.clientX - rect.left
+    const screenWidth = rect.width
+    
+    // If clicked on left half, go back; if clicked on right half, go forward
+    if (clickX < screenWidth / 2) {
+      onPrevious()
+    } else {
+      onNext()
+    }
+  }
   const {products, loading, error} = usePopularProducts({first: 6})
 
   if (loading) {
@@ -23,7 +36,7 @@ export function PopularProductsScreen({onNext}: PopularProductsScreenProps) {
     return (
       <div
         className="w-full h-full bg-red-900 rounded-lg flex items-center justify-center text-white cursor-pointer"
-        onClick={onNext}
+        onClick={handleClick}
       >
         <p>Error loading products. Click to continue.</p>
       </div>
@@ -33,7 +46,7 @@ export function PopularProductsScreen({onNext}: PopularProductsScreenProps) {
   return (
     <div
       className="w-full h-full bg-white rounded-lg p-4 overflow-y-auto cursor-pointer"
-      onClick={onNext}
+      onClick={handleClick}
     >
       <h2 className="text-xl font-bold mb-4 text-center">Popular Products</h2>
       <div 

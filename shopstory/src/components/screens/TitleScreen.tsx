@@ -6,6 +6,7 @@ import {usePreloadedSavedProducts} from '../../contexts/DataContext'
 
 type TitleScreenProps = {
   onNext: () => void
+  onPrevious: () => void
   screen: TitleScreenData
 }
 
@@ -13,7 +14,7 @@ type TitleScreenProps = {
  * A title screen with scrapbook paper background, original Tailwind styling,
  * and animated product images that slide across the screen.
  */
-export function TitleScreen({onNext}: TitleScreenProps) {
+export function TitleScreen({onNext, onPrevious}: TitleScreenProps) {
   // Use preloaded saved products for animations
   const {products, loading, error} = usePreloadedSavedProducts({first: 5})
 
@@ -36,10 +37,23 @@ export function TitleScreen({onNext}: TitleScreenProps) {
     </>
   )
 
+  const handleClick = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const clickX = e.clientX - rect.left
+    const screenWidth = rect.width
+    
+    // If clicked on left half, go back; if clicked on right half, go forward
+    if (clickX < screenWidth / 2) {
+      onPrevious()
+    } else {
+      onNext()
+    }
+  }
+
   return (
     <div
       className="w-full h-full rounded-lg flex items-center justify-center text-gray-800 cursor-pointer relative overflow-hidden"
-      onClick={onNext}
+      onClick={handleClick}
       style={{
         // Beautiful scrapbook paper background
         background: `

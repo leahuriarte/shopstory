@@ -4,6 +4,7 @@ import {usePreloadedSavedProducts} from '../../contexts/DataContext'
 
 type PaletteScreenProps = {
   onNext: () => void
+  onPrevious: () => void
 }
 
 interface ColorPalette {
@@ -23,7 +24,19 @@ interface ColorPalette {
  * and displays a beautiful scrapbook visualization of the user's color preferences
  * with actual color swatches and polaroid-style presentation.
  */
-export function PaletteScreen({onNext}: PaletteScreenProps) {
+export function PaletteScreen({onNext, onPrevious}: PaletteScreenProps) {
+  const handleClick = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const clickX = e.clientX - rect.left
+    const screenWidth = rect.width
+    
+    // If clicked on left half, go back; if clicked on right half, go forward
+    if (clickX < screenWidth / 2) {
+      onPrevious()
+    } else {
+      onNext()
+    }
+  }
   const {products, loading: productsLoading, error: productsError} = usePreloadedSavedProducts({first: 10})
 
   const [colorAnalysis, setColorAnalysis] = useState<ColorPalette | null>(null)
@@ -129,7 +142,7 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
     return (
       <div 
         className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer relative" 
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -153,7 +166,7 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -178,7 +191,7 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -211,7 +224,7 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
     return (
       <div 
         className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative" 
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -249,7 +262,7 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -283,7 +296,7 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg p-4 overflow-y-auto cursor-pointer relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -403,7 +416,7 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
   return (
     <div 
       className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer relative" 
-      onClick={onNext}
+      onClick={handleClick}
       style={scrapbookStyle}
     >
       {/* Decorative tape pieces */}

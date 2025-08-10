@@ -5,6 +5,7 @@ import {usePreloadedSavedProducts} from '../../contexts/DataContext'
 
 type CarbonFootprintScreenProps = {
   onNext: () => void
+  onPrevious: () => void
 }
 
 /**
@@ -12,7 +13,19 @@ type CarbonFootprintScreenProps = {
  * using Gemini LLM integration. Shows total emissions and eco-friendly rankings.
  * Now styled with scrapbook theme and green environmental accents.
  */
-export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
+export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScreenProps) {
+  const handleClick = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const clickX = e.clientX - rect.left
+    const screenWidth = rect.width
+    
+    // If clicked on left half, go back; if clicked on right half, go forward
+    if (clickX < screenWidth / 2) {
+      onPrevious()
+    } else {
+      onNext()
+    }
+  }
   const {products, loading: productsLoading, error: productsError} = usePreloadedSavedProducts({first: 20})
 
   const [analysis, setAnalysis] = useState<CarbonFootprintAnalysis | null>(null)
@@ -134,7 +147,7 @@ export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer p-4 relative overflow-hidden"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -155,7 +168,7 @@ export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer p-4 relative overflow-hidden"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -223,7 +236,7 @@ export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg p-4 overflow-y-auto cursor-pointer relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={{
           ...scrapbookStyle,
           animation: 'fadeIn 1.2s ease-in-out forwards',
@@ -360,7 +373,7 @@ export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
             Try Again
           </button>
           <button
-            onClick={onNext}
+            onClick={handleClick}
             className="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-4 rounded-lg transition-colors border border-amber-500"
           >
             Skip

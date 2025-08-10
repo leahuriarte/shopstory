@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react'
 
 type ShippingTimeScreenProps = {
   onNext: () => void
+  onPrevious: () => void
 }
 
 interface ShippingData {
@@ -54,7 +55,7 @@ const mockShippingData: ShippingData = {
  * including cumulative wait times, fastest/slowest deliveries with product cards,
  * and monthly shipping statistics. Now styled with scrapbook theme.
  */
-export function ShippingTimeScreen({onNext}: ShippingTimeScreenProps) {
+export function ShippingTimeScreen({onNext, onPrevious}: ShippingTimeScreenProps) {
   const [shippingData, setShippingData] = useState<ShippingData | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -63,6 +64,19 @@ export function ShippingTimeScreen({onNext}: ShippingTimeScreenProps) {
     setShippingData(mockShippingData)
     setLoading(false)
   }, [])
+
+  const handleClick = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const clickX = e.clientX - rect.left
+    const screenWidth = rect.width
+    
+    // If clicked on left half, go back; if clicked on right half, go forward
+    if (clickX < screenWidth / 2) {
+      onPrevious()
+    } else {
+      onNext()
+    }
+  }
 
   // Base scrapbook background style
   const scrapbookStyle = {
@@ -88,7 +102,7 @@ export function ShippingTimeScreen({onNext}: ShippingTimeScreenProps) {
     return (
       <div 
         className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -111,7 +125,7 @@ export function ShippingTimeScreen({onNext}: ShippingTimeScreenProps) {
     return (
       <div
         className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
-        onClick={onNext}
+        onClick={handleClick}
         style={scrapbookStyle}
       >
         {/* Decorative tape pieces */}
@@ -136,7 +150,7 @@ export function ShippingTimeScreen({onNext}: ShippingTimeScreenProps) {
   return (
     <div
       className="w-full h-full rounded-lg p-4 overflow-y-auto cursor-pointer relative"
-      onClick={onNext}
+      onClick={handleClick}
       style={scrapbookStyle}
     >
       {/* Decorative tape pieces */}

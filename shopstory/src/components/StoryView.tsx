@@ -89,6 +89,16 @@ export function StoryView({stories}: StoryViewProps) {
     }
   }
 
+  const handlePrevious = () => {
+    if (currentScreenIndex > 0) {
+      setCurrentScreenIndex(currentScreenIndex - 1)
+    } else if (currentStoryIndex > 0) {
+      setCurrentStoryIndex(currentStoryIndex - 1)
+      setCurrentScreenIndex(stories[currentStoryIndex - 1].screens.length - 1)
+    }
+    // If we're at the very first screen, do nothing (can't go back further)
+  }
+
   if (!currentStory) {
     return null
   }
@@ -119,6 +129,7 @@ export function StoryView({stories}: StoryViewProps) {
         </div>
         <StoryScreen
           onNext={handleNext}
+          onPrevious={handlePrevious}
           screen={currentStory.screens[currentScreenIndex]}
           allScreens={currentStory.screens}
         />
