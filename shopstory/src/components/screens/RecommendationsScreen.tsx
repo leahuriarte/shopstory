@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import {ProductCard} from '@shopify/shop-minis-react'
 import {geminiService, RecommendationsAnalysis} from '../../services/gemini'
-import {usePreloadedRecommendedProducts, usePreloadedData} from '../../contexts/DataContext'
+import {usePreloadedRecommendedProducts} from '../../contexts/DataContext'
 
 type RecommendationsScreenProps = {
   onNext: () => void
@@ -14,23 +14,15 @@ type RecommendationsScreenProps = {
  */
 export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
   const {products, loading: productsLoading, error: productsError} = usePreloadedRecommendedProducts({first: 12})
-  const {getAnalysisCache, setAnalysisCache} = usePreloadedData()
-  
+
   const [analysis, setAnalysis] = useState<RecommendationsAnalysis | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)
   const [hasStartedAnalysis, setHasStartedAnalysis] = useState(false)
   const [showResults, setShowResults] = useState(false)
 
-  // Check for cached results first, then start analysis when products are loaded
+  // Automatically start analysis when products are loaded
   useEffect(() => {
-    const cachedAnalysis = getAnalysisCache('recommendations')
-    if (cachedAnalysis) {
-      setAnalysis(cachedAnalysis)
-      setShowResults(true)
-      return
-    }
-    
     if (products && products.length > 0 && !hasStartedAnalysis && !isAnalyzing && !analysis) {
       startRecommendationsAnalysis()
     }
@@ -79,7 +71,6 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
         console.log('Analysis successful - Headline:', result.data.headline)
         console.log('Future self description:', result.data.futureSelfdescription)
         setAnalysis(result.data)
-        setAnalysisCache('recommendations', result.data)
       } else {
         console.error('Recommendations analysis failed:', result.error)
         setAnalysisError(result.error || 'Failed to analyze recommendations')
@@ -193,15 +184,6 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
           <p className="text-amber-800 mb-8 text-lg leading-relaxed">
             No recommendations available right now. Keep exploring to discover your future style evolution!
           </p>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onNext()
-            }}
-            className="bg-amber-800 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-amber-900 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-amber-700"
-          >
-            Continue Journey
-          </button>
         </div>
       </div>
     )
@@ -373,23 +355,6 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
           )}
         </div>
 
-        {/* Continue Button with scrapbook styling */}
-        <div className="sticky bottom-0 pt-4 relative z-10" style={{
-          background: 'linear-gradient(to top, #faf5f0 0%, #faf5f0 70%, transparent 100%)'
-        }}>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onNext()
-            }}
-            className="w-full bg-amber-800 text-white py-3 rounded-lg font-semibold text-base hover:bg-amber-900 transition-all duration-300 transform hover:scale-[1.01] shadow-md hover:shadow-lg flex items-center justify-center gap-2 group border border-amber-700"
-          >
-            Continue Your Journey
-            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </button>
-        </div>
       </div>
     )
   }

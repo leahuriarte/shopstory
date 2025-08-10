@@ -1,19 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { useSavedProducts, useRecommendedProducts, Product } from '@shopify/shop-minis-react'
-import { 
-  CarbonFootprintAnalysis, 
-  AestheticsAnalysis, 
-  SmallBusinessAnalysis, 
-  RecommendationsAnalysis 
-} from '../services/gemini'
-
-interface AnalysisCache {
-  carbonFootprint: CarbonFootprintAnalysis | null
-  aesthetics: AestheticsAnalysis | null
-  smallBusiness: SmallBusinessAnalysis | null
-  recommendations: RecommendationsAnalysis | null
-  colorPalette: any | null // Using any since there's no specific type defined
-}
 
 interface DataContextType {
   savedProducts: Product[] | null
@@ -23,22 +9,12 @@ interface DataContextType {
   savedProductsError: any
   recommendedProductsError: any
   isDataReady: boolean
-  analysisCache: AnalysisCache
-  setAnalysisCache: (key: keyof AnalysisCache, value: any) => void
-  getAnalysisCache: (key: keyof AnalysisCache) => any
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined)
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const [isDataReady, setIsDataReady] = useState(false)
-  const [analysisCache, setAnalysisCacheState] = useState<AnalysisCache>({
-    carbonFootprint: null,
-    aesthetics: null,
-    smallBusiness: null,
-    recommendations: null,
-    colorPalette: null
-  })
   
   // Preload saved products with a higher limit to cover all screens
   const { 
@@ -61,17 +37,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     }
   }, [savedProductsLoading, recommendedProductsLoading])
 
-  const setAnalysisCache = (key: keyof AnalysisCache, value: any) => {
-    setAnalysisCacheState(prev => ({
-      ...prev,
-      [key]: value
-    }))
-  }
-
-  const getAnalysisCache = (key: keyof AnalysisCache) => {
-    return analysisCache[key]
-  }
-
   const value: DataContextType = {
     savedProducts,
     recommendedProducts,
@@ -79,10 +44,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     recommendedProductsLoading,
     savedProductsError,
     recommendedProductsError,
-    isDataReady,
-    analysisCache,
-    setAnalysisCache,
-    getAnalysisCache
+    isDataReady
   }
 
   return (

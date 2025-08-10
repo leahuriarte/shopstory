@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import {geminiService, SmallBusinessAnalysis} from '../../services/gemini'
-import {usePreloadedSavedProducts, usePreloadedData} from '../../contexts/DataContext'
+import {usePreloadedSavedProducts} from '../../contexts/DataContext'
 
 type SmallBusinessScreenProps = {
   onNext: () => void
@@ -13,24 +13,16 @@ type SmallBusinessScreenProps = {
  */
 export function SmallBusinessScreen({onNext}: SmallBusinessScreenProps) {
   const {products, loading, error} = usePreloadedSavedProducts({first: 10})
-  const {getAnalysisCache, setAnalysisCache} = usePreloadedData()
-  
   const [analysis, setAnalysis] = useState<SmallBusinessAnalysis | null>(null)
   const [analyzing, setAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)
 
-  // Check for cached results first, then analyze businesses when products are loaded
+  // Analyze businesses when products are loaded
   useEffect(() => {
-    const cachedAnalysis = getAnalysisCache('smallBusiness')
-    if (cachedAnalysis) {
-      setAnalysis(cachedAnalysis)
-      return
-    }
-    
     if (!loading && !error && products && products.length > 0 && !analysis && !analyzing) {
       analyzeBusinesses()
     }
-  }, [products, loading, error, analysis, analyzing, getAnalysisCache])
+  }, [products, loading, error, analysis, analyzing])
 
   const analyzeBusinesses = async () => {
     if (!products) return
@@ -70,7 +62,6 @@ export function SmallBusinessScreen({onNext}: SmallBusinessScreenProps) {
       
       if (result.success && result.data) {
         setAnalysis(result.data)
-        setAnalysisCache('smallBusiness', result.data)
       } else {
         setAnalysisError(result.error || 'Failed to analyze businesses')
       }
@@ -196,15 +187,6 @@ export function SmallBusinessScreen({onNext}: SmallBusinessScreenProps) {
           <p className="text-amber-800 mb-8 text-lg leading-relaxed">
             Start saving products to discover which businesses are small and local, and see how your purchases can make a difference!
           </p>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onNext()
-            }}
-            className="bg-amber-800 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-amber-900 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-amber-700"
-          >
-            Continue Journey
-          </button>
         </div>
       </div>
     )
@@ -373,23 +355,6 @@ export function SmallBusinessScreen({onNext}: SmallBusinessScreenProps) {
         </div>
       )}
 
-      {/* Continue Button with scrapbook styling */}
-      <div className="sticky bottom-0 pt-4 relative z-10" style={{
-        background: 'linear-gradient(to top, #faf5f0 0%, #faf5f0 70%, transparent 100%)'
-      }}>
-        <button
-          onClick={(e) => {
-            e.stopPropagation()
-            onNext()
-          }}
-          className="w-full bg-amber-800 text-white py-3 rounded-lg font-semibold text-base hover:bg-amber-900 transition-all duration-300 transform hover:scale-[1.01] shadow-md hover:shadow-lg flex items-center justify-center gap-2 group border border-amber-700"
-        >
-          Continue Your Journey
-          <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-          </svg>
-        </button>
-      </div>
     </div>
   )
 }

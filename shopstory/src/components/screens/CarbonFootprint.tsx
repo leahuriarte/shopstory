@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import {ProductCard} from '@shopify/shop-minis-react'
 import {geminiService, CarbonFootprintAnalysis} from '../../services/gemini'
-import {usePreloadedSavedProducts, usePreloadedData} from '../../contexts/DataContext'
+import {usePreloadedSavedProducts} from '../../contexts/DataContext'
 
 type CarbonFootprintScreenProps = {
   onNext: () => void
@@ -14,38 +14,25 @@ type CarbonFootprintScreenProps = {
  */
 export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
   const {products, loading: productsLoading, error: productsError} = usePreloadedSavedProducts({first: 20})
-  const {getAnalysisCache, setAnalysisCache} = usePreloadedData()
-  
+
   const [analysis, setAnalysis] = useState<CarbonFootprintAnalysis | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)
   const [hasStartedAnalysis, setHasStartedAnalysis] = useState(false)
   const [showResults, setShowResults] = useState(false)
 
-  // Check for cached results first, then start analysis when products are loaded
+  // Automatically start analysis when products are loaded
   useEffect(() => {
-    const cachedAnalysis = getAnalysisCache('carbonFootprint')
-    if (cachedAnalysis) {
-      setAnalysis(cachedAnalysis)
-      setShowResults(true)
-      return
-    }
-    
     if (products && products.length > 0 && !hasStartedAnalysis && !isAnalyzing && !analysis) {
       startAnalysis()
     }
-  }, [products, hasStartedAnalysis, isAnalyzing, analysis, getAnalysisCache])
+  }, [products, hasStartedAnalysis, isAnalyzing, analysis])
 
-  // Add delay before showing results
+  // Show results immediately when analysis is complete
   useEffect(() => {
     if (analysis && !showResults) {
-      const timer = setTimeout(() => {
-        setShowResults(true)
-      }, 3500) // 3.5 second delay
-
-      return () => clearTimeout(timer)
+      setShowResults(true)
     }
-    return undefined
   }, [analysis, showResults])
 
   const startAnalysis = async () => {
@@ -92,7 +79,6 @@ export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
 
       if (result.success && result.data) {
         setAnalysis(result.data)
-        setAnalysisCache('carbonFootprint', result.data)
       } else {
         setAnalysisError(result.error || 'Failed to analyze carbon footprint')
       }
@@ -345,16 +331,6 @@ export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
           </ul>
         </div>
 
-        {/* Continue Button with scrapbook styling */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation()
-            onNext()
-          }}
-          className="w-full bg-green-700 hover:bg-green-800 text-white font-medium py-3 px-4 rounded-lg transition-colors border border-green-600 shadow-md relative z-10"
-        >
-          Continue
-        </button>
       </div>
     )
   }

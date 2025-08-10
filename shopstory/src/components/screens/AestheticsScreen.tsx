@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import {geminiService, AestheticsAnalysis} from '../../services/gemini'
-import {usePreloadedSavedProducts, usePreloadedData} from '../../contexts/DataContext'
+import {usePreloadedSavedProducts} from '../../contexts/DataContext'
 
 type AestheticsScreenProps = {
   onNext: () => void
@@ -13,23 +13,15 @@ type AestheticsScreenProps = {
  */
 export function AestheticsScreen({onNext}: AestheticsScreenProps) {
   const {products, loading: productsLoading, error: productsError} = usePreloadedSavedProducts({first: 15})
-  const {getAnalysisCache, setAnalysisCache} = usePreloadedData()
-  
+
   const [analysis, setAnalysis] = useState<AestheticsAnalysis | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)
   const [hasStartedAnalysis, setHasStartedAnalysis] = useState(false)
   const [showResults, setShowResults] = useState(false)
 
-  // Check for cached results first, then start analysis when products are loaded
+  // Automatically start analysis when products are loaded
   useEffect(() => {
-    const cachedAnalysis = getAnalysisCache('aesthetics')
-    if (cachedAnalysis) {
-      setAnalysis(cachedAnalysis)
-      setShowResults(true)
-      return
-    }
-    
     if (products && products.length > 0 && !hasStartedAnalysis && !isAnalyzing && !analysis) {
       startAestheticsAnalysis()
     }
@@ -78,7 +70,6 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
         console.log('Analysis successful - Headline:', result.data.headline)
         console.log('Top aesthetics:', result.data.topAesthetics?.map((a: any) => `${a.name} ${a.percentage}%`))
         setAnalysis(result.data)
-        setAnalysisCache('aesthetics', result.data)
       } else {
         console.error('Aesthetics analysis failed:', result.error)
         setAnalysisError(result.error || 'Failed to analyze aesthetics')
@@ -309,7 +300,6 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
             </h1>
           </div>
           
-          <p className="text-amber-800 text-sm">Based on {products.length} saved products</p>
         </div>
 
         {/* Top 3 Aesthetics as polaroid-style cards */}
@@ -353,39 +343,7 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
             })}
           </div>
         </div>
-
-        {/* Summary as a handwritten note */}
-        <div className="bg-white rounded-lg p-4 border-2 border-amber-200 mb-6 relative transform rotate-1 shadow-md">
-          {/* Tape corners */}
-          <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
-          <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
-          
-          <h3 className="font-semibold text-amber-900 mb-3 flex items-center gap-2">
-            <svg className="w-5 h-5 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Your Style Summary
-          </h3>
-          <p className="text-amber-800 text-sm leading-relaxed">{analysis.summary}</p>
-        </div>
-
-        {/* Continue Button with scrapbook styling */}
-        <div className="sticky bottom-0 pt-4 relative z-10" style={{
-          background: 'linear-gradient(to top, #faf5f0 0%, #faf5f0 70%, transparent 100%)'
-        }}>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onNext()
-            }}
-            className="w-full bg-amber-800 text-white py-3 rounded-lg font-semibold text-base hover:bg-amber-900 transition-all duration-300 transform hover:scale-[1.01] shadow-md hover:shadow-lg flex items-center justify-center gap-2 group border border-amber-700"
-          >
-            Continue Your Journey
-            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </button>
-        </div>
+        
       </div>
     )
   }

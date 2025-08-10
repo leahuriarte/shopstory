@@ -59,13 +59,9 @@ export function ShippingTimeScreen({onNext}: ShippingTimeScreenProps) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate data loading
-    const timer = setTimeout(() => {
-      setShippingData(mockShippingData)
-      setLoading(false)
-    }, 1500)
-
-    return () => clearTimeout(timer)
+    // Load data immediately
+    setShippingData(mockShippingData)
+    setLoading(false)
   }, [])
 
   // Base scrapbook background style
@@ -147,7 +143,7 @@ export function ShippingTimeScreen({onNext}: ShippingTimeScreenProps) {
       <div className="absolute top-2 left-3 w-8 h-3 bg-white bg-opacity-90 border border-amber-300 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
       <div className="absolute top-2 right-3 w-7 h-3 bg-white bg-opacity-90 border border-amber-300 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
 
-      <div className="space-y-6" onClick={e => e.stopPropagation()}>
+      <div className="space-y-6">
         {/* Header with scrapbook styling */}
         <div className="text-center mb-6 relative z-10">
           <div className="inline-flex items-center gap-2 mb-4">
@@ -295,23 +291,6 @@ export function ShippingTimeScreen({onNext}: ShippingTimeScreenProps) {
           </div>
         </div>
 
-        {/* Continue Button with scrapbook styling */}
-        <div className="sticky bottom-0 pt-4 relative z-10" style={{
-          background: 'linear-gradient(to top, #faf5f0 0%, #faf5f0 70%, transparent 100%)'
-        }}>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onNext()
-            }}
-            className="w-full bg-amber-800 text-white py-3 rounded-lg font-semibold text-base hover:bg-amber-900 transition-all duration-300 transform hover:scale-[1.01] shadow-md hover:shadow-lg flex items-center justify-center gap-2 group border border-amber-700"
-          >
-            Continue Your Journey
-            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </button>
-        </div>
       </div>
     </div>
   )
