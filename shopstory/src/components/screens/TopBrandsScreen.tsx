@@ -257,14 +257,9 @@ export function TopBrandsScreen({onNext, onPrevious}: TopBrandsScreenProps) {
               <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
               
               <div className="flex items-center relative z-10">
-                {/* Rank badge with crown for #1 */}
+                {/* Rank badge */}
                 <div className="flex-shrink-0 mr-4">
                   <div className={`relative w-10 h-10 ${rankStyle.badgeColor} text-white text-sm font-bold rounded-lg flex items-center justify-center shadow-md border-2`}>
-                    {index === 0 && (
-                      <svg className="absolute -top-1 -right-1 w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M5 16L3 21l5.25-1.31L12 21l3.75-1.31L21 21l-2-5-2-1V9.5c0-.83-.67-1.5-1.5-1.5S14 8.67 14 9.5V10h-4v-.5C10 8.67 9.33 8 8.5 8S7 8.67 7 9.5V15l-2 1z"/>
-                      </svg>
-                    )}
                     #{index + 1}
                   </div>
                 </div>
