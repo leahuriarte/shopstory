@@ -15,21 +15,21 @@ export function App() {
           imageUrl:
             'https://media.istockphoto.com/id/1293996796/photo/white-paper-texture-background.jpg?s=612x612&w=0&k=20&c=rm1tkR4vvYScql1xyWWywF4h5vKQgHFurlJyieJAESw=',
         },
-        {
-          type: 'color' as const,
-          value: 'bg-blue-500',
-          text: 'Welcome!',
-        },
-        {
-          type: 'color' as const,
-          value: 'bg-green-500',
-          text: 'Check out our popular products next!',
-        },
-        // This screen will render the PopularProductsScreen component.
-        // It doesn't need any extra data because the component fetches its own.
-        {
-          type: 'popularProducts' as const,
-        },
+        // {
+        //   type: 'color' as const,
+        //   value: 'bg-blue-500',
+        //   text: 'Welcome!',
+        // },
+        // {
+        //   type: 'color' as const,
+        //   value: 'bg-green-500',
+        //   text: 'Check out our popular products next!',
+        // },
+        // // This screen will render the PopularProductsScreen component.
+        // // It doesn't need any extra data because the component fetches its own.
+        // {
+        //   type: 'popularProducts' as const,
+        // },
         // Carbon footprint analysis screen - analyzes saved products with AI
         {
           type: 'carbonFootprint' as const,
@@ -52,11 +52,11 @@ export function App() {
         {
           type: 'palette' as const,
         },
-        {
-          type: 'color' as const,
-          value: 'bg-green-500',
-          text: 'Supporting small businesses matters!',
-        },
+        // {
+        //   type: 'color' as const,
+        //   value: 'bg-green-500',
+        //   text: 'Supporting small businesses matters!',
+        // },
         // Small business analysis screen - identifies and shows small businesses from saved products
         {
           type: 'smallBusiness' as const,
