@@ -346,10 +346,6 @@ export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScree
                       <p className="text-base text-green-600 font-bold mt-1">
                         {product.estimatedEmissionsKgCO2.toFixed(2)} kg CO₂
                       </p>
-                      {/* Debug info */}
-                      <p className="text-xs text-gray-500 mt-1">
-                        Analysis ID: {product.productId} | Found: {originalProduct ? 'Yes' : 'No'}
-                      </p>
                     </div>
                   </div>
                 </div>
