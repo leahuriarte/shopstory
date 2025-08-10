@@ -26,11 +26,16 @@ export type TopBrandsScreenData = {
   type: 'topBrands'
 }
 
+export type PaletteScreenData = {
+  type: 'palette'
+}
+
 export type SmallBusinessScreenData = {
   type: 'smallBusiness'
 }
 
 // A screen can be one of the types we've defined.
+export type Screen = TitleScreenData | ColorScreenData | PopularProductsScreenData | CarbonFootprintScreenData | TopBrandsScreenData | PaletteScreenData
 export type Screen = TitleScreenData | ColorScreenData | PopularProductsScreenData | CarbonFootprintScreenData | TopBrandsScreenData | SmallBusinessScreenData
 
 // A story is an array of these screen types.
@@ -75,6 +80,7 @@ export function StoryView({stories}: StoryViewProps) {
           {currentStory.screens.map((screen, index) => {
             const isCurrentScreen = index === currentScreenIndex
             const isCarbonFootprint = isCurrentScreen && screen.type === 'carbonFootprint'
+            const isPalette = isCurrentScreen && screen.type === 'palette'
             
             return (
               <div key={index} className="flex-1 h-1 bg-gray-600 mx-0.5 rounded-full">
@@ -83,7 +89,7 @@ export function StoryView({stories}: StoryViewProps) {
                     index < currentScreenIndex ? 'bg-white' : 'bg-transparent'
                   } ${isCurrentScreen ? 'bg-white animate-progress' : ''}`}
                   style={{
-                    animationDuration: isCarbonFootprint ? '4.7s' : '5s', // 4.7s = 3.5s delay + 1.2s fade-in
+                    animationDuration: isCarbonFootprint ? '4.7s' : isPalette ? '3.5s' : '5s', // Palette: 2s delay + 1.5s fade-in
                     animationTimingFunction: 'linear',
                     animationFillMode: 'forwards',
                   }}
