@@ -43,6 +43,15 @@ export function App() {
         {
           type: 'topBrands' as const,
         },
+        {
+          type: 'color' as const,
+          value: 'bg-green-500',
+          text: 'Supporting small businesses matters!',
+        },
+        // Small business analysis screen - identifies and shows small businesses from saved products
+        {
+          type: 'smallBusiness' as const,
+        },
       ],
     },
   ]
