@@ -6,7 +6,8 @@ type TopBrandsScreenProps = {
 
 /**
  * A screen component that fetches and displays top brands from saved products in a modern, visually appealing grid.
- * Features enhanced UI with gradients, animations, and improved visual hierarchy.
+ * Features enhanced UI with gradients, animations, improved visual hierarchy, and product images from each shop.
+ * Shows actual saved product images instead of shop logos for a more personal and engaging experience.
  */
 export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
   const {products, loading, error} = useSavedProducts({first: 50})
@@ -71,7 +72,6 @@ export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
       id: firstShop.id,
       name: firstShop.name,
       logo: firstShop.logo,
-      logoUrl: firstShop.logoUrl,
       description: firstShop.description,
       followersCount: firstShop.followersCount,
       reviewAnalytics: firstShop.reviewAnalytics,
@@ -80,7 +80,7 @@ export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
     })
   }
 
-  // Extract unique shops and count their occurrences, storing shop objects
+  // Extract unique shops and count their occurrences, storing shop objects and sample products
   const shopCounts = products.reduce((acc, product) => {
     const shop = product.shop
     const shopId = shop.id || shop.name || 'unknown'
@@ -88,19 +88,30 @@ export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
     if (!acc[shopId]) {
       acc[shopId] = {
         shop: shop,
-        count: 0
+        count: 0,
+        sampleProducts: []
       }
     }
     acc[shopId].count += 1
+    // Keep up to 3 sample products for variety
+    if (acc[shopId].sampleProducts.length < 3) {
+      acc[shopId].sampleProducts.push(product)
+    }
     return acc
-  }, {} as Record<string, {shop: any, count: number}>)
+  }, {} as Record<string, {shop: any, count: number, sampleProducts: any[]}>)
 
   // Get top 5 shops by count
   const topShops = Object.values(shopCounts)
     .sort((a, b) => b.count - a.count)
     .slice(0, 5)
 
-  console.log('Top shops:', topShops)
+  console.log('Top shops with sample products:', topShops.map(({shop, count, sampleProducts}) => ({
+    shopName: shop.name,
+    count,
+    sampleProductsCount: sampleProducts.length,
+    firstProductImage: sampleProducts[0]?.featuredImage?.url,
+    firstProductTitle: sampleProducts[0]?.title
+  })))
 
   // If no shops found, show a message and allow navigation
   if (topShops.length === 0) {
@@ -188,8 +199,9 @@ export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
 
       {/* Brands Grid */}
       <div className="space-y-3 mb-5">
-        {topShops.map(({shop, count}, index) => {
+        {topShops.map(({shop, count, sampleProducts}, index) => {
           const rankStyle = getRankStyle(index)
+          const shopData = shop as any // Type assertion for extended properties
           
           return (
             <div
@@ -214,25 +226,56 @@ export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
                   </div>
                 </div>
                 
-                {/* Shop logo with better styling */}
+                {/* Product images from this shop */}
                 <div className="flex-shrink-0 mr-4">
-                  {(shop as any).logoUrl || (shop as any).logo ? (
-                    <img 
-                      src={(shop as any).logoUrl || (shop as any).logo} 
-                      alt={`${shop.name} logo`}
-                      className="w-14 h-14 rounded-xl object-cover border border-gray-100 shadow-sm group-hover:shadow-md transition-all duration-300"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        target.nextElementSibling?.classList.remove('hidden');
-                      }}
-                    />
-                  ) : null}
-                  <div className={`w-14 h-14 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300 ${((shop as any).logoUrl || (shop as any).logo) ? 'hidden' : ''}`}>
-                    <span className="text-white font-bold text-lg">
-                      {shop.name?.charAt(0).toUpperCase() || '?'}
-                    </span>
-                  </div>
+                  {sampleProducts.length > 0 && sampleProducts.some(p => p.featuredImage) ? (
+                    <div className="relative w-14 h-14">
+                      {/* Main product image */}
+                      {sampleProducts[0]?.featuredImage && (
+                        <img 
+                          src={sampleProducts[0].featuredImage.url} 
+                          alt={sampleProducts[0].featuredImage.altText || sampleProducts[0].title}
+                          className="w-14 h-14 rounded-xl object-cover border border-gray-100 shadow-sm group-hover:shadow-md transition-all duration-300"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                          }}
+                        />
+                      )}
+                      
+                      {/* Secondary product images as small overlays */}
+                      {sampleProducts.length > 1 && sampleProducts[1]?.featuredImage && (
+                        <img 
+                          src={sampleProducts[1].featuredImage.url} 
+                          alt={sampleProducts[1].featuredImage.altText || sampleProducts[1].title}
+                          className="absolute -bottom-1 -right-1 w-6 h-6 rounded-md object-cover border-2 border-white shadow-sm"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                          }}
+                        />
+                      )}
+                      
+                      {/* Third product image if available */}
+                      {sampleProducts.length > 2 && sampleProducts[2]?.featuredImage && (
+                        <img 
+                          src={sampleProducts[2].featuredImage.url} 
+                          alt={sampleProducts[2].featuredImage.altText || sampleProducts[2].title}
+                          className="absolute -top-1 -right-1 w-5 h-5 rounded-md object-cover border-2 border-white shadow-sm"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                          }}
+                        />
+                      )}
+                    </div>
+                  ) : (
+                    <div className="w-14 h-14 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
+                      <span className="text-white font-bold text-lg">
+                        {shop.name?.charAt(0).toUpperCase() || '?'}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 
                 {/* Shop info with enhanced typography */}
@@ -241,7 +284,7 @@ export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
                     <h3 className="font-bold text-lg text-gray-900 truncate pr-2 group-hover:text-blue-600 transition-colors">
                       {shop.name || 'Unknown Brand'}
                     </h3>
-                    {(shop as any).isFollowing && (
+                    {shopData.isFollowing && (
                       <span className="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-full font-medium border border-blue-200">
                         <svg className="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
@@ -252,9 +295,9 @@ export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
                   </div>
                   
                   {/* Shop description */}
-                  {(shop as any).description && (
+                  {shopData.description && (
                     <p className="text-gray-600 text-xs mb-2 line-clamp-1 leading-relaxed">
-                      {(shop as any).description}
+                      {shopData.description}
                     </p>
                   )}
                   
@@ -267,28 +310,28 @@ export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
                       </span>
                     </div>
                     
-                    {(shop as any).followersCount && (
+                    {shopData.followersCount && (
                       <div className="flex items-center gap-2 text-gray-500">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
-                        <span>{(shop as any).followersCount.toLocaleString()}</span>
+                        <span>{shopData.followersCount.toLocaleString()}</span>
                       </div>
                     )}
                     
-                    {(shop as any).reviewAnalytics?.averageRating && (
+                    {shopData.reviewAnalytics?.averageRating && (
                       <div className="flex items-center gap-2">
                         <div className="flex items-center gap-1">
                           <svg className="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                           </svg>
                           <span className="font-semibold text-gray-700">
-                            {(shop as any).reviewAnalytics.averageRating.toFixed(1)}
+                            {shopData.reviewAnalytics.averageRating.toFixed(1)}
                           </span>
                         </div>
-                        {(shop as any).reviewAnalytics.reviewCount && (
+                        {shopData.reviewAnalytics.reviewCount && (
                           <span className="text-gray-500">
-                            ({(shop as any).reviewAnalytics.reviewCount})
+                            ({shopData.reviewAnalytics.reviewCount})
                           </span>
                         )}
                       </div>
