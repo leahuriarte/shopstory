@@ -73,6 +73,9 @@ export function App() {
         {
           type: 'shippingTime' as const,
         },
+        {
+          type: 'recommendations' as const,
+        },
       ],
     },
   ]
