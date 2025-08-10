@@ -147,8 +147,8 @@ export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
   if (analysis && showResults) {
     return (
       <div
-        className="w-full h-full bg-white rounded-lg p-4 overflow-y-auto animate-fade-in"
-        onClick={(e) => e.stopPropagation()}
+        className="w-full h-full bg-white rounded-lg p-4 overflow-y-auto animate-fade-in cursor-pointer"
+        onClick={onNext}
         style={{
           animation: 'fadeIn 1.2s ease-in-out forwards',
           opacity: 0,
@@ -226,7 +226,10 @@ export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
         </div>
 
         <button
-          onClick={onNext}
+          onClick={(e) => {
+            e.stopPropagation()
+            onNext()
+          }}
           className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-lg transition-colors"
         >
           Continue

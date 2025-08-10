@@ -236,7 +236,6 @@ export function SmallBusinessScreen({onNext}: SmallBusinessScreenProps) {
                 <div
                   key={business.businessId}
                   className={`bg-white rounded-xl p-4 border-2 border-green-200 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 ${rotation} relative`}
-                  onClick={(e) => e.stopPropagation()}
                   style={{
                     background: 'linear-gradient(135deg, #ffffff 0%, #f8fffe 100%)',
                   }}
@@ -310,7 +309,13 @@ export function SmallBusinessScreen({onNext}: SmallBusinessScreenProps) {
 
       {/* Continue Button */}
       <div className="mt-6">
-        <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-xl font-semibold text-center flex items-center justify-center gap-2">
+        <div 
+          className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-xl font-semibold text-center flex items-center justify-center gap-2 cursor-pointer hover:from-green-600 hover:to-emerald-700 transition-all duration-200"
+          onClick={(e) => {
+            e.stopPropagation()
+            onNext()
+          }}
+        >
           <span>Continue Journey</span>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />

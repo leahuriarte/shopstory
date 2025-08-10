@@ -32,20 +32,24 @@ export function PopularProductsScreen({onNext}: PopularProductsScreenProps) {
 
   return (
     <div
-      className="w-full h-full bg-white rounded-lg p-4 overflow-y-auto"
-      // We stop the click from propagating to the onNext handler of the parent
-      // so users can scroll and interact with the products.
-      onClick={e => e.stopPropagation()}
+      className="w-full h-full bg-white rounded-lg p-4 overflow-y-auto cursor-pointer"
+      onClick={onNext}
     >
       <h2 className="text-xl font-bold mb-4 text-center">Popular Products</h2>
-      <div className="grid grid-cols-2 gap-4">
+      <div 
+        className="grid grid-cols-2 gap-4"
+        onClick={e => e.stopPropagation()}
+      >
         {products.map(product => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
       <button
-        onClick={onNext}
-        className="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg"
+        onClick={(e) => {
+          e.stopPropagation()
+          onNext()
+        }}
+        className="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors"
       >
         Next
       </button>
