@@ -76,6 +76,10 @@ export function App() {
         {
           type: 'recommendations' as const,
         },
+        // Share screen - allows users to select and share screens on social media
+        {
+          type: 'share' as const,
+        },
       ],
     },
   ]

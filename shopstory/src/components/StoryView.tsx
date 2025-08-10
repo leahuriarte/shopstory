@@ -45,8 +45,12 @@ export type RecommendationsScreenData = {
   type: 'recommendations'
 }
 
+export type ShareScreenData = {
+  type: 'share'
+}
+
 // A screen can be one of the types we've defined.
-export type Screen = TitleScreenData | ColorScreenData | PopularProductsScreenData | CarbonFootprintScreenData | TopBrandsScreenData | PaletteScreenData | SmallBusinessScreenData | ShippingTimeScreenData | AestheticsScreenData | RecommendationsScreenData
+export type Screen = TitleScreenData | ColorScreenData | PopularProductsScreenData | CarbonFootprintScreenData | TopBrandsScreenData | PaletteScreenData | SmallBusinessScreenData | ShippingTimeScreenData | AestheticsScreenData | RecommendationsScreenData | ShareScreenData
 
 // A story is an array of these screen types.
 type Story = {
@@ -89,17 +93,16 @@ export function StoryView({stories}: StoryViewProps) {
         <div className="flex w-full mb-2">
           {currentStory.screens.map((screen, index) => {
             const isCurrentScreen = index === currentScreenIndex
-            const isCarbonFootprint = isCurrentScreen && screen.type === 'carbonFootprint'
-            const isPalette = isCurrentScreen && screen.type === 'palette'
+            const isShareScreen = isCurrentScreen && screen.type === 'share'
             
             return (
               <div key={index} className="flex-1 h-1 bg-gray-600 mx-0.5 rounded-full">
                 <div
                   className={`h-full rounded-full ${
                     index < currentScreenIndex ? 'bg-white' : 'bg-transparent'
-                  } ${isCurrentScreen ? 'bg-white animate-progress' : ''}`}
+                  } ${isCurrentScreen && !isShareScreen ? 'bg-white animate-progress' : ''} ${isShareScreen ? 'bg-white' : ''}`}
                   style={{
-                    animationDuration: isCarbonFootprint ? '4.7s' : isPalette ? '3.5s' : '5s', // Palette: 2s delay + 1.5s fade-in
+                    animationDuration: isShareScreen ? '0s' : '5s', // No animation for share screen
                     animationTimingFunction: 'linear',
                     animationFillMode: 'forwards',
                   }}
@@ -111,6 +114,7 @@ export function StoryView({stories}: StoryViewProps) {
         <StoryScreen
           onNext={handleNext}
           screen={currentStory.screens[currentScreenIndex]}
+          allScreens={currentStory.screens}
         />
       </div>
       <style>{`

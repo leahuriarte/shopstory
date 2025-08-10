@@ -8,18 +8,20 @@ import {SmallBusinessScreen} from './screens/SmallBusiness'
 import {ShippingTimeScreen} from './screens/ShippingTime'
 import {AestheticsScreen} from './screens/AestheticsScreen'
 import {RecommendationsScreen} from './screens/RecommendationsScreen'
+import {ShareScreen} from './screens/ShareScreen'
 import {Screen} from './StoryView'
 
 type StoryScreenProps = {
   onNext: () => void
   screen: Screen
+  allScreens?: Screen[]
 }
 
 /**
  * This component is the "router" for our screens. It checks the screen's `type`
  * and renders the correct component.
  */
-export function StoryScreen({onNext, screen}: StoryScreenProps) {
+export function StoryScreen({onNext, screen, allScreens}: StoryScreenProps) {
   if (!screen) {
     return null
   }
@@ -45,6 +47,8 @@ export function StoryScreen({onNext, screen}: StoryScreenProps) {
       return <AestheticsScreen onNext={onNext} />
     case 'recommendations':
       return <RecommendationsScreen onNext={onNext} />
+    case 'share':
+      return <ShareScreen onNext={onNext} allScreens={allScreens} />
     default:
       return (
         <div
