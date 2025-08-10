@@ -189,7 +189,7 @@ class GeminiService {
   ): Promise<GeminiResponse<RecommendationsAnalysis>> {
     
     const sampleProducts = products.slice(0, 10) // Analyze up to 10 products
-    const prompt = `You are a gen-z fashion and lifestyle expert. Analyze these ${sampleProducts.length} recommended products to create a Spotify Daylist-style headline about the user's future style evolution and describe what their future self would be like.
+    const prompt = `You are a gen-z fashion and lifestyle expert. Analyze these ${sampleProducts.length} recommended products to create a  headline about the user's future style evolution and describe what their future self would be like.
 
 Recommended products to analyze:
 ${sampleProducts.map((product, index) => `
@@ -204,10 +204,10 @@ Create a catchy and witty and quirky headline that captures their future style e
 Please provide your analysis in the following JSON format:
 {
   "headline": "catchy style headline describing their future style evolution, eg ",
-  "futureSelfdescription": "A description of what their future self would be like, their style evolution, and how these products would help them achieve that aesthetic. Keep it witty and inspiring in gen-z language. 2-3 sentences max."
+  "futureSelfdescription": "A description of what their future self would be like, their style evolution, and how these products would help them achieve that aesthetic. Keep it witty and inspiring in gen-z language. 2-3 sentences max. 25 words max."
 }
 
-Make the headline creative and forward-looking, focusing on style evolution and transformation. Be inspiring and aspirational while staying authentic. You are talking directly to the user about their style future.
+Make the headline creative and forward-looking, and short and catchy, focusing on style evolution and transformation. Be inspiring and aspirational while staying authentic. You are talking directly to the user about their style future. The user doesn't want to read too much.
 
 IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatting.`
 

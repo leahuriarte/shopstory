@@ -9,6 +9,7 @@ type RecommendationsScreenProps = {
 /**
  * A screen component that analyzes recommended products to generate a Spotify Daylist-style
  * headline and displays product recommendations to match the user's future self.
+ * Now styled with scrapbook theme to match TitleScreen.
  */
 export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
   const {products, loading: productsLoading, error: productsError} = useRecommendedProducts({first: 12})
@@ -84,17 +85,45 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
     console.log('Favorite toggled:', productId, isFavorited)
   }
 
+  // Base scrapbook background style
+  const scrapbookStyle = {
+    background: `
+      radial-gradient(circle at 20% 30%, rgba(139, 69, 19, 0.03) 1px, transparent 1px),
+      radial-gradient(circle at 80% 70%, rgba(139, 69, 19, 0.02) 1px, transparent 1px),
+      radial-gradient(circle at 40% 80%, rgba(139, 69, 19, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139, 69, 19, 0.01) 50%, transparent 50%),
+      linear-gradient(180deg, rgba(139, 69, 19, 0.01) 50%, transparent 50%),
+      linear-gradient(135deg, 
+        #faf5f0 0%, 
+        #f7f1ea 25%,
+        #f5ede4 50%,
+        #f3e9de 75%,
+        #f1e5d8 100%
+      )
+    `,
+    backgroundSize: '40px 40px, 60px 60px, 30px 30px, 8px 8px, 12px 12px, 100% 100%',
+    boxShadow: 'inset 0 0 120px rgba(139, 69, 19, 0.1), inset 0 0 40px rgba(139, 69, 19, 0.05)',
+  }
+
   // Loading state for products
   if (productsLoading) {
     return (
-      <div className="w-full h-full bg-gradient-to-br from-emerald-900 via-teal-900 to-cyan-900 rounded-2xl flex items-center justify-center text-white cursor-pointer" onClick={onNext}>
+      <div 
+        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative" 
+        onClick={onNext}
+        style={scrapbookStyle}
+      >
+        {/* Decorative tape pieces */}
+        <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute top-5 right-5 w-9 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        
         <div className="text-center z-10 p-8">
           <div className="w-16 h-16 mx-auto mb-6 relative">
-            <div className="absolute inset-0 rounded-full border-4 border-white/20"></div>
-            <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-white animate-spin"></div>
+            <div className="absolute inset-0 rounded-full border-4 border-amber-800/20"></div>
+            <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-800 animate-spin"></div>
           </div>
-          <h3 className="text-2xl font-bold mb-2">Loading Recommendations</h3>
-          <p className="text-emerald-200 text-lg">Finding your future style...</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Loading Recommendations</h3>
+          <p className="text-amber-800 text-lg">Finding your future style...</p>
         </div>
       </div>
     )
@@ -104,18 +133,22 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
   if (productsError || !products) {
     return (
       <div
-        className="w-full h-full bg-gradient-to-br from-red-600 via-rose-600 to-pink-600 rounded-2xl flex items-center justify-center text-white cursor-pointer overflow-hidden relative"
+        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
         onClick={onNext}
+        style={scrapbookStyle}
       >
-        <div className="absolute inset-0 bg-black/10"></div>
+        {/* Decorative tape pieces */}
+        <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute bottom-5 right-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
+        
         <div className="text-center z-10 p-8">
-          <div className="w-20 h-20 mx-auto mb-6 bg-white/20 rounded-full flex items-center justify-center">
-            <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-20 h-20 mx-auto mb-6 bg-amber-100 rounded-full flex items-center justify-center border-2 border-amber-200 shadow-sm">
+            <svg className="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-2">Unable to Load Recommendations</h3>
-          <p className="text-rose-100 text-lg">Click anywhere to continue</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Unable to Load Recommendations</h3>
+          <p className="text-amber-800 text-lg">Click anywhere to continue</p>
         </div>
       </div>
     )
@@ -125,20 +158,28 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
   if (products.length === 0) {
     return (
       <div
-        className="w-full h-full bg-gradient-to-br from-slate-50 to-emerald-50 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative"
+        className="w-full h-full rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative"
         onClick={onNext}
+        style={scrapbookStyle}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-teal-500/5"></div>
+        {/* Decorative tape pieces */}
+        <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute top-5 right-5 w-9 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute bottom-5 left-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
+        
         <div className="text-center z-10 max-w-md">
-          <div className="w-24 h-24 mx-auto mb-8 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-3xl flex items-center justify-center">
-            <svg className="w-12 h-12 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-24 h-24 mx-auto mb-8 bg-white border-2 border-amber-200 rounded-lg shadow-md relative p-4">
+            <svg className="w-full h-full text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
+            {/* Tape corners */}
+            <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
+            <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
           </div>
-          <h2 className="text-3xl font-bold mb-4 text-gray-900 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold mb-4 text-amber-900">
             Your Future Style
           </h2>
-          <p className="text-gray-600 mb-8 text-lg leading-relaxed">
+          <p className="text-amber-800 mb-8 text-lg leading-relaxed">
             No recommendations available right now. Keep exploring to discover your future style evolution!
           </p>
           <button
@@ -146,7 +187,7 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
               e.stopPropagation()
               onNext()
             }}
-            className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-emerald-600 hover:to-teal-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            className="bg-amber-800 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-amber-900 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-amber-700"
           >
             Continue Journey
           </button>
@@ -158,26 +199,33 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
   // Analyzing state
   if (isAnalyzing) {
     return (
-      <div className="w-full h-full bg-gradient-to-br from-indigo-900 via-emerald-900 to-teal-900 rounded-2xl flex items-center justify-center text-white cursor-pointer overflow-hidden relative" onClick={onNext}>
-        <div className="absolute inset-0 bg-black/20"></div>
+      <div 
+        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative" 
+        onClick={onNext}
+        style={scrapbookStyle}
+      >
+        {/* Decorative tape pieces */}
+        <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute bottom-5 right-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
+        
         <div className="text-center z-10 p-8">
-          {/* Animated crystal ball */}
+          {/* Animated crystal ball with scrapbook styling */}
           <div className="w-20 h-20 mx-auto mb-6 relative">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 animate-spin"></div>
-            <div className="absolute inset-2 rounded-full bg-indigo-900 flex items-center justify-center">
+            <div className="absolute inset-0 rounded-full bg-white border-4 border-amber-300 shadow-md animate-spin"></div>
+            <div className="absolute inset-2 rounded-full bg-amber-100 flex items-center justify-center">
               <span className="text-2xl">🔮</span>
             </div>
           </div>
-          <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent">
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">
             Predicting Your Future Style
           </h3>
-          <p className="text-emerald-200 mb-8 text-lg">Reading the style crystal ball...</p>
+          <p className="text-amber-800 mb-8 text-lg">Reading the style crystal ball...</p>
           <button 
             onClick={(e) => {
               e.stopPropagation()
               onNext()
             }}
-            className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 py-3 rounded-full hover:bg-white/20 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+            className="bg-white/90 backdrop-blur-md border-2 border-amber-300 text-amber-800 px-8 py-3 rounded-lg hover:bg-white transition-all duration-300 font-semibold shadow-md hover:shadow-lg transform hover:scale-105"
           >
             Skip Prediction
           </button>
@@ -190,24 +238,28 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
   if (analysisError) {
     return (
       <div
-        className="w-full h-full bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 rounded-2xl flex items-center justify-center text-white cursor-pointer overflow-hidden relative"
+        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
         onClick={onNext}
+        style={scrapbookStyle}
       >
-        <div className="absolute inset-0 bg-black/10"></div>
+        {/* Decorative tape pieces */}
+        <div className="absolute top-5 right-5 w-9 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute bottom-5 left-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
+        
         <div className="text-center z-10 p-8">
-          <div className="w-20 h-20 mx-auto mb-6 bg-white/20 rounded-full flex items-center justify-center">
-            <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-20 h-20 mx-auto mb-6 bg-amber-100 rounded-full flex items-center justify-center border-2 border-amber-300 shadow-md">
+            <svg className="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-2">Prediction Unavailable</h3>
-          <p className="text-rose-100 text-lg mb-4">{analysisError}</p>
+          <h3 className="text-2xl font-bold mb-2 text-amber-900">Prediction Unavailable</h3>
+          <p className="text-amber-800 text-lg mb-4">{analysisError}</p>
           <button
             onClick={(e) => {
               e.stopPropagation()
               onNext()
             }}
-            className="bg-white/20 backdrop-blur-md text-white px-6 py-3 rounded-full hover:bg-white/30 transition-all duration-300 font-semibold"
+            className="bg-white/90 backdrop-blur-md border-2 border-amber-300 text-amber-800 px-6 py-3 rounded-lg hover:bg-white transition-all duration-300 font-semibold shadow-md"
           >
             Continue
           </button>
@@ -216,75 +268,110 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
     )
   }
 
-  // Results state
+  // Results state with scrapbook styling
   if (analysis && showResults) {
     return (
       <div
-        className="w-full h-full bg-gradient-to-br from-slate-50 via-white to-emerald-50 rounded-2xl p-4 overflow-y-auto cursor-pointer"
+        className="w-full h-full rounded-lg p-4 overflow-y-auto cursor-pointer relative"
         onClick={onNext}
+        style={scrapbookStyle}
       >
+        {/* Decorative tape pieces */}
+        <div className="absolute top-2 left-3 w-8 h-3 bg-white bg-opacity-90 border border-amber-300 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+        <div className="absolute top-2 right-3 w-7 h-3 bg-white bg-opacity-90 border border-amber-300 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
+
         {/* Header with future style headline */}
-        <div className="text-center mb-6">
+        <div className="text-center mb-6 relative z-10">
           <div className="inline-flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-amber-800 rounded-lg flex items-center justify-center shadow-md">
               <span className="text-white text-lg">🔮</span>
             </div>
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+            <h2 className="text-2xl font-bold text-amber-900">
               Your Future Style
             </h2>
           </div>
           
-          {/* Spotify Daylist-style headline for future self */}
-          <div className="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl p-6 mb-4 text-white shadow-lg">
-            <p className="text-sm font-medium mb-2 opacity-90">Your style evolution</p>
-            <h1 className="text-2xl font-bold leading-tight">
+          {/* Spotify Daylist-style headline as a scrapbook note */}
+          <div className="bg-white rounded-lg p-6 mb-4 text-amber-900 shadow-lg border-2 border-emerald-200 relative transform -rotate-1">
+            {/* Tape corners for the note */}
+            <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
+            <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
+            
+            <p className="text-sm font-medium mb-2 text-emerald-700">Your style evolution</p>
+            <h1 className="text-2xl font-bold leading-tight text-amber-900">
               {analysis.headline}
             </h1>
           </div>
           
-          {/* Future self description */}
-          <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-4 border border-emerald-200 mb-6">
-            <h3 className="font-semibold text-emerald-800 mb-2">To match your future self</h3>
-            <p className="text-emerald-700 text-sm leading-relaxed">{analysis.futureSelfdescription}</p>
+          {/* Future self description as handwritten note */}
+          <div className="bg-white rounded-lg p-4 border-2 border-emerald-200 mb-6 relative transform rotate-1 shadow-md">
+            {/* Tape corners */}
+            <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
+            <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
+            
+            <h3 className="font-semibold text-emerald-800 mb-2 flex items-center gap-2">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              To match your future self
+            </h3>
+            <p className="text-amber-800 text-sm leading-relaxed">{analysis.futureSelfdescription}</p>
           </div>
           
-          <p className="text-gray-600 text-sm">Based on {products.length} curated recommendations</p>
+          <p className="text-amber-700 text-sm">Based on {products.length} curated recommendations</p>
         </div>
 
-        {/* Product Recommendations Grid */}
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-4 text-center text-gray-800">Recommended for You</h3>
+        {/* Product Recommendations as polaroid grid */}
+        <div className="mb-6 relative z-10">
+          <h3 className="text-lg font-semibold mb-4 text-center text-amber-900">Recommended for You</h3>
           <div 
             className="grid grid-cols-2 gap-4"
             onClick={e => e.stopPropagation()}
           >
-            {products.slice(0, 8).map(product => (
-              <div key={product.id} className="hover:scale-105 transition-transform duration-200">
-                <ProductCard 
-                  product={product} 
-                  onFavoriteToggled={handleFavoriteToggled}
-                />
-              </div>
-            ))}
+            {products.slice(0, 8).map((product, index) => {
+              const rotations = ['rotate-1', '-rotate-1', 'rotate-2', '-rotate-2']
+              const rotation = rotations[index % rotations.length]
+              
+              return (
+                <div key={product.id} className={`bg-white p-2 rounded-lg border-2 border-amber-200 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 ${rotation} relative`}>
+                  {/* Tape corners for each product card */}
+                  <div className="absolute -top-1 -right-1 w-3 h-1.5 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
+                  <div className="absolute -bottom-1 -left-1 w-2 h-1.5 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
+                  
+                  <div className="transform scale-90 origin-center">
+                    <ProductCard 
+                      product={product} 
+                      onFavoriteToggled={handleFavoriteToggled}
+                    />
+                  </div>
+                </div>
+              )
+            })}
           </div>
           
           {products.length > 8 && (
-            <div className="text-center mt-4">
-              <p className="text-sm text-gray-600">
+            <div className="bg-white rounded-lg p-3 border-2 border-amber-200 mt-4 relative transform -rotate-1 shadow-md">
+              {/* Tape corners */}
+              <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
+              <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
+              
+              <p className="text-sm text-amber-800 text-center">
                 +{products.length - 8} more recommendations waiting for you
               </p>
             </div>
           )}
         </div>
 
-        {/* Continue Button */}
-        <div className="sticky bottom-0 pt-4 bg-gradient-to-t from-white via-white to-transparent">
+        {/* Continue Button with scrapbook styling */}
+        <div className="sticky bottom-0 pt-4 relative z-10" style={{
+          background: 'linear-gradient(to top, #faf5f0 0%, #faf5f0 70%, transparent 100%)'
+        }}>
           <button
             onClick={(e) => {
               e.stopPropagation()
               onNext()
             }}
-            className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 rounded-xl font-semibold text-base hover:from-emerald-600 hover:to-teal-700 transition-all duration-300 transform hover:scale-[1.01] shadow-md hover:shadow-lg flex items-center justify-center gap-2 group"
+            className="w-full bg-amber-800 text-white py-3 rounded-lg font-semibold text-base hover:bg-amber-900 transition-all duration-300 transform hover:scale-[1.01] shadow-md hover:shadow-lg flex items-center justify-center gap-2 group border border-amber-700"
           >
             Continue Your Journey
             <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -298,14 +385,22 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
 
   // Default loading state while waiting for analysis to start
   return (
-    <div className="w-full h-full bg-gradient-to-br from-emerald-900 via-teal-900 to-cyan-900 rounded-2xl flex items-center justify-center text-white cursor-pointer" onClick={onNext}>
+    <div 
+      className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer relative" 
+      onClick={onNext}
+      style={scrapbookStyle}
+    >
+      {/* Decorative tape pieces */}
+      <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
+      <div className="absolute bottom-5 right-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
+      
       <div className="text-center z-10 p-8">
         <div className="w-16 h-16 mx-auto mb-6 relative">
-          <div className="absolute inset-0 rounded-full border-4 border-white/20"></div>
-          <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-white animate-spin"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-amber-800/20"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-800 animate-spin"></div>
         </div>
-        <h3 className="text-2xl font-bold mb-2">Preparing Predictions</h3>
-        <p className="text-emerald-200 text-lg">Getting ready to see your future style...</p>
+        <h3 className="text-2xl font-bold mb-2 text-amber-900">Preparing Predictions</h3>
+        <p className="text-amber-800 text-lg">Getting ready to see your future style...</p>
       </div>
     </div>
   )
