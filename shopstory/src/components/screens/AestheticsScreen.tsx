@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
-import {useSavedProducts} from '@shopify/shop-minis-react'
 import {geminiService, AestheticsAnalysis} from '../../services/gemini'
+import {usePreloadedSavedProducts, usePreloadedData} from '../../contexts/DataContext'
 
 type AestheticsScreenProps = {
   onNext: () => void
@@ -12,15 +12,24 @@ type AestheticsScreenProps = {
  * Now styled with scrapbook theme to match TitleScreen.
  */
 export function AestheticsScreen({onNext}: AestheticsScreenProps) {
-  const {products, loading: productsLoading, error: productsError} = useSavedProducts({first: 15})
+  const {products, loading: productsLoading, error: productsError} = usePreloadedSavedProducts({first: 15})
+  const {getAnalysisCache, setAnalysisCache} = usePreloadedData()
+  
   const [analysis, setAnalysis] = useState<AestheticsAnalysis | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)
   const [hasStartedAnalysis, setHasStartedAnalysis] = useState(false)
   const [showResults, setShowResults] = useState(false)
 
-  // Automatically start analysis when products are loaded
+  // Check for cached results first, then start analysis when products are loaded
   useEffect(() => {
+    const cachedAnalysis = getAnalysisCache('aesthetics')
+    if (cachedAnalysis) {
+      setAnalysis(cachedAnalysis)
+      setShowResults(true)
+      return
+    }
+    
     if (products && products.length > 0 && !hasStartedAnalysis && !isAnalyzing && !analysis) {
       startAestheticsAnalysis()
     }
@@ -69,6 +78,7 @@ export function AestheticsScreen({onNext}: AestheticsScreenProps) {
         console.log('Analysis successful - Headline:', result.data.headline)
         console.log('Top aesthetics:', result.data.topAesthetics?.map((a: any) => `${a.name} ${a.percentage}%`))
         setAnalysis(result.data)
+        setAnalysisCache('aesthetics', result.data)
       } else {
         console.error('Aesthetics analysis failed:', result.error)
         setAnalysisError(result.error || 'Failed to analyze aesthetics')

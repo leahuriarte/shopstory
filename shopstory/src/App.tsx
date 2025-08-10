@@ -1,4 +1,5 @@
 import {StoryView} from './components/StoryView'
+import {DataProvider} from './contexts/DataContext'
 
 /**
  * The main App component.
@@ -84,5 +85,9 @@ export function App() {
     },
   ]
 
-  return <StoryView stories={stories} />
+  return (
+    <DataProvider>
+      <StoryView stories={stories} />
+    </DataProvider>
+  )
 }

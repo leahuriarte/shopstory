@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react'
-import {useSavedProducts, ProductCard} from '@shopify/shop-minis-react'
+import {ProductCard} from '@shopify/shop-minis-react'
 import {geminiService, CarbonFootprintAnalysis} from '../../services/gemini'
+import {usePreloadedSavedProducts, usePreloadedData} from '../../contexts/DataContext'
 
 type CarbonFootprintScreenProps = {
   onNext: () => void
@@ -12,19 +13,28 @@ type CarbonFootprintScreenProps = {
  * Now styled with scrapbook theme and green environmental accents.
  */
 export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
-  const {products, loading: productsLoading, error: productsError} = useSavedProducts({first: 20})
+  const {products, loading: productsLoading, error: productsError} = usePreloadedSavedProducts({first: 20})
+  const {getAnalysisCache, setAnalysisCache} = usePreloadedData()
+  
   const [analysis, setAnalysis] = useState<CarbonFootprintAnalysis | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)
   const [hasStartedAnalysis, setHasStartedAnalysis] = useState(false)
   const [showResults, setShowResults] = useState(false)
 
-  // Automatically start analysis when products are loaded
+  // Check for cached results first, then start analysis when products are loaded
   useEffect(() => {
+    const cachedAnalysis = getAnalysisCache('carbonFootprint')
+    if (cachedAnalysis) {
+      setAnalysis(cachedAnalysis)
+      setShowResults(true)
+      return
+    }
+    
     if (products && products.length > 0 && !hasStartedAnalysis && !isAnalyzing && !analysis) {
       startAnalysis()
     }
-  }, [products, hasStartedAnalysis, isAnalyzing, analysis])
+  }, [products, hasStartedAnalysis, isAnalyzing, analysis, getAnalysisCache])
 
   // Add delay before showing results
   useEffect(() => {
@@ -82,6 +92,7 @@ export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
 
       if (result.success && result.data) {
         setAnalysis(result.data)
+        setAnalysisCache('carbonFootprint', result.data)
       } else {
         setAnalysisError(result.error || 'Failed to analyze carbon footprint')
       }

@@ -540,7 +540,7 @@ IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatti
       }
     }
 
-    palette.overallDescription = `Based on your ${products.length} saved products, your style reflects ${palette.mood.toLowerCase()} preferences with ${palette.style.toLowerCase()} aesthetics.`
+    (palette as any).overallDescription = `Based on your ${products.length} saved products, your style reflects ${palette.mood.toLowerCase()} preferences with ${palette.style.toLowerCase()} aesthetics.`
 
     return {
       success: true,

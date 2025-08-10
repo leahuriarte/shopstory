@@ -1,9 +1,8 @@
 import {
-  useSavedProducts,
   Product,
-  ProductImage,
 } from '@shopify/shop-minis-react'
 import {TitleScreenData} from '../StoryView'
+import {usePreloadedSavedProducts} from '../../contexts/DataContext'
 
 type TitleScreenProps = {
   onNext: () => void
@@ -14,9 +13,9 @@ type TitleScreenProps = {
  * A title screen with scrapbook paper background, original Tailwind styling,
  * and animated product images that slide across the screen.
  */
-export function TitleScreen({onNext, screen}: TitleScreenProps) {
-  // Fetch the user's saved products to display as animations.
-  const {products, loading, error} = useSavedProducts({first: 5})
+export function TitleScreen({onNext}: TitleScreenProps) {
+  // Use preloaded saved products for animations
+  const {products, loading, error} = usePreloadedSavedProducts({first: 5})
 
   // Base component structure
   const renderContent = () => (
@@ -81,7 +80,10 @@ export function TitleScreen({onNext, screen}: TitleScreenProps) {
 
       {/* Handle loading and error states */}
       {loading ? (
-        <p className="relative z-10 text-gray-800">Loading saved items...</p>
+        <div className="relative z-10 text-center">
+          <div className="text-5xl font-extrabold tracking-tight text-amber-900 drop-shadow-sm mb-2">ShopStory</div>
+          <p className="text-xl font-light text-amber-800">Loading your story...</p>
+        </div>
       ) : error ? (
         <p className="relative z-10 text-center text-red-600">
           Could not load saved items.

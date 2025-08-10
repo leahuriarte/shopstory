@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import {StoryScreen} from './StoryScreen'
+import {usePreloadedData} from '../contexts/DataContext'
 
 // Define the shape of our different screen types.
 export type ColorScreenData = {
@@ -68,10 +69,15 @@ type StoryViewProps = {
 export function StoryView({stories}: StoryViewProps) {
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0)
   const [currentScreenIndex, setCurrentScreenIndex] = useState(0)
+  const {isDataReady} = usePreloadedData()
 
   const currentStory = stories[currentStoryIndex]
 
   const handleNext = () => {
+    // Don't allow navigation from title screen until data is ready
+    if (currentScreenIndex === 0 && currentStory.screens[0].type === 'title' && !isDataReady) {
+      return
+    }
     if (currentScreenIndex < currentStory.screens.length - 1) {
       setCurrentScreenIndex(currentScreenIndex + 1)
     } else if (currentStoryIndex < stories.length - 1) {

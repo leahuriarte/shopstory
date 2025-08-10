@@ -1,4 +1,4 @@
-import {useSavedProducts} from '@shopify/shop-minis-react'
+import {usePreloadedSavedProducts} from '../../contexts/DataContext'
 
 type TopBrandsScreenProps = {
   onNext: () => void
@@ -10,7 +10,7 @@ type TopBrandsScreenProps = {
  * and decorative tape elements. Shows actual saved product images for a personal touch.
  */
 export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
-  const {products, loading, error} = useSavedProducts({first: 20})
+  const {products, loading, error} = usePreloadedSavedProducts({first: 20})
   
   console.log('TopBrandsScreen render:', { products, loading, error })
 
@@ -94,7 +94,7 @@ export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
   }
 
   // Debug: Log the products to see what we're working with
-  console.log('Products from useSavedProducts:', products)
+  console.log('Products from preloaded data:', products)
   
   // Debug: Log the first shop object to see available properties
   if (products.length > 0) {

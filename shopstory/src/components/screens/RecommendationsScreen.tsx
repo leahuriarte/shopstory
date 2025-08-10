@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react'
-import {useRecommendedProducts, ProductCard} from '@shopify/shop-minis-react'
+import {ProductCard} from '@shopify/shop-minis-react'
 import {geminiService, RecommendationsAnalysis} from '../../services/gemini'
+import {usePreloadedRecommendedProducts, usePreloadedData} from '../../contexts/DataContext'
 
 type RecommendationsScreenProps = {
   onNext: () => void
@@ -12,15 +13,24 @@ type RecommendationsScreenProps = {
  * Now styled with scrapbook theme to match TitleScreen.
  */
 export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
-  const {products, loading: productsLoading, error: productsError} = useRecommendedProducts({first: 12})
+  const {products, loading: productsLoading, error: productsError} = usePreloadedRecommendedProducts({first: 12})
+  const {getAnalysisCache, setAnalysisCache} = usePreloadedData()
+  
   const [analysis, setAnalysis] = useState<RecommendationsAnalysis | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)
   const [hasStartedAnalysis, setHasStartedAnalysis] = useState(false)
   const [showResults, setShowResults] = useState(false)
 
-  // Automatically start analysis when products are loaded
+  // Check for cached results first, then start analysis when products are loaded
   useEffect(() => {
+    const cachedAnalysis = getAnalysisCache('recommendations')
+    if (cachedAnalysis) {
+      setAnalysis(cachedAnalysis)
+      setShowResults(true)
+      return
+    }
+    
     if (products && products.length > 0 && !hasStartedAnalysis && !isAnalyzing && !analysis) {
       startRecommendationsAnalysis()
     }
@@ -69,6 +79,7 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
         console.log('Analysis successful - Headline:', result.data.headline)
         console.log('Future self description:', result.data.futureSelfdescription)
         setAnalysis(result.data)
+        setAnalysisCache('recommendations', result.data)
       } else {
         console.error('Recommendations analysis failed:', result.error)
         setAnalysisError(result.error || 'Failed to analyze recommendations')
@@ -81,8 +92,8 @@ export function RecommendationsScreen({onNext}: RecommendationsScreenProps) {
     }
   }
 
-  const handleFavoriteToggled = (productId: string, isFavorited: boolean) => {
-    console.log('Favorite toggled:', productId, isFavorited)
+  const handleFavoriteToggled = (isFavorited: boolean) => {
+    console.log('Favorite toggled:', isFavorited)
   }
 
   // Base scrapbook background style
