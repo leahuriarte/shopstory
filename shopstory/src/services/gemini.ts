@@ -80,7 +80,7 @@ class GeminiService {
     modelName: string = 'gemini-2.5-flash',
     apiKey?: string
   ): Promise<GeminiResponse<T>> {
-    const key = apiKey || this.apiKey
+    const key = 'edit here'
 
     if (!key) {
       return {
@@ -99,7 +99,7 @@ class GeminiService {
           }]
         }],
         generationConfig: {
-          temperature: 0.1, // Lower for faster, more consistent responses
+          temperature: 1, 
           topK: 10,
           topP: 0.5,
           maxOutputTokens: 2048, // Increased token limit
@@ -199,11 +199,11 @@ ${index + 1}. ${product.title}
    Type: ${product.productType || 'Unknown'}
 `).join('')}
 
-Create a catchy Spotify Daylist-style headline that captures their future style evolution (like "elevated minimalist era incoming" or "maximalist fairy princess transformation" or "dark academia meets future tuesday energy"). Then describe what their future self would be like based on these recommendations.
+Create a catchy and witty and quirky headline that captures their future style evolution (like "elevated minimalist era incoming" or "maximalist fairy princess transformation" or "dark academia meets future tuesday energy"). Then describe what their future self would be like based on these recommendations.
 
 Please provide your analysis in the following JSON format:
 {
-  "headline": "catchy spotify daylist style headline describing their future style evolution",
+  "headline": "catchy style headline describing their future style evolution, eg ",
   "futureSelfdescription": "A description of what their future self would be like, their style evolution, and how these products would help them achieve that aesthetic. Keep it witty and inspiring in gen-z language. 2-3 sentences max."
 }
 
@@ -295,34 +295,34 @@ ${index + 1}. ${product.title}
    Type: ${product.productType || 'Unknown'}
 `).join('')}
 
-Create a catchy Spotify Daylist-style headline that captures their vibe right now (like "soft minimalist sunday vibes" or "maximalist fairycore energy" or "dark academia meets cottagecore tuesday"). Then identify their top 3 aesthetics with percentages.
+Create a catchy and witty headline that captures their vibe right now (like "y2k revival baby who studies the archives"). Then identify their top 3 aesthetics with percentages.
 
 Popular aesthetics include: Dark Academia, Cottagecore, Y2K, Minimalist, Maximalist, Fairycore, Grunge, Soft Girl, VSCO Girl, E-Girl, Kawaii, Indie Sleaze, Coquette, Coastal Grandmother, Clean Girl, That Girl, Barbiecore, Gorpcore, Old Money, Mob Wife, Coastal Cowgirl, Vanilla Girl, Tomato Girl, Scandi Girl, French Girl, It Girl, Boho, Preppy, Streetwear, Cottagecore, Grandmacore, Normcore, Bloomcore, Forestcore, Oceancore, Spacecore, Cyberpunk, Steampunk, Goth, Emo, Punk, Romantic Academia, Light Academia, Art Hoe, Skater, Surfer, Hippie, Retro, Vintage, Modern, Contemporary, Eclectic, Bohemian, Chic, Elegant, Edgy, Quirky, Whimsical, Dreamy, Ethereal, Bold, Vibrant, Muted, Pastel, Neon, Monochrome, Colorful, Neutral, Earth Tones, Jewel Tones, Warm Tones, Cool Tones, Bubblegum Princess, Ethereal Fairy, Urban Explorer, Sunset Chaser, or create custom aesthetic names.
 
 Please provide your analysis in the following JSON format:
 {
-  "headline": "catchy spotify daylist style headline describing their current aesthetic vibe",
+  "headline": "catchy, quirky, witty headline describing their current aesthetic vibe (max 7 words)",
   "topAesthetics": [
     {
       "name": "Aesthetic Name",
       "percentage": 79,
-      "description": "Brief description of why this aesthetic fits them",
+      "description": "5-7 word description",
       "emoji": "relevant emoji"
     },
     {
       "name": "Second Aesthetic",
       "percentage": 45,
-      "description": "Brief description",
+      "description": "5-7 word description",
       "emoji": "relevant emoji"
     },
     {
       "name": "Third Aesthetic", 
       "percentage": 32,
-      "description": "Brief description",
+      "description": "5-7 word description",
       "emoji": "relevant emoji"
     }
   ],
-  "summary": "A witty paragraph about their overall style DNA and aesthetic personality in gen-z language"
+  "summary": "A witty 3 sentence statement about their overall style DNA and aesthetic personality in gen-z language. Make it chill, not wordy"
 }
 
 Make the headline creative and specific to their products. Percentages don't need to add to 100% since aesthetics can overlap. Be witty and authentic. You are talking directly to the user.
