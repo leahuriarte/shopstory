@@ -59,13 +59,9 @@ export function ShippingTimeScreen({onNext}: ShippingTimeScreenProps) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate data loading
-    const timer = setTimeout(() => {
-      setShippingData(mockShippingData)
-      setLoading(false)
-    }, 1500)
-
-    return () => clearTimeout(timer)
+    // Load data immediately
+    setShippingData(mockShippingData)
+    setLoading(false)
   }, [])
 
   // Base scrapbook background style

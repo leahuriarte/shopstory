@@ -36,16 +36,11 @@ export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
     }
   }, [products, hasStartedAnalysis, isAnalyzing, analysis, getAnalysisCache])
 
-  // Add delay before showing results
+  // Show results immediately when analysis is complete
   useEffect(() => {
     if (analysis && !showResults) {
-      const timer = setTimeout(() => {
-        setShowResults(true)
-      }, 3500) // 3.5 second delay
-
-      return () => clearTimeout(timer)
+      setShowResults(true)
     }
-    return undefined
   }, [analysis, showResults])
 
   const startAnalysis = async () => {
