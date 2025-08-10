@@ -3,6 +3,7 @@ import {PopularProductsScreen} from './screens/PopularProductsScreen'
 import {TitleScreen} from './screens/TitleScreen'
 import {CarbonFootprintScreen} from './screens/CarbonFootprint'
 import {TopBrandsScreen} from './screens/TopBrandsScreen'
+import {PaletteScreen} from './screens/Palette'
 import {Screen} from './StoryView'
 
 type StoryScreenProps = {
@@ -30,6 +31,8 @@ export function StoryScreen({onNext, screen}: StoryScreenProps) {
       return <CarbonFootprintScreen onNext={onNext} />
     case 'topBrands':
       return <TopBrandsScreen onNext={onNext} />
+    case 'palette':
+      return <PaletteScreen onNext={onNext} />
     default:
       return (
         <div

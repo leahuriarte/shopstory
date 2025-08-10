@@ -43,6 +43,15 @@ export function App() {
         {
           type: 'topBrands' as const,
         },
+        {
+          type: 'color' as const,
+          value: 'bg-gradient-to-br from-purple-500 to-pink-500',
+          text: 'Now let\'s explore your color palette!',
+        },
+        // This screen will render the PaletteScreen component - analyzes color trends from saved products
+        {
+          type: 'palette' as const,
+        },
       ],
     },
   ]
