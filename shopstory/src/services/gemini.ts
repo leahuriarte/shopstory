@@ -80,7 +80,7 @@ class GeminiService {
     modelName: string = 'gemini-2.5-flash',
     apiKey?: string
   ): Promise<GeminiResponse<T>> {
-    const key = 'edit here'
+    const key = apiKey || this.apiKey
 
     if (!key) {
       return {
