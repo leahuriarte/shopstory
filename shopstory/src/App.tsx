@@ -34,6 +34,15 @@ export function App() {
         {
           type: 'carbonFootprint' as const,
         },
+        {
+          type: 'color' as const,
+          value: 'bg-purple-500',
+          text: 'Discover your top brands!',
+        },
+        // This screen will render the TopBrandsScreen component.
+        {
+          type: 'topBrands' as const,
+        },
       ],
     },
   ]
