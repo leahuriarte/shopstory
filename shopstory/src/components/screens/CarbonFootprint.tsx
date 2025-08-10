@@ -11,7 +11,7 @@ type CarbonFootprintScreenProps = {
  * using Gemini LLM integration. Shows total emissions and eco-friendly rankings.
  */
 export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
-  const {products, loading: productsLoading, error: productsError} = useSavedProducts({first: 10})
+  const {products, loading: productsLoading, error: productsError} = useSavedProducts()
   const [analysis, setAnalysis] = useState<CarbonFootprintAnalysis | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)
@@ -47,13 +47,34 @@ export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
     setHasStartedAnalysis(true)
 
     try {
-      const productsData = products.map(product => ({
-        id: product.id,
-        title: product.title,
-        description: (product as any).description || '',
-        vendor: (product as any).vendor || '',
-        productType: (product as any).productType || '',
-      }))
+      const productsData = products.map(product => {
+        // Debug: Log the actual product structure
+        console.log('Product structure:', JSON.stringify(product, null, 2))
+        
+        // Extract data more carefully from the Shopify product
+        const title = product.title || 'Unknown Product'
+        const description = product.description || 
+                           (product as any).excerpt || 
+                           (product as any).summary || 
+                           ''
+        const vendor = (product as any).vendor || 
+                      product.shop?.name || 
+                      'Unknown Vendor'
+        const productType = (product as any).productType || 
+                           (product as any).category || 
+                           (product as any).type ||
+                           'Unknown Type'
+
+        return {
+          id: product.id,
+          title: title,
+          description: description,
+          vendor: vendor,
+          productType: productType,
+        }
+      })
+
+      console.log('Processed products data:', productsData)
 
       const result = await geminiService.analyzeCarbonFootprint(productsData)
 
