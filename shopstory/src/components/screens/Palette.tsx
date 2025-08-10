@@ -316,9 +316,9 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
         </div>
 
         {/* Color Palette as simple squares */}
-        <div className="mb-6 relative z-10">
+        <div className="mb-12 relative z-10">
           <h3 className="text-lg font-semibold mb-4 text-center text-amber-900">Your Color Palette</h3>
-          <div className="grid grid-cols-3 gap-4 mb-4">
+          <div className="grid grid-cols-3 gap-4 mb-12">
             {colorAnalysis.colors.slice(0, 6).map((color, index) => {
               const rotations = ['rotate-2', '-rotate-1', 'rotate-1', '-rotate-2', 'rotate-3', '-rotate-3']
               const rotation = rotations[index % rotations.length]
@@ -338,39 +338,35 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
               )
             })}
           </div>
+        </div>
 
-          {/* Color Palette Overview Bar */}
-          <div className="bg-white rounded-lg p-4 border-2 border-amber-200 shadow-md relative transform rotate-1">
-            {/* Tape corners */}
-            <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
-            <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
-            
-            <h4 className="font-semibold text-amber-900 text-sm mb-3 text-center">Palette Overview</h4>
-            <div className="flex rounded-lg overflow-hidden shadow-md h-16 border-2 border-amber-200">
-              {colorAnalysis.colors.slice(0, 6).map((color, index) => (
-                <div
-                  key={index}
-                  className="flex-grow flex items-end justify-center pb-2 text-white text-xs font-medium relative overflow-hidden"
-                  style={{ 
-                    backgroundColor: color.hex,
-                    width: `${color.percentage}%`
+        {/* Palette Popsicle */}
+        <div className="mb-6 relative z-10">
+          <h3 className="text-lg font-semibold mb-4 text-center text-amber-900">Palette Popsicle</h3>
+          <div className="flex rounded-lg overflow-hidden shadow-md h-16 border-2 border-amber-200">
+            {colorAnalysis.colors.slice(0, 6).map((color, index) => (
+              <div
+                key={index}
+                className="flex-grow flex items-end justify-center pb-2 text-white text-xs font-medium relative overflow-hidden"
+                style={{ 
+                  backgroundColor: color.hex,
+                  width: `${color.percentage}%`
+                }}
+              >
+                {/* Paint texture overlay */}
+                <div 
+                  className="absolute inset-0 opacity-20"
+                  style={{
+                    background: `linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.2) 75%)`
                   }}
-                >
-                  {/* Paint texture overlay */}
-                  <div 
-                    className="absolute inset-0 opacity-20"
-                    style={{
-                      background: `linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.2) 75%)`
-                    }}
-                  ></div>
-                  {color.percentage >= 10 && (
-                    <span className="relative z-10 drop-shadow-sm">
-                      {color.percentage}%
-                    </span>
-                  )}
-                </div>
-              ))}
-            </div>
+                ></div>
+                {color.percentage >= 10 && (
+                  <span className="relative z-10 drop-shadow-sm">
+                    {color.percentage}%
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </div>
