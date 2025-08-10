@@ -1,5 +1,5 @@
-import {StoryView} from './components/StoryView'
-import {DataProvider} from './contexts/DataContext'
+import { StoryView } from './components/StoryView'
+import { DataProvider } from './contexts/DataContext'
 
 /**
  * The main App component.
@@ -28,7 +28,7 @@ export function App() {
         {
           type: 'color' as const,
           value: 'bg-gradient-to-br from-purple-500 to-pink-500',
-          text: 'Helping the Earth out',
+          text: 'Earth is having a moment rn',
         },
         {
           type: 'carbonFootprint' as const,
@@ -39,7 +39,7 @@ export function App() {
         {
           type: 'color' as const,
           value: 'bg-gradient-to-br from-blue-500 to-cyan-500',
-          text: 'Time to check your shipping analytics!',
+          text: 'Your shipping stats are kinda fire',
         },
         {
           type: 'shippingTime' as const,
