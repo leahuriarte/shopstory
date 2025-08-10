@@ -1,25 +1,23 @@
-import {usePopularProducts, ProductCard} from '@shopify/shop-minis-react'
+import {StoryView} from './components/StoryView'
 
 export function App() {
-  const {products} = usePopularProducts()
+  // The list of stories to be displayed.
+  // Each object in the array represents a story, and its 'screens' property is an array of screen components.
+  // For now, we are just passing empty screen objects to render the placeholders.
+  const stories = [
+    {
+      id: 'story-1',
+      screens: [{}, {}, {}], // This story will have 3 screens.
+    },
+    {
+      id: 'story-2',
+      screens: [{}, {}], // This story will have 2 screens.
+    },
+    {
+      id: 'story-3',
+      screens: [{}, {}, {}, {}], // This story will have 4 screens.
+    },
+  ]
 
-  return (
-    <div className="pt-12 px-4 pb-6">
-      <h1 className="text-2xl font-bold mb-2 text-center">
-        Welcome to Shop Minis!
-      </h1>
-      <p className="text-xs text-blue-600 mb-4 text-center bg-blue-50 py-2 px-4 rounded border border-blue-200">
-        🛠️ Edit <b>src/App.tsx</b> to change this screen and come back to see
-        your edits!
-      </p>
-      <p className="text-base text-gray-600 mb-6 text-center">
-        These are the popular products today
-      </p>
-      <div className="grid grid-cols-2 gap-4">
-        {products?.map(product => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
-    </div>
-  )
+  return <StoryView stories={stories} />
 }
