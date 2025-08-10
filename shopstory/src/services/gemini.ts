@@ -38,12 +38,26 @@ export interface SmallBusinessAnalysis {
   recommendations: string[]
 }
 
+export interface ColorPaletteAnalysis {
+  colors: Array<{
+    hex: string;
+    name: string;
+    percentage: number;
+    description: string;
+  }>;
+  overallDescription: string;
+  mood: string;
+  style: string;
+}
+
 class GeminiService {
   private apiKey: string | null = null
   private baseURL = 'https://generativelanguage.googleapis.com/v1beta/models'
 
   constructor() {
-    this.apiKey = 'use env file'
+    // Read API key from environment variables
+    // In Vite, environment variables must be prefixed with VITE_ to be accessible in the browser
+    this.apiKey = import.meta.env.VITE_GEMINI_API_KEY || null
   }
 
   /**
@@ -231,7 +245,7 @@ IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatti
     // Analyze your actual products to determine style
     const allText = products.map(p => `${p.title} ${p.vendor || ''} ${p.productType || ''}`).join(' ').toLowerCase()
     
-    let palette
+    let palette: Partial<ColorPaletteAnalysis>
     if (allText.includes('luxury') || allText.includes('premium') || allText.includes('designer')) {
       palette = {
         colors: [
@@ -279,11 +293,11 @@ IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatti
       }
     }
 
-    palette.overallDescription = `Based on your ${products.length} saved products, your style reflects ${palette.mood.toLowerCase()} preferences with ${palette.style.toLowerCase()} aesthetics.`
+    palette.overallDescription = `Based on your ${products.length} saved products, your style reflects ${palette.mood!.toLowerCase()} preferences with ${palette.style!.toLowerCase()} aesthetics.`
 
     return {
       success: true,
-      data: palette,
+      data: palette as ColorPaletteAnalysis,
     }
   }
 
