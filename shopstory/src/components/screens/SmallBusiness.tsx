@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import {geminiService, SmallBusinessAnalysis} from '../../services/gemini'
-import {usePreloadedSavedProducts, usePreloadedData} from '../../contexts/DataContext'
+import {usePreloadedSavedProducts} from '../../contexts/DataContext'
 
 type SmallBusinessScreenProps = {
   onNext: () => void
@@ -13,24 +13,16 @@ type SmallBusinessScreenProps = {
  */
 export function SmallBusinessScreen({onNext}: SmallBusinessScreenProps) {
   const {products, loading, error} = usePreloadedSavedProducts({first: 10})
-  const {getAnalysisCache, setAnalysisCache} = usePreloadedData()
-  
   const [analysis, setAnalysis] = useState<SmallBusinessAnalysis | null>(null)
   const [analyzing, setAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)
 
-  // Check for cached results first, then analyze businesses when products are loaded
+  // Analyze businesses when products are loaded
   useEffect(() => {
-    const cachedAnalysis = getAnalysisCache('smallBusiness')
-    if (cachedAnalysis) {
-      setAnalysis(cachedAnalysis)
-      return
-    }
-    
     if (!loading && !error && products && products.length > 0 && !analysis && !analyzing) {
       analyzeBusinesses()
     }
-  }, [products, loading, error, analysis, analyzing, getAnalysisCache])
+  }, [products, loading, error, analysis, analyzing])
 
   const analyzeBusinesses = async () => {
     if (!products) return
@@ -70,7 +62,6 @@ export function SmallBusinessScreen({onNext}: SmallBusinessScreenProps) {
       
       if (result.success && result.data) {
         setAnalysis(result.data)
-        setAnalysisCache('smallBusiness', result.data)
       } else {
         setAnalysisError(result.error || 'Failed to analyze businesses')
       }

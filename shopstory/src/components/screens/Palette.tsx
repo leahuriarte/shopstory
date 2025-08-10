@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import {geminiService} from '../../services/gemini'
-import {usePreloadedSavedProducts, usePreloadedData} from '../../contexts/DataContext'
+import {usePreloadedSavedProducts} from '../../contexts/DataContext'
 
 type PaletteScreenProps = {
   onNext: () => void
@@ -25,27 +25,19 @@ interface ColorPalette {
  */
 export function PaletteScreen({onNext}: PaletteScreenProps) {
   const {products, loading: productsLoading, error: productsError} = usePreloadedSavedProducts({first: 10})
-  const {getAnalysisCache, setAnalysisCache} = usePreloadedData()
-  
+
   const [colorAnalysis, setColorAnalysis] = useState<ColorPalette | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)
   const [hasStartedAnalysis, setHasStartedAnalysis] = useState(false)
   const [showResults, setShowResults] = useState(false)
 
-  // Check for cached results first, then start analysis when products are loaded
+  // Automatically start analysis when products are loaded
   useEffect(() => {
-    const cachedAnalysis = getAnalysisCache('colorPalette')
-    if (cachedAnalysis) {
-      setColorAnalysis(cachedAnalysis)
-      setShowResults(true)
-      return
-    }
-    
     if (products && products.length > 0 && !hasStartedAnalysis && !isAnalyzing && !colorAnalysis) {
       startColorAnalysis()
     }
-  }, [products, hasStartedAnalysis, isAnalyzing, colorAnalysis, getAnalysisCache])
+  }, [products, hasStartedAnalysis, isAnalyzing, colorAnalysis])
 
   // Add delay before showing results
   useEffect(() => {
@@ -100,7 +92,6 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
         console.log('Color analysis successful - Colors:', result.data.colors?.map((c: any) => c.name))
         console.log('Style:', result.data.style, 'Mood:', result.data.mood)
         setColorAnalysis(result.data)
-        setAnalysisCache('colorPalette', result.data)
       } else {
         console.error('Color analysis failed:', result.error)
         setAnalysisError(result.error || 'Failed to analyze color palette')
