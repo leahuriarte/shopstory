@@ -578,7 +578,7 @@ IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatti
       productType: p.productType || this.inferProductType(p.title),
     }))
 
-    const prompt = `You are a gen-z environmental sustainability expert. Analyze the carbon footprint of the following products and provide  insights.
+    const prompt = `You are a gen-z environmental sustainability expert. Analyze the carbon footprint of the following products and provide insights.
 
 Products to analyze:
 ${enhancedProducts.map((p, index) => `${index + 1}. ${p.title}
@@ -588,6 +588,7 @@ ${enhancedProducts.map((p, index) => `${index + 1}. ${p.title}
 
 Please provide your analysis in the following JSON format:
 {
+  "analysis": "<concise analysis of the carbon footprint in 1 sentence max, discussing key factors and environmental impact>",
   "totalEmissionsKgCO2": <estimated total emissions in kg CO2 for all products>,
   "averageEmissionsPerProduct": <average emissions per product>,
   "lowestEmissionProducts": [
@@ -598,12 +599,10 @@ Please provide your analysis in the following JSON format:
       "reasoning": "<explanation of why this product has relatively low emissions>"
     }
   ],
-  "analysis": "<concise analysis of the carbon footprint, discussing key factors and environmental impact in 1-2 concise sentences>",
   "recommendations": ["<specific actionable recommendation 1, less than ten words>", "<specific actionable recommendation 2, less than ten words>"]
 }
 
-
-Rank the products by emissions and provide the top 3 most eco-friendly purchases with  reasoning. You are talking directly to the user. Talk like a gen-zer and never write more than 3 sentences.
+Rank the products by emissions and provide the top 3 most eco-friendly purchases with reasoning. You are talking directly to the user. Talk like a gen-zer and keep the analysis super short - max 1 sentence.
 
 IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatting.`
 
