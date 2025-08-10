@@ -107,7 +107,7 @@ export function ColorScreen({onNext, onPrevious, screen}: ColorScreenProps) {
         {/* Main text with scrapbook styling */}
         <div className="relative z-10 text-center p-6">
           <div className="bg-white bg-opacity-90 rounded-lg p-4 shadow-lg transform -rotate-1 border-2 border-dashed border-green-400">
-            <p className="text-green-800 text-2xl font-bold font-serif">{screen.text}</p>
+            <p className="text-green-800 text-2xl font-bold font-sans-serif">{screen.text}</p>
             <div className="mt-2 flex justify-center space-x-2">
               <span className="text-green-600">♻️</span>
               <span className="text-green-600">🌱</span>
