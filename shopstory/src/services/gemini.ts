@@ -44,7 +44,7 @@ class GeminiService {
 
   constructor() {
     // Put your Gemini API key here:
-    this.apiKey = 'use env'
+    this.apiKey = 'edit'
   }
 
   /**
@@ -188,15 +188,15 @@ Please analyze the overall color trends and provide a JSON response in this exac
       "hex": "#hexcode",
       "name": "Color Name",
       "percentage": 25,
-      "description": "Brief description of this color's role in the palette"
+      "description": "Brief description of this color's role in the palette. Max 1 sentence."
     }
   ],
-  "overallDescription": "A detailed paragraph describing the overall color palette and what it says about the user's style preferences and aesthetic choices",
-  "mood": "The mood/feeling the palette conveys (e.g., 'Warm and Earthy', 'Cool and Minimalist', 'Bold and Energetic')",
+  "overallDescription": "A  paragraph describing the overall color palette and what it says about the user's style preferences and aesthetic choices, all in a gen-z appealing way",
+  "mood": "The mood/feeling the palette conveys (e.g., 'Earthy Warmth', 'Minimalist to the Max', 'Energy off the Walls')",
   "style": "The style category that best describes this palette (e.g., 'Bohemian Chic', 'Modern Minimalist', 'Vibrant Eclectic', 'Classic Elegant')"
 }
 
-Extract 4-6 dominant colors that would represent this collection, ensure percentages add up to 100, and provide insightful descriptions about the user's color preferences and style based on the product types, brands, and descriptions provided.
+Extract 4-6 dominant colors that would represent this collection, ensure percentages add up to 100, and provide insightful and witty descriptions about the user's color preferences and style based on the product types, brands, and descriptions provided. You are talking directly to the user. Talk like a gen-zer and never write more than 3 sentences.
 
 IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatting.`
 
@@ -318,7 +318,7 @@ IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatti
       productType: p.productType || this.inferProductType(p.title),
     }))
 
-    const prompt = `You are an environmental sustainability expert. Analyze the carbon footprint of the following products and provide detailed insights based on manufacturing processes, material sourcing, transportation, product lifecycle, packaging, and vendor sustainability practices.
+    const prompt = `You are a gen-z environmental sustainability expert. Analyze the carbon footprint of the following products and provide  insights.
 
 Products to analyze:
 ${enhancedProducts.map((p, index) => `${index + 1}. ${p.title}
@@ -335,23 +335,15 @@ Please provide your analysis in the following JSON format:
       "productId": "<product_id>",
       "productTitle": "<product_title>",
       "estimatedEmissionsKgCO2": <emissions_estimate>,
-      "reasoning": "<detailed explanation of why this product has relatively low emissions>"
+      "reasoning": "<explanation of why this product has relatively low emissions>"
     }
   ],
-  "analysis": "<comprehensive analysis of the overall carbon footprint, discussing key factors like product categories, manufacturing locations, shipping distances, and sustainability practices>",
-  "recommendations": ["<specific actionable recommendation 1>", "<specific actionable recommendation 2>", "<specific actionable recommendation 3>", "<specific actionable recommendation 4>"]
+  "analysis": "<analysis of the overall carbon footprint, discussing key factors in a gen-z accessible way>",
+  "recommendations": ["<specific actionable recommendation 1>", "<specific actionable recommendation 2>]
 }
 
-Consider factors like:
-- Manufacturing processes and energy requirements
-- Raw material sourcing and processing
-- Transportation and shipping distances
-- Product lifecycle and durability
-- Packaging materials and waste
-- Vendor sustainability practices and certifications
-- Local vs international production
 
-Rank the products by emissions and provide the top 3 most eco-friendly purchases with detailed reasoning.
+Rank the products by emissions and provide the top 3 most eco-friendly purchases with  reasoning. You are talking directly to the user. Talk like a gen-zer and never write more than 3 sentences.
 
 IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatting.`
 
@@ -514,7 +506,7 @@ Please provide your analysis in the following JSON format:
       "businessName": "<business_name>",
       "isSmallBusiness": <true/false>,
       "confidence": <0-1 confidence score>,
-      "reasoning": "<detailed explanation of why you classified this business this way, including specific indicators>",
+      "reasoning": "<explanation of why you classified this business this way, including specific indicators>",
       "employeeEstimate": <estimated number of employees if possible>,
       "businessType": "<type/category of business>"
     }
@@ -540,7 +532,7 @@ Generally consider businesses as "small" if they appear to have:
 - Handmade, custom, or small-batch product offerings
 - Limited social media presence or more personal/informal online presence
 
-Provide detailed insights about the user's shopping patterns and the impact of supporting small businesses, along with actionable recommendations for finding and supporting more small businesses.
+Provide  insights about the user's shopping patterns and the impact of supporting small businesses, along with actionable recommendations for finding and supporting more small businesses. Talk like a gen-zer and never write more than 3 sentences.
 
 IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatting.`
 
