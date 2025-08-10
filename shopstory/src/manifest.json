@@ -1,6 +1,6 @@
 {
-  "name": "ShopStory",
-  "permissions": [],
+  "name": "shopstory",
+  "permissions": ["user.saved_products.read"],
   "privacy_policy_url": "https://example.com/privacy",
   "terms_url": "https://example.com/terms"
 }
