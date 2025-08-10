@@ -331,16 +331,6 @@ export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
           </ul>
         </div>
 
-        {/* Continue Button with scrapbook styling */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation()
-            onNext()
-          }}
-          className="w-full bg-green-700 hover:bg-green-800 text-white font-medium py-3 px-4 rounded-lg transition-colors border border-green-600 shadow-md relative z-10"
-        >
-          Continue
-        </button>
       </div>
     )
   }

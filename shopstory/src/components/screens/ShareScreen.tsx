@@ -150,12 +150,6 @@ export function ShareScreen({ onNext, allScreens = [] }: ShareScreenProps) {
       <div className="w-full h-full bg-black text-white flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">No screens to share</h1>
-          <button
-            onClick={onNext}
-            className="text-gray-400 hover:text-white transition-colors"
-          >
-            Continue →
-          </button>
         </div>
       </div>
     )
@@ -289,15 +283,6 @@ export function ShareScreen({ onNext, allScreens = [] }: ShareScreenProps) {
         </div>
       )}
 
-      {/* Continue button */}
-      <div className="p-4 border-t border-gray-800 text-center">
-        <button
-          onClick={onNext}
-          className="text-gray-400 hover:text-white text-sm"
-        >
-          Continue →
-        </button>
-      </div>
     </div>
   )
 }

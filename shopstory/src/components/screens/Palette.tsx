@@ -201,15 +201,6 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
           <p className="text-amber-800 mb-8 text-lg leading-relaxed">
             Start saving products to discover your unique color palette and style preferences!
           </p>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onNext()
-            }}
-            className="bg-amber-800 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-amber-900 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-amber-700"
-          >
-            Continue Journey
-          </button>
         </div>
       </div>
     )
