@@ -598,7 +598,7 @@ Please provide your analysis in the following JSON format:
       "reasoning": "<explanation of why this product has relatively low emissions>"
     }
   ],
-  "analysis": "<comprehensive analysis of the carbon footprint, discussing key factors and environmental impact in 1-2 concise sentences>",
+  "analysis": "<concise analysis of the carbon footprint, discussing key factors and environmental impact in 1-2 concise sentences>",
   "recommendations": ["<specific actionable recommendation 1, less than ten words>", "<specific actionable recommendation 2, less than ten words>"]
 }
 
