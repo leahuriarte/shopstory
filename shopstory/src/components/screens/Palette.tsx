@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import {useSavedProducts} from '@shopify/shop-minis-react'
-import {falAIService} from '../../services/falai'
+import {geminiService} from '../../services/gemini'
 
 type PaletteScreenProps = {
   onNext: () => void
@@ -19,11 +19,11 @@ interface ColorPalette {
 }
 
 /**
- * A screen component that analyzes the color palette of saved products using fal.ai
+ * A screen component that analyzes the color palette of saved products using Gemini
  * and displays a beautiful visualization of the user's color preferences.
  */
 export function PaletteScreen({onNext}: PaletteScreenProps) {
-  const {products, loading: productsLoading, error: productsError} = useSavedProducts({first: 50})
+  const {products, loading: productsLoading, error: productsError} = useSavedProducts({first: 10})
   const [colorAnalysis, setColorAnalysis] = useState<ColorPalette | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)
@@ -82,7 +82,7 @@ export function PaletteScreen({onNext}: PaletteScreenProps) {
       console.log('Starting color analysis for', productsData.length, 'products')
       console.log('Sample products:', productsData.slice(0, 3).map(p => ({title: p.title, vendor: p.vendor})))
       
-      const result = await falAIService.analyzeColorPalette(productsData)
+      const result = await geminiService.analyzeColorPalette(productsData)
 
       console.log('Analysis result:', result)
       

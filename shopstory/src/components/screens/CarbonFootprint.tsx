@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import {useSavedProducts, ProductCard} from '@shopify/shop-minis-react'
-import {falAIService, CarbonFootprintAnalysis} from '../../services/falai'
+import {geminiService, CarbonFootprintAnalysis} from '../../services/gemini'
 
 type CarbonFootprintScreenProps = {
   onNext: () => void
@@ -8,10 +8,10 @@ type CarbonFootprintScreenProps = {
 
 /**
  * A screen component that analyzes the carbon footprint of saved products
- * using Fal.ai LLM integration. Shows total emissions and eco-friendly rankings.
+ * using Gemini LLM integration. Shows total emissions and eco-friendly rankings.
  */
 export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
-  const {products, loading: productsLoading, error: productsError} = useSavedProducts()
+  const {products, loading: productsLoading, error: productsError} = useSavedProducts({first: 10})
   const [analysis, setAnalysis] = useState<CarbonFootprintAnalysis | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)
@@ -55,7 +55,7 @@ export function CarbonFootprintScreen({onNext}: CarbonFootprintScreenProps) {
         productType: (product as any).productType || '',
       }))
 
-      const result = await falAIService.analyzeCarbonFootprint(productsData)
+      const result = await geminiService.analyzeCarbonFootprint(productsData)
 
       if (result.success && result.data) {
         setAnalysis(result.data)

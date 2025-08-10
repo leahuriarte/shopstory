@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import {useSavedProducts} from '@shopify/shop-minis-react'
-import {falAIService, SmallBusinessAnalysis} from '../../services/falai'
+import {geminiService, SmallBusinessAnalysis} from '../../services/gemini'
 
 type SmallBusinessScreenProps = {
   onNext: () => void
@@ -11,7 +11,7 @@ type SmallBusinessScreenProps = {
  * and displays merchant cards for small businesses the user has purchased from most.
  */
 export function SmallBusinessScreen({onNext}: SmallBusinessScreenProps) {
-  const {products, loading, error} = useSavedProducts({first: 50})
+  const {products, loading, error} = useSavedProducts({first: 10})
   const [analysis, setAnalysis] = useState<SmallBusinessAnalysis | null>(null)
   const [analyzing, setAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)
@@ -57,7 +57,7 @@ export function SmallBusinessScreen({onNext}: SmallBusinessScreenProps) {
 
       console.log('Analyzing businesses:', businesses)
 
-      const result = await falAIService.analyzeSmallBusinesses(businesses)
+      const result = await geminiService.analyzeSmallBusinesses(businesses)
       
       if (result.success && result.data) {
         setAnalysis(result.data)

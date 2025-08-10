@@ -10,7 +10,7 @@ type TopBrandsScreenProps = {
  * Shows actual saved product images instead of shop logos for a more personal and engaging experience.
  */
 export function TopBrandsScreen({onNext}: TopBrandsScreenProps) {
-  const {products, loading, error} = useSavedProducts({first: 50})
+  const {products, loading, error} = useSavedProducts({first: 20})
   
   console.log('TopBrandsScreen render:', { products, loading, error })
 
