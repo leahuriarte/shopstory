@@ -218,7 +218,7 @@ export function TopBrandsScreen({onNext, onPrevious}: TopBrandsScreenProps) {
 
   return (
     <div
-      className="w-full h-full rounded-lg p-4 overflow-y-auto cursor-pointer relative"
+      className="w-full h-full rounded-lg p-4 overflow-y-auto cursor-pointer relative flex flex-col"
       onClick={handleClick}
       style={scrapbookStyle}
     >
@@ -227,7 +227,7 @@ export function TopBrandsScreen({onNext, onPrevious}: TopBrandsScreenProps) {
       <div className="absolute top-2 right-3 w-7 h-3 bg-white bg-opacity-90 border border-amber-300 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
       
       {/* Header with scrapbook styling */}
-      <div className="text-center mb-5 relative z-10">
+      <div className="text-center mb-5 relative z-10 flex-shrink-0">
         <div className="inline-flex items-center gap-2 mb-2">
           <div className="w-8 h-8 bg-amber-800 rounded-lg flex items-center justify-center shadow-md">
             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -242,7 +242,7 @@ export function TopBrandsScreen({onNext, onPrevious}: TopBrandsScreenProps) {
       </div>
 
       {/* Brands as scrapbook polaroid-style cards */}
-      <div className="space-y-3 mb-5 relative z-10">
+      <div className="flex flex-col justify-between flex-1 relative z-10 pb-6">
         {topShops.map(({shop, count, sampleProducts}, index) => {
           const rankStyle = getRankStyle(index)
           const shopData = shop as any // Type assertion for extended properties
@@ -257,14 +257,9 @@ export function TopBrandsScreen({onNext, onPrevious}: TopBrandsScreenProps) {
               <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
               
               <div className="flex items-center relative z-10">
-                {/* Rank badge with crown for #1 */}
+                {/* Rank badge */}
                 <div className="flex-shrink-0 mr-4">
                   <div className={`relative w-10 h-10 ${rankStyle.badgeColor} text-white text-sm font-bold rounded-lg flex items-center justify-center shadow-md border-2`}>
-                    {index === 0 && (
-                      <svg className="absolute -top-1 -right-1 w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M5 16L3 21l5.25-1.31L12 21l3.75-1.31L21 21l-2-5-2-1V9.5c0-.83-.67-1.5-1.5-1.5S14 8.67 14 9.5V10h-4v-.5C10 8.67 9.33 8 8.5 8S7 8.67 7 9.5V15l-2 1z"/>
-                      </svg>
-                    )}
                     #{index + 1}
                   </div>
                 </div>

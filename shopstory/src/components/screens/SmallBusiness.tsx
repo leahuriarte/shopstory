@@ -345,7 +345,7 @@ export function SmallBusinessScreen({onNext, onPrevious}: SmallBusinessScreenPro
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-amber-900">
-            Your Small Biz Support Era
+            Your Small Biz Era
           </h2>
         </div>
         {analysis && (
@@ -373,7 +373,7 @@ export function SmallBusinessScreen({onNext, onPrevious}: SmallBusinessScreenPro
       ) : (
         <div className="flex-1 flex flex-col relative z-10">
           {/* Small Business Cards in TopBrands style */}
-          <div className="space-y-3 mb-5 relative z-10">
+          <div className="space-y-6 mb-5 relative z-10">
             {smallBusinessShops.slice(0, 5).map((business, index) => {
               const shop = business.shop
               const sampleProducts = business.sampleProducts || []

@@ -248,8 +248,20 @@ export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScree
         <div className="absolute top-2 right-3 w-7 h-3 bg-white bg-opacity-90 border border-amber-300 shadow-sm transform rotate-12 z-20" style={{ borderRadius: '1px' }} />
         
         <div className="text-center mb-6 relative z-10">
-          <p className="text-3xl mb-2">🌱</p>
-          <h2 className="text-xl font-bold text-amber-900">Your Environmental Impact</h2>
+          <h2 className="text-xl font-bold text-amber-900">🌱 Your Environmental Impact</h2>
+        </div>
+
+        
+
+        {/* Analysis as a scrapbook note */}
+        <div className="bg-white border-2 border-green-200 rounded-lg p-4 mb-4 relative shadow-md transform rotate-1">
+          {/* Tape corners */}
+          <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
+          <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
+          
+          <p className="text-sm text-amber-800">
+            {analysis.analysis}
+          </p>
         </div>
 
         {/* Total Emissions as a scrapbook card with green accents */}
@@ -267,31 +279,41 @@ export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScree
           </p>
         </div>
 
-        {/* Analysis as a scrapbook note */}
-        <div className="bg-white border-2 border-green-200 rounded-lg p-4 mb-4 relative shadow-md transform rotate-1">
-          {/* Tape corners */}
-          <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
-          <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
-          
-          <h3 className="font-semibold text-green-800 mb-2">The Tea</h3>
-          <ul className="space-y-1">
-            {analysis.analysis.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0).map((sentence, index) => (
-              <li key={index} className="text-sm text-amber-800 flex items-start gap-2">
-                <span className="text-green-600">•</span>
-                <span>{sentence.trim()}.</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
         {/* Top Eco-Friendly Products as polaroid-style cards */}
         <div className="mb-4 relative z-10">
           <h3 className="font-semibold text-amber-900 mb-3">🏆 Your Sustainable Slay Moments</h3>
           <div className="space-y-3">
             {analysis.lowestEmissionProducts.map((product, index) => {
-              const originalProduct = products.find(p => p.id === product.productId)
+              // Debug logging
+              console.log('Analysis product:', product)
+              console.log('Looking for product ID:', product.productId)
+              console.log('Available products:', products.map(p => ({ id: p.id, title: p.title })))
+              
+              // Try multiple matching strategies
+              let originalProduct = products.find(p => p.id === product.productId)
+              
+              // If no exact match, try string/number conversion
+              if (!originalProduct) {
+                originalProduct = products.find(p => String(p.id) === String(product.productId))
+              }
+              
+              // If still no match, try finding by title
+              if (!originalProduct) {
+                originalProduct = products.find(p => p.title === product.productTitle)
+              }
+              
+              console.log('Found original product:', originalProduct)
+              
               const rotations = ['rotate-2', '-rotate-1', 'rotate-1']
               const rotation = rotations[index] || 'rotate-0'
+              
+              const handleProductClick = (e: React.MouseEvent) => {
+                e.stopPropagation() // Prevent triggering the main click handler
+                if (originalProduct) {
+                  // Open product in shop app instead of URL
+                  window.open(`shopify://product/${originalProduct.id}`, '_self')
+                }
+              }
               
               return (
                 <div key={product.productId} className={`bg-white border-2 border-green-200 rounded-lg p-4 relative shadow-md ${rotation}`}>
@@ -300,25 +322,30 @@ export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScree
                   <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
                   
                   <div className="flex items-center gap-4">
-                    <span className="bg-green-600 text-white text-sm font-bold px-3 py-2 rounded-full flex-shrink-0">
-                      #{index + 1}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-4">
-                        {originalProduct && (
-                          <div className="flex-shrink-0 w-20 h-20 overflow-hidden rounded-lg bg-amber-50 border border-amber-200">
-                            <div className="transform scale-[0.4] origin-top-left w-[200px] h-[200px]">
-                              <ProductCard product={originalProduct} />
-                            </div>
+                    <div className="flex items-center gap-3">
+                      <span className="bg-green-600 text-white text-sm font-bold px-3 py-2 rounded-full flex-shrink-0">
+                        #{index + 1}
+                      </span>
+                      {originalProduct ? (
+                        <div 
+                          className="flex-shrink-0 w-16 h-16 overflow-hidden rounded-lg bg-amber-50 border border-amber-200 cursor-pointer hover:opacity-80 transition-opacity"
+                          onClick={handleProductClick}
+                        >
+                          <div className="transform scale-[0.32] origin-top-left w-[200px] h-[200px]">
+                            <ProductCard product={originalProduct} />
                           </div>
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-amber-900 text-base truncate">{product.productTitle}</p>
-                          <p className="text-base text-green-600 font-bold mt-1">
-                            {product.estimatedEmissionsKgCO2.toFixed(2)} kg CO₂
-                          </p>
                         </div>
-                      </div>
+                      ) : (
+                        <div className="flex-shrink-0 w-16 h-16 overflow-hidden rounded-lg bg-red-100 border border-red-200 flex items-center justify-center">
+                          <span className="text-red-500 text-xs">No Match</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-amber-900 text-base truncate">{product.productTitle}</p>
+                      <p className="text-base text-green-600 font-bold mt-1">
+                        {product.estimatedEmissionsKgCO2.toFixed(2)} kg CO₂
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -327,22 +354,7 @@ export function CarbonFootprintScreen({onNext, onPrevious}: CarbonFootprintScree
           </div>
         </div>
 
-        {/* Recommendations as a handwritten note */}
-        <div className="bg-white border-2 border-green-200 rounded-lg p-4 mb-4 relative shadow-md transform -rotate-1">
-          {/* Tape corners */}
-          <div className="absolute -top-1 -right-1 w-4 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-12 z-10" />
-          <div className="absolute -bottom-1 -left-1 w-3 h-2 bg-white bg-opacity-90 border border-amber-300 transform -rotate-12 z-10" />
-          
-          <h3 className="font-semibold text-green-800 mb-2">💡 How to Serve Sustainability</h3>
-          <ul className="space-y-1">
-            {analysis.recommendations.map((recommendation, index) => (
-              <li key={index} className="text-sm text-amber-800 flex items-start gap-2">
-                <span className="text-green-600">•</span>
-                <span>{recommendation}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+
 
       </div>
     )
