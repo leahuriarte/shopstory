@@ -61,6 +61,15 @@ export function App() {
         {
           type: 'smallBusiness' as const,
         },
+        {
+          type: 'color' as const,
+          value: 'bg-gradient-to-br from-blue-500 to-cyan-500',
+          text: 'Time to check your shipping analytics!',
+        },
+        // Shipping time analysis screen - shows cumulative shipping data and fastest/slowest deliveries
+        {
+          type: 'shippingTime' as const,
+        },
       ],
     },
   ]

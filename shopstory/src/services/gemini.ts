@@ -40,11 +40,11 @@ export interface SmallBusinessAnalysis {
 
 class GeminiService {
   private apiKey: string | null = null
-  private baseURL = 'https://generativelanguage.googleapis.com/v1beta/models'
+  private baseURL = 'use env'
 
   constructor() {
     // Put your Gemini API key here:
-    this.apiKey = 'use env'
+    this.apiKey = "AIzaSyAp6ANRRTeT-bbnmJQWtxsc6KSQ54VS7Is"
   }
 
   /**
