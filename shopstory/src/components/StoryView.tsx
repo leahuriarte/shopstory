@@ -35,8 +35,7 @@ export type SmallBusinessScreenData = {
 }
 
 // A screen can be one of the types we've defined.
-export type Screen = TitleScreenData | ColorScreenData | PopularProductsScreenData | CarbonFootprintScreenData | TopBrandsScreenData | PaletteScreenData
-export type Screen = TitleScreenData | ColorScreenData | PopularProductsScreenData | CarbonFootprintScreenData | TopBrandsScreenData | SmallBusinessScreenData
+export type Screen = TitleScreenData | ColorScreenData | PopularProductsScreenData | CarbonFootprintScreenData | TopBrandsScreenData | PaletteScreenData | SmallBusinessScreenData
 
 // A story is an array of these screen types.
 type Story = {
