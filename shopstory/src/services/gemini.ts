@@ -43,7 +43,8 @@ class GeminiService {
   private baseURL = 'https://generativelanguage.googleapis.com/v1beta/models'
 
   constructor() {
-    this.apiKey = 'use env file'
+    // Put your Gemini API key here:
+    this.apiKey = 'use env'
   }
 
   /**
@@ -301,14 +302,29 @@ IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatti
     apiKey?: string
   ): Promise<GeminiResponse<CarbonFootprintAnalysis>> {
 
-    const sampleProducts = products.slice(0, 12) // Analyze up to 12 products
+    // Filter out products with no useful data and enhance what we have
+    const validProducts = products.filter(p => p.title && p.title.trim() !== '').slice(0, 12)
+    
+    if (validProducts.length === 0) {
+      return this.createCarbonFallback(products)
+    }
+
+    // Enhance product data by inferring missing information
+    const enhancedProducts = validProducts.map(p => ({
+      ...p,
+      title: p.title || 'Unknown Product',
+      description: p.description || 'No description available',
+      vendor: p.vendor || 'Unknown Vendor',
+      productType: p.productType || this.inferProductType(p.title),
+    }))
+
     const prompt = `You are an environmental sustainability expert. Analyze the carbon footprint of the following products and provide detailed insights based on manufacturing processes, material sourcing, transportation, product lifecycle, packaging, and vendor sustainability practices.
 
 Products to analyze:
-${sampleProducts.map((p, index) => `${index + 1}. ${p.title}
-   Type: ${p.productType || 'Unknown'}
-   Vendor: ${p.vendor || 'Unknown'}
-   Description: ${p.description || 'No description'}`).join('\n\n')}
+${enhancedProducts.map((p, index) => `${index + 1}. ${p.title}
+   Type: ${p.productType}
+   Vendor: ${p.vendor}
+   Description: ${p.description}`).join('\n\n')}
 
 Please provide your analysis in the following JSON format:
 {
@@ -363,8 +379,50 @@ IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatti
   }
 
   /**
-   * Smart carbon footprint analysis based on product types
+   * Infer product type from title when not available
    */
+  private inferProductType(title: string): string {
+    const titleLower = title.toLowerCase()
+    
+    // Electronics
+    if (titleLower.includes('phone') || titleLower.includes('iphone') || titleLower.includes('android')) return 'Electronics - Mobile Phone'
+    if (titleLower.includes('laptop') || titleLower.includes('computer') || titleLower.includes('macbook')) return 'Electronics - Computer'
+    if (titleLower.includes('headphone') || titleLower.includes('earbuds') || titleLower.includes('speaker')) return 'Electronics - Audio'
+    if (titleLower.includes('tablet') || titleLower.includes('ipad')) return 'Electronics - Tablet'
+    if (titleLower.includes('watch') || titleLower.includes('fitbit')) return 'Electronics - Wearable'
+    
+    // Clothing
+    if (titleLower.includes('shirt') || titleLower.includes('tee') || titleLower.includes('top')) return 'Clothing - Tops'
+    if (titleLower.includes('jeans') || titleLower.includes('pants') || titleLower.includes('trousers')) return 'Clothing - Bottoms'
+    if (titleLower.includes('dress') || titleLower.includes('gown')) return 'Clothing - Dresses'
+    if (titleLower.includes('jacket') || titleLower.includes('coat') || titleLower.includes('hoodie')) return 'Clothing - Outerwear'
+    if (titleLower.includes('shoes') || titleLower.includes('sneakers') || titleLower.includes('boots')) return 'Footwear'
+    
+    // Home & Living
+    if (titleLower.includes('lamp') || titleLower.includes('light')) return 'Home - Lighting'
+    if (titleLower.includes('chair') || titleLower.includes('table') || titleLower.includes('furniture')) return 'Home - Furniture'
+    if (titleLower.includes('pillow') || titleLower.includes('blanket') || titleLower.includes('bedding')) return 'Home - Textiles'
+    if (titleLower.includes('kitchen') || titleLower.includes('cooking') || titleLower.includes('utensil')) return 'Home - Kitchen'
+    
+    // Beauty & Personal Care
+    if (titleLower.includes('makeup') || titleLower.includes('cosmetic') || titleLower.includes('lipstick')) return 'Beauty - Cosmetics'
+    if (titleLower.includes('skincare') || titleLower.includes('moisturizer') || titleLower.includes('serum')) return 'Beauty - Skincare'
+    if (titleLower.includes('shampoo') || titleLower.includes('soap') || titleLower.includes('body wash')) return 'Personal Care'
+    
+    // Food & Beverages
+    if (titleLower.includes('coffee') || titleLower.includes('tea') || titleLower.includes('beverage')) return 'Food & Beverage'
+    if (titleLower.includes('organic') || titleLower.includes('food') || titleLower.includes('snack')) return 'Food - Organic/Natural'
+    
+    // Books & Media
+    if (titleLower.includes('book') || titleLower.includes('novel') || titleLower.includes('guide')) return 'Books & Media'
+    
+    // Sports & Outdoors
+    if (titleLower.includes('fitness') || titleLower.includes('yoga') || titleLower.includes('exercise')) return 'Sports & Fitness'
+    if (titleLower.includes('outdoor') || titleLower.includes('camping') || titleLower.includes('hiking')) return 'Outdoor Equipment'
+    
+    // Default
+    return 'General Merchandise'
+  }
   private createCarbonFallback(products: any[]): GeminiResponse<CarbonFootprintAnalysis> {
     const productAnalysis = products.map(product => {
       let emissions = 3.0 // Base emissions
