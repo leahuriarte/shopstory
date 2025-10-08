@@ -1,8 +1,11 @@
 {
-  "name": "Shop Story",
+  "name": "Story",
   "privacy_policy_url": "https://example.com/privacy",
   "terms_url": "https://example.com/terms",
   "handle": "shop-story",
-  "description": "Your Style, Unboxed"
+  "description": "Your Style, Unboxed",
+  "trusted_domains": [
+    "eruawxwkcljkayxnyshe.supabase.co"
+  ]
 
 }

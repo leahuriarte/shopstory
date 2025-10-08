@@ -8,7 +8,7 @@
     "start": "shop-minis dev"
   },
   "devDependencies": {
-    "@shopify/shop-minis-cli": "0.0.180",
+    "@shopify/shop-minis-cli": "0.0.193",
     "@tailwindcss/vite": "^4.1.8",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
@@ -17,7 +17,8 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@shopify/shop-minis-react": "0.0.34",
+    "@shopify/shop-minis-react": "0.1.4",
+    "@supabase/supabase-js": "^2.58.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   }

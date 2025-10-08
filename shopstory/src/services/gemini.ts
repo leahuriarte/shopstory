@@ -1,9 +1,11 @@
 /**
  * Google Gemini API service - FIXED VERSION
  * Solves MAX_TOKENS issue by disabling thinking and increasing limits
+ *
+ * API keys are now stored securely in Supabase
  */
 
-
+import { getCachedApiKey } from './supabase'
 
 export interface GeminiResponse<T = any> {
   data?: T
@@ -57,115 +59,69 @@ export interface RecommendationsAnalysis {
 }
 
 class GeminiService {
-  private apiKey: string | null = null
-  private baseURL = 'https://generativelanguage.googleapis.com/v1beta/models'
-
   constructor() {
-    // Put your Gemini API key here:
-    this.apiKey = import.meta.env.VITE_GEMINI_API_KEY || null
+    console.log('[Gemini] Service initialized - using Supabase Edge Functions')
   }
 
   /**
-   * Set the API key for Gemini
-   */
-  setApiKey(apiKey: string) {
-    this.apiKey = apiKey
-  }
-
-  /**
-   * Generic method to make API calls to Gemini - FIXED for token limits
+   * Generic method to make API calls to Gemini via Supabase Edge Function
+   * This solves CSP issues and keeps API keys secure
    */
   async makeAPICall<T>(
     prompt: string,
     modelName: string = 'gemini-2.5-flash',
     apiKey?: string
   ): Promise<GeminiResponse<T>> {
-    const key = apiKey || this.apiKey
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-    if (!key) {
+    if (!supabaseUrl || !supabaseAnonKey) {
       return {
         success: false,
-        error: 'API key not provided. Please set your Gemini API key.',
+        error: 'VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY must be configured in .env',
       }
     }
 
     try {
-      const url = `${this.baseURL}/${modelName}:generateContent`
-      
-      const requestBody = {
-        contents: [{
-          parts: [{
-            text: prompt
-          }]
-        }],
-        generationConfig: {
-          temperature: 1, 
-          topK: 10,
-          topP: 0.5,
-          maxOutputTokens: 2048, // Increased token limit
-          // DISABLE THINKING to save tokens
-          thinkingConfig: {
-            thinkingBudget: 0 // This disables the "thinking" that was using 1023 tokens
-          }
-        }
-      }
-      
-      const response = await fetch(url, {
+      const edgeFunctionUrl = `${supabaseUrl}/functions/v1/analyze-gemini`
+
+      console.log('[Gemini] Calling via Supabase Edge Function')
+
+      const response = await fetch(edgeFunctionUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-goog-api-key': key,
+          'Authorization': `Bearer ${supabaseAnonKey}`,
+          'apikey': supabaseAnonKey,
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({ prompt, modelName }),
       })
 
       if (!response.ok) {
-        const errorText = await response.text()
-        throw new Error(`HTTP ${response.status}: ${errorText}`)
-      }
-
-      const data = await response.json()
-
-      if (data.candidates && data.candidates.length > 0) {
-        const candidate = data.candidates[0]
-        
-        // Check for issues
-        if (candidate.finishReason === 'SAFETY') {
-          return {
-            success: false,
-            error: 'Response blocked by safety filters'
-          }
-        }
-
-        if (candidate.finishReason === 'MAX_TOKENS') {
-          return {
-            success: false,
-            error: 'Response still hitting token limit - trying fallback'
-          }
-        }
-
-        // Extract text from response
-        const generatedText = candidate.content?.parts?.[0]?.text
-
-        if (!generatedText) {
-          return {
-            success: false,
-            error: `No text generated. Reason: ${candidate.finishReason || 'unknown'}`
-          }
-        }
-
-        return {
-          success: true,
-          data: generatedText,
-        }
-      } else {
+        const errorData = await response.json()
+        console.error('[Gemini] Edge Function error:', errorData)
         return {
           success: false,
-          error: 'No response candidates returned'
+          error: errorData.error || `HTTP ${response.status}`,
         }
+      }
+
+      const result = await response.json()
+
+      if (!result.success) {
+        return {
+          success: false,
+          error: result.error || 'Unknown error from Edge Function',
+        }
+      }
+
+      return {
+        success: true,
+        data: result.data,
       }
 
     } catch (error) {
+      console.error('[Gemini] Request failed:', error)
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Network or API error',

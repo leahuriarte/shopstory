@@ -202,44 +202,6 @@ export function RecommendationsScreen({ onNext, onPrevious }: RecommendationsScr
     )
   }
 
-  // Analyzing state
-  if (isAnalyzing) {
-    return (
-      <div
-        className="w-full h-full rounded-lg flex items-center justify-center text-amber-900 cursor-pointer overflow-hidden relative"
-        onClick={handleClick}
-        style={scrapbookStyle}
-      >
-        {/* Decorative tape pieces */}
-        <div className="absolute top-5 left-5 w-10 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform -rotate-12 z-20" style={{ borderRadius: '1px' }} />
-        <div className="absolute bottom-5 right-8 w-11 h-4 bg-white bg-opacity-80 border border-amber-200 shadow-sm transform rotate-6 z-20" style={{ borderRadius: '1px' }} />
-
-        <div className="text-center z-10 p-8">
-          {/* Animated crystal ball with scrapbook styling */}
-          <div className="w-20 h-20 mx-auto mb-6 relative">
-            <div className="absolute inset-0 rounded-full bg-white border-4 border-amber-300 shadow-md animate-spin"></div>
-            <div className="absolute inset-2 rounded-full bg-amber-100 flex items-center justify-center">
-              <span className="text-2xl">🔮</span>
-            </div>
-          </div>
-          <h3 className="text-2xl font-bold mb-2 text-amber-900">
-            Manifesting Your Style Era
-          </h3>
-          <p className="text-amber-800 mb-8 text-lg">The algorithm is doing its thing...</p>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onNext()
-            }}
-            className="bg-white/90 backdrop-blur-md border-2 border-amber-300 text-amber-800 px-8 py-3 rounded-lg hover:bg-white transition-all duration-300 font-semibold shadow-md hover:shadow-lg transform hover:scale-105"
-          >
-            Skip the Wait
-          </button>
-        </div>
-      </div>
-    )
-  }
-
   // Analysis error state
   if (analysisError) {
     return (

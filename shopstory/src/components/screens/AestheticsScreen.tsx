@@ -356,7 +356,21 @@ export function AestheticsScreen({onNext, onPrevious}: AestheticsScreenProps) {
             })}
           </div>
         </div>
-        
+
+        {/* Summary - explaining why this is their style DNA */}
+        {analysis.summary && (
+          <div className="mb-6 relative z-10">
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg p-5 border-2 border-amber-200 shadow-md relative transform rotate-1">
+              {/* Tape corner */}
+              <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-5 h-2 bg-white bg-opacity-90 border border-amber-300 transform rotate-6 z-10" />
+
+              <p className="text-amber-900 leading-relaxed text-center">
+                {analysis.summary}
+              </p>
+            </div>
+          </div>
+        )}
+
       </div>
     )
   }

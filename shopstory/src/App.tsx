@@ -37,14 +37,6 @@ export function App() {
           type: 'smallBusiness' as const,
         },
         {
-          type: 'color' as const,
-          value: 'bg-gradient-to-br from-blue-500 to-cyan-500',
-          text: 'Your shipping stats are kinda fire',
-        },
-        {
-          type: 'shippingTime' as const,
-        },
-        {
           type: 'recommendations' as const,
         },
         {

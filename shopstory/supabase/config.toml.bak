@@ -1,0 +1,9 @@
+[project]
+# Your Supabase project reference ID
+ref = "eruawxwkcljkayxnyshe"
+
+[functions.auth]
+verify_jwt = false
+
+[functions.get-api-key]
+verify_jwt = false
