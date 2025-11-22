@@ -12,6 +12,7 @@
   ],
   "trusted_domains": [
     "eruawxwkcljkayxnyshe.supabase.co",
-    "shopify.dev"
+    "shopify.dev",
+    "generativelanguage.googleapis.com"
   ]
 }
