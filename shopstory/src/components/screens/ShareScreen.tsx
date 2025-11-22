@@ -52,8 +52,7 @@ export function ShareScreen({ onNext, onPrevious, allScreens = [] }: ShareScreen
 
     try {
       await share({
-        title: 'My Shop Story',
-        text: shareText,
+        title: `My Shop Story - ${shareText}`,
         url: window.location.href,
       })
     } catch (error) {

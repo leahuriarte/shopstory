@@ -17,13 +17,6 @@ if (!SUPABASE_URL) {
   console.warn('VITE_SUPABASE_URL not configured. Supabase features will be disabled.')
 }
 
-interface ApiKey {
-  id: string
-  key_name: string
-  key_value: string
-  created_at: string
-}
-
 /**
  * Fetch an API key from Supabase Edge Function
  */

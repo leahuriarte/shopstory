@@ -5,8 +5,6 @@
  * API keys are now stored securely in Supabase
  */
 
-import { getCachedApiKey } from './supabase'
-
 export interface GeminiResponse<T = any> {
   data?: T
   error?: string
@@ -69,8 +67,7 @@ class GeminiService {
    */
   async makeAPICall<T>(
     prompt: string,
-    modelName: string = 'gemini-2.5-flash',
-    apiKey?: string
+    modelName: string = 'gemini-2.5-flash'
   ): Promise<GeminiResponse<T>> {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
     const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -140,8 +137,7 @@ class GeminiService {
       vendor?: string
       productType?: string
       imageUrl?: string
-    }>,
-    apiKey?: string
+    }>
   ): Promise<GeminiResponse<RecommendationsAnalysis>> {
     
     const sampleProducts = products.slice(0, 10) // Analyze up to 10 products
@@ -168,7 +164,7 @@ Make the headline creative and forward-looking, and short and catchy, focusing o
 IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatting.`
 
     try {
-      const response = await this.makeAPICall<string>(prompt, 'gemini-2.5-flash', apiKey)
+      const response = await this.makeAPICall<string>(prompt, 'gemini-2.5-flash')
       
       if (!response.success) {
         return this.createRecommendationsFallback(products)
@@ -236,8 +232,7 @@ IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatti
       vendor?: string
       productType?: string
       imageUrl?: string
-    }>,
-    apiKey?: string
+    }>
   ): Promise<GeminiResponse<AestheticsAnalysis>> {
     
     const sampleProducts = products.slice(0, 12) // Analyze up to 12 products
@@ -286,7 +281,7 @@ Make the headline creative and specific to their products. Percentages don't nee
 IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatting.`
 
     try {
-      const response = await this.makeAPICall<string>(prompt, 'gemini-2.5-flash', apiKey)
+      const response = await this.makeAPICall<string>(prompt, 'gemini-2.5-flash')
       
       if (!response.success) {
         return this.createAestheticsFallback(products)
@@ -382,8 +377,7 @@ IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatti
       description?: string
       vendor?: string
       productType?: string
-    }>,
-    apiKey?: string
+    }>
   ): Promise<GeminiResponse<any>> {
     
     const sampleProducts = products.slice(0, 10) // Analyze up to 10 products
@@ -417,7 +411,7 @@ Extract 6 dominant colors that would represent this collection, ensure percentag
 IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatting.`
 
     try {
-      const response = await this.makeAPICall<string>(prompt, 'gemini-2.5-flash', apiKey)
+      const response = await this.makeAPICall<string>(prompt, 'gemini-2.5-flash')
       
       if (!response.success) {
         // Smart fallback based on your products
@@ -514,8 +508,7 @@ IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatti
       description?: string
       vendor?: string
       productType?: string
-    }>,
-    apiKey?: string
+    }>
   ): Promise<GeminiResponse<CarbonFootprintAnalysis>> {
 
     // Filter out products with no useful data and enhance what we have
@@ -563,7 +556,7 @@ Rank the products by emissions and provide the top 3 most eco-friendly purchases
 IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatting.`
 
     try {
-      const response = await this.makeAPICall<string>(prompt, 'gemini-2.5-flash', apiKey)
+      const response = await this.makeAPICall<string>(prompt, 'gemini-2.5-flash')
       
       if (!response.success) {
         return this.createCarbonFallback(products)
@@ -698,8 +691,7 @@ IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatti
       followersCount?: number
       reviewCount?: number
       purchaseCount: number
-    }>,
-    apiKey?: string
+    }>
   ): Promise<GeminiResponse<SmallBusinessAnalysis>> {
 
     const sampleBusinesses = businesses.slice(0, 15) // Analyze up to 15 businesses
@@ -752,7 +744,7 @@ Provide  insights about the user's shopping patterns and the impact of supportin
 IMPORTANT: Respond with ONLY valid JSON, no additional text or markdown formatting.`
 
     try {
-      const response = await this.makeAPICall<string>(prompt, 'gemini-2.5-flash', apiKey)
+      const response = await this.makeAPICall<string>(prompt, 'gemini-2.5-flash')
       
       if (!response.success) {
         return this.createSmallBusinessFallback(businesses)

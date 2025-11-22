@@ -1,7 +1,0 @@
-{
-  "name": "shop-story",
-  "permissions": [],
-  "scopes": [
-    "product_list:write"
-  ]
-}
