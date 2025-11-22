@@ -1,11 +1,17 @@
 {
-  "name": "Story",
-  "privacy_policy_url": "https://example.com/privacy",
-  "terms_url": "https://example.com/terms",
+  "name": "Shop Story",
+  "privacy_policy_url": "https://YOUR-USERNAME.github.io/shop-story/privacy.html",
+  "terms_url": "https://YOUR-USERNAME.github.io/shop-story/terms.html",
   "handle": "shop-story",
   "description": "Your Style, Unboxed",
+  "icon": "icon.png",
+  "scopes": [
+    "product_list:read",
+    "product_list:write",
+    "products:recommendations:read"
+  ],
   "trusted_domains": [
-    "eruawxwkcljkayxnyshe.supabase.co"
+    "eruawxwkcljkayxnyshe.supabase.co",
+    "shopify.dev"
   ]
-
 }
